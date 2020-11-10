@@ -1,0 +1,6 @@
+﻿language: csharp
+solution: MoneroClient.sln
+
+jobs:
+    include:
+        - dotnet: 3.1.100
