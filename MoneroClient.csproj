@@ -5,7 +5,7 @@
     <LangVersion>8</LangVersion>
     <RootNamespace>MoneroClient</RootNamespace>
     <AssemblyName>Monero.Client</AssemblyName>
-    <Version>1.0.0.0</Version>
+    <Version>1.0.0.1</Version>
     <RepositoryUrl>https://github.com/Agorist-Action/charp-monero-rpc-client</RepositoryUrl>
     <PackageReleaseNotes>Initial Release</PackageReleaseNotes>
     <NeutralLanguage>en-US</NeutralLanguage>
@@ -19,6 +19,8 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageId>Monero.Client</PackageId>
     <Product>Monero JSON-RPC Client</Product>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

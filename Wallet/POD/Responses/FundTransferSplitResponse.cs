@@ -20,6 +20,6 @@ namespace Monero.Client.Wallet.POD.Responses
         public List<string> tx_metadata_list { get; set; } = new List<string>();
         public string multisig_txset { get; set; }
         public string unsigned_txset { get; set; }
-        public List<uint> weight_list { get; set; }
+        public List<uint> weight_list { get; set; } = new List<uint>();
     }
 }
