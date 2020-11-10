@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace MoneroClient.Daemon.POD
+namespace Monero.Client.Daemon.POD
 {
     public class Block
     {

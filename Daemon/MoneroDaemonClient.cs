@@ -6,11 +6,11 @@ using System.IO;
 using System.Collections.Generic;
 using System.Text.Json;
 
-using MoneroClient.Daemon.POD.Responses;
-using MoneroClient.Daemon.POD.Requests;
-using MoneroClient.Network;
+using Monero.Client.Daemon.POD.Responses;
+using Monero.Client.Daemon.POD.Requests;
+using Monero.Client.Network;
 
-namespace MoneroClient.Daemon
+namespace Monero.Client.Daemon
 {
     public class MoneroDaemonClient : IMoneroDaemonClient
     {

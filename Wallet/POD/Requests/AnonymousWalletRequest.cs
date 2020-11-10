@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MoneroClient.Wallet.POD.Requests
+namespace Monero.Client.Wallet.POD.Requests
 {
     internal class AnonymousWalletRequest
     {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-using MoneroClient.Network;
+using Monero.Client.Network;
 
-namespace MoneroClient.Daemon.POD.Responses
+namespace Monero.Client.Daemon.POD.Responses
 {
     public class OutputHistogramResponse : RpcResponse
     {
@@ -14,7 +14,7 @@ namespace MoneroClient.Daemon.POD.Responses
     public class OutputHistogramResult
     {
         public uint credits { get; set; }
-        public List<Histogram> histogram { get; set; }
+        public List<Histogram> histogram { get; set; } = new List<Histogram>();
         public string status { get; set; }
         public bool untrusted { get; set; }
         public string top_hash { get; set; }

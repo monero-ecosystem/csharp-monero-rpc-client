@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MoneroClient.Daemon.POD
+namespace Monero.Client.Daemon.POD
 {
     public class BlockDetails
     {

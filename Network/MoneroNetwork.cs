@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MoneroClient.Network
+namespace Monero.Client.Network
 {
     public enum MoneroNetwork
     {

@@ -1,9 +1,9 @@
-﻿using MoneroClient.Network;
+﻿using Monero.Client.Network;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MoneroClient.Wallet.POD.Responses
+namespace Monero.Client.Wallet.POD.Responses
 {
     public class OpenWalletResponse : RpcResponse
     {

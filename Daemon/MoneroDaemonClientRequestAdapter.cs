@@ -7,11 +7,11 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-using MoneroClient.Daemon.POD.Responses;
-using MoneroClient.Daemon.POD.Requests;
-using MoneroClient.Network;
+using Monero.Client.Daemon.POD.Responses;
+using Monero.Client.Daemon.POD.Requests;
+using Monero.Client.Network;
 
-namespace MoneroClient.Daemon
+namespace Monero.Client.Daemon
 {
     internal class MoneroDaemonClientRequestAdapter
     {

@@ -4,9 +4,9 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-using MoneroClient.Network;
+using Monero.Client.Network;
 
-namespace MoneroClient.Daemon.POD.Responses
+namespace Monero.Client.Daemon.POD.Responses
 {
     public class TransactionPoolBacklogResponse : RpcResponse
     {

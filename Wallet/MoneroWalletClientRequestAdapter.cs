@@ -6,11 +6,11 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-using MoneroClient.Network;
-using MoneroClient.Wallet.POD.Requests;
-using MoneroClient.Wallet.POD.Responses;
+using Monero.Client.Network;
+using Monero.Client.Wallet.POD.Requests;
+using Monero.Client.Wallet.POD.Responses;
 
-namespace MoneroClient.Wallet
+namespace Monero.Client.Wallet
 {
     internal class MoneroWalletClientRequestAdapter
     {

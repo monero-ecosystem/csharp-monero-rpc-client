@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Numerics;
 
-using MoneroClient.Network;
+using Monero.Client.Network;
 
-namespace MoneroClient.Wallet.POD.Responses
+namespace Monero.Client.Wallet.POD.Responses
 {
     public class BalanceResponse : RpcResponse
     {

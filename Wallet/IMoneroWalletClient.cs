@@ -4,11 +4,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-using MoneroClient.Wallet.POD.Requests;
-using MoneroClient.Wallet.POD.Responses;
-using MoneroClient.Wallet.POD;
+using Monero.Client.Wallet.POD.Requests;
+using Monero.Client.Wallet.POD.Responses;
+using Monero.Client.Wallet.POD;
 
-namespace MoneroClient.Wallet
+namespace Monero.Client.Wallet
 {
     interface IMoneroWalletClient : IDisposable
     {

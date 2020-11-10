@@ -9,7 +9,7 @@ Both a daemon client and wallet client are available. The daemon client interact
 ## MoneroDaemonClient
 **Initialize Client**
 ```
-using MoneroClient.Daemon;
+using Monero.Client.Daemon;
 var daemonClient = new MoneroDaemonClient(new Uri("http://127.0.0.1:18082/json_rpc"));
 ```
 **Get Connections**
@@ -21,9 +21,9 @@ For the entire MoneroDaemonClient interface, please click [here](https://github.
 ## MoneroWalletClient
 **Initialize Client**
 ```
-using MoneroClient.Network;
-using MoneroClient.Wallet;
-using MoneroClient.Wallet.POD;
+using Monero.Client.Network;
+using Monero.Client.Wallet;
+using Monero.Client.Wallet.POD;
 
 var moneroWalletClient = new MoneroWalletClient(MoneroNetwork.Testnet);
 ```

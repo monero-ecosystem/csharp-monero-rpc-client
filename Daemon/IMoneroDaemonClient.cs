@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using MoneroClient.Daemon.POD.Responses;
+using Monero.Client.Daemon.POD.Responses;
 
-namespace MoneroClient.Daemon
+namespace Monero.Client.Daemon
 {
     interface IMoneroDaemonClient : IDisposable
     {

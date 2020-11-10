@@ -9,12 +9,12 @@ using System.Text.Unicode;
 using System.Threading;
 using System.Threading.Tasks;
 
-using MoneroClient.Network;
-using MoneroClient.Wallet.POD;
-using MoneroClient.Wallet.POD.Requests;
-using MoneroClient.Wallet.POD.Responses;
+using Monero.Client.Network;
+using Monero.Client.Wallet.POD;
+using Monero.Client.Wallet.POD.Requests;
+using Monero.Client.Wallet.POD.Responses;
 
-namespace MoneroClient.Wallet
+namespace Monero.Client.Wallet
 {
     public class MoneroWalletClient : IMoneroWalletClient
     {

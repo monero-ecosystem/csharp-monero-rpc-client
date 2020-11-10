@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using MoneroClient.Network;
-using MoneroClient.Wallet.POD.Responses;
+using Monero.Client.Network;
+using Monero.Client.Wallet.POD.Responses;
 
-namespace MoneroClient.Wallet
+namespace Monero.Client.Wallet
 {
     public enum MoneroWalletResponseType
     {

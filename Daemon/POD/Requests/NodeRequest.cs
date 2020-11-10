@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MoneroClient.Daemon.POD.Requests
+namespace Monero.Client.Daemon.POD.Requests
 {
     internal class DaemonRequest
     {

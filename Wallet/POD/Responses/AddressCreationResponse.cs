@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-using MoneroClient.Network;
+using Monero.Client.Network;
 
-namespace MoneroClient.Wallet.POD.Responses
+namespace Monero.Client.Wallet.POD.Responses
 {
     public class AddressCreationResponse : RpcResponse
     {
@@ -15,7 +15,7 @@ namespace MoneroClient.Wallet.POD.Responses
     {
         public string address { get; set; }
         public uint address_index { get; set; }
-        public List<uint> address_indices { get; set; }
-        public List<string> addresses { get; set; }
+        public List<uint> address_indices { get; set; } = new List<uint>();
+        public List<string> addresses { get; set; } = new List<string>();
     }
 }

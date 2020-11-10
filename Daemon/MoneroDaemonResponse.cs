@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-using MoneroClient.Daemon.POD.Responses;
+using Monero.Client.Daemon.POD.Responses;
 
-namespace MoneroClient.Daemon
+namespace Monero.Client.Daemon
 {
     public enum MoneroDaemonResponseType
     {

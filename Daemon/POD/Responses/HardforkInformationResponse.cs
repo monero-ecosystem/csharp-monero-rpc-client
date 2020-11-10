@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-using MoneroClient.Network;
+using Monero.Client.Network;
 
-namespace MoneroClient.Daemon.POD.Responses
+namespace Monero.Client.Daemon.POD.Responses
 {
     public class HardforkInformationResponse : RpcResponse
     {
