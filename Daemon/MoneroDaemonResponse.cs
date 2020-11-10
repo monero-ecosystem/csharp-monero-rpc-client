@@ -44,7 +44,7 @@ namespace Monero.Client.Daemon
         SetBans,
     }
 
-    public class MoneroDaemonResponse
+    internal class MoneroDaemonResponse
     {
         public MoneroDaemonResponseType MoneroNodeResponseType { get; set; } = MoneroDaemonResponseType.None;
         public MoneroDaemonResponseSubType MoneroNodeResponseSubType { get; set; }
@@ -52,9 +52,9 @@ namespace Monero.Client.Daemon
         public BlockHeaderResponse BlockHeaderResponse { get; set; }
         public BlockHeaderRangeResponse BlockHeaderRangeResponse { get; set; }
         public ConnectionResponse ConnectionResponse { get; set; }
-        public NodeInformationResponse NodeInformationResponse { get; set; }
+        public DaemonInformationResponse DaemonInformationResponse { get; set; }
         public HardforkInformationResponse HardforkInformationResponse { get; set; }
-        public BanInformationResponse BanInformationResponse { get; set; }
+        public GetBansResponse GetBansResponse { get; set; }
         public FlushTransactionPoolResponse FlushTransactionPoolResponse { get; set; }
         public OutputHistogramResponse OutputHistogramResponse { get; set; }
         public CoinbaseTransactionSumResponse CoinbaseTransactionSumReponse { get; set; }

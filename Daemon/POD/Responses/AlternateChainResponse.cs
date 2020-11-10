@@ -6,7 +6,7 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Daemon.POD.Responses
 {
-    public class AlternateChainResponse : RpcResponse
+    internal class AlternateChainResponse : RpcResponse
     {
         public AlternateChainResult result { get; set; }
         public string status { get; set; }

@@ -6,7 +6,7 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Daemon.POD.Responses
 {
-    public class HardforkInformationResponse : RpcResponse
+    internal class HardforkInformationResponse : RpcResponse
     {
         public HardforkInformationResult result { get; set; }
     }

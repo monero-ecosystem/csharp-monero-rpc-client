@@ -8,7 +8,7 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Daemon.POD.Responses
 {
-    public class TransactionPoolBacklogResponse : RpcResponse
+    internal class TransactionPoolBacklogResponse : RpcResponse
     {
         public TransactionPoolBacklogResult result { get; set; }
     }

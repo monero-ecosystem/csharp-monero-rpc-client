@@ -6,7 +6,7 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Daemon.POD.Responses
 {
-    public class OutputHistogramResponse : RpcResponse
+    internal class OutputHistogramResponse : RpcResponse
     {
         public OutputHistogramResult result { get; set; }
     }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-    public class OpenWalletResponse : RpcResponse
+    internal class OpenWalletResponse : RpcResponse
     {
         public OpenWalletResult result { get; set; }
     }

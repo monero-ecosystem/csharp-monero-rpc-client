@@ -5,8 +5,8 @@ using System.Text;
 using Monero.Client.Network;
 
 namespace Monero.Client.Daemon.POD.Responses
-{ 
-    public class BlockResponse : RpcResponse
+{
+    internal class BlockResponse : RpcResponse
     {
         public Block result { get; set; }
     }

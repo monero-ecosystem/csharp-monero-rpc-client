@@ -1,1496 +1,605 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net.Http;
-using System.Text.Encodings.Web;
-using System.Text.Json;
-using System.Text.Unicode;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-
 using Monero.Client.Network;
 using Monero.Client.Wallet.POD;
-using Monero.Client.Wallet.POD.Requests;
 using Monero.Client.Wallet.POD.Responses;
 
 namespace Monero.Client.Wallet
 {
     public class MoneroWalletClient : IMoneroWalletClient
     {
-        private readonly HttpClient _httpClient;
-        private readonly MoneroWalletClientRequestAdapter _requestAdapter;
+        private readonly IMoneroWalletDataRetriever _moneroRpcWalletDataRetriever;
 
-        private MoneroWalletClient()
+        public MoneroWalletClient(Uri uri)
         {
-            _httpClient = new HttpClient();
+            _moneroRpcWalletDataRetriever = new MoneroWalletDataRetriever(uri);
         }
 
-        private MoneroWalletClient(HttpMessageHandler httpMessageHandler)
+        public MoneroWalletClient(Uri uri, HttpMessageHandler httpMessageHandler)
         {
-            _httpClient = new HttpClient(httpMessageHandler);
+            _moneroRpcWalletDataRetriever = new MoneroWalletDataRetriever(uri, httpMessageHandler);
         }
 
-        private MoneroWalletClient(HttpMessageHandler httpMessageHandler, bool disposeHandler)
+        public MoneroWalletClient(Uri uri, HttpMessageHandler httpMessageHandler, bool disposeHandler)
         {
-            _httpClient = new HttpClient(httpMessageHandler, disposeHandler);
+            _moneroRpcWalletDataRetriever = new MoneroWalletDataRetriever(uri, httpMessageHandler, disposeHandler);
         }
 
-        public MoneroWalletClient(Uri uri, HttpMessageHandler httpMessageHandler) : this(httpMessageHandler)
+        /// <summary>
+        /// Initialize a Monero Wallet Client using default network settings (<localhost>:<defaultport>)
+        /// </summary>
+        public MoneroWalletClient(MoneroNetwork networkType)
         {
-            _requestAdapter = new MoneroWalletClientRequestAdapter(uri);
-        }
-
-        public MoneroWalletClient(Uri uri, HttpMessageHandler httpMessageHandler, bool disposeHandler) : this(httpMessageHandler, disposeHandler)
-        {
-            _requestAdapter = new MoneroWalletClientRequestAdapter(uri);
-        }
-
-        public MoneroWalletClient(Uri uri) : this()
-        {
-            _requestAdapter = new MoneroWalletClientRequestAdapter(uri);
-        }
-
-        public MoneroWalletClient(MoneroNetwork networkType) : this()
-        {
-            Uri uri;
-            switch (networkType)
-            {
-                case MoneroNetwork.Mainnet:
-                    uri = new Uri(MoneroNetworkDefaults.WalletMainnetUri);
-                    break;
-                case MoneroNetwork.Stagenet:
-                    uri = new Uri(MoneroNetworkDefaults.WalletStagenetUri);
-                    break;
-                case MoneroNetwork.Testnet:
-                    uri = new Uri(MoneroNetworkDefaults.WalletTestnetUri);
-                    break;
-                default:
-                    throw new InvalidOperationException($"Unknown MoneroNetwork ({networkType})");
-            }
-            _requestAdapter = new MoneroWalletClientRequestAdapter(uri);
-        }
-
-        public async Task<MoneroWalletResponse> GetBalanceAsync(uint account_index, IEnumerable<uint> address_indices, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                account_index = account_index,
-                address_indices = address_indices,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.Balance, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            BalanceResponse responseObject = await JsonSerializer.DeserializeAsync<BalanceResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Account,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.Balance,
-                BalanceResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> GetBalanceAsync(uint account_index, CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.Balance, new WalletRequestParameters() { account_index = account_index, }, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            BalanceResponse responseObject = await JsonSerializer.DeserializeAsync<BalanceResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Account,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.Balance,
-                BalanceResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> GetAddressAsync(uint account_index, IEnumerable<uint> address_indices, CancellationToken token = default)
-        {
-            var walletParameters = new WalletRequestParameters()
-            {
-                account_index = account_index,
-                address_indices = address_indices,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.Address, walletParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            AddressResponse responseObject = await JsonSerializer.DeserializeAsync<AddressResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Account,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.Address,
-                AddressResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> GetAddressAsync(uint account_index, CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.Address, new WalletRequestParameters() { account_index = account_index, }, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            AddressResponse responseObject = await JsonSerializer.DeserializeAsync<AddressResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Account,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.Address,
-                AddressResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> GetAddressIndexAsync(string address, CancellationToken token = default)
-        {
-            if (string.IsNullOrWhiteSpace(address))
-                throw new InvalidOperationException("Address cannot be null of whitespace");
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.AddressIndex, new WalletRequestParameters() { address = address, }, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            AddressIndexResponse responseObject = await JsonSerializer.DeserializeAsync<AddressIndexResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Account,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.AddressIndex,
-                AddressIndexResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> CreateAddressAsync(uint account_index, CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.AddressCreation, new WalletRequestParameters() { account_index = account_index, }, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            AddressCreationResponse responseObject = await JsonSerializer.DeserializeAsync<AddressCreationResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Address,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.AddressCreation,
-                AddressCreationResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> CreateAddressAsync(uint account_index, string label, CancellationToken token = default)
-        {
-            if (string.IsNullOrWhiteSpace(label))
-                throw new InvalidOperationException("Label cannot be null of whitespace");
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                account_index = account_index,
-                label = label,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.AddressCreation, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            AddressCreationResponse responseObject = await JsonSerializer.DeserializeAsync<AddressCreationResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Address,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.AddressCreation,
-                AddressCreationResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> LabelAddressAsync(uint major_index, uint minor_index, string label, CancellationToken token = default)
-        {
-            if (string.IsNullOrWhiteSpace(label))
-                throw new InvalidOperationException("Label cannot be null of whitespace");
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                index = new AddressIndexParameter()
-                {
-                    major = major_index,
-                    minor = minor_index,
-                },
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.AddressLabeling, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            AddressLabelResponse responseObject = await JsonSerializer.DeserializeAsync<AddressLabelResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Address,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.AddressCreation,
-                AddressLabelResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> GetAccountsAsync(string tag, CancellationToken token = default)
-        {
-            if (string.IsNullOrWhiteSpace(tag))
-                throw new InvalidOperationException("Tag used to filter accounts on cannot be null of whitespace");
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                label = tag,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.Account, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            AccountResponse responseObject = await JsonSerializer.DeserializeAsync<AccountResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Account,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.Account,
-                AccountResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> GetAccountsAsync(CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.Account, null, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            AccountResponse responseObject = await JsonSerializer.DeserializeAsync<AccountResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Account,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.Account,
-                AccountResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> CreateAccountAsync(string label, CancellationToken token = default)
-        {
-            if (string.IsNullOrWhiteSpace(label))
-                throw new InvalidOperationException("Label cannot be null of whitespace");
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.AccountCreation, new WalletRequestParameters() { label = label, }, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            CreateAccountResponse responseObject = await JsonSerializer.DeserializeAsync<CreateAccountResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Account,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.AccountCreation,
-                CreateAccountResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> CreateAccountAsync(CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.AccountCreation, null, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            CreateAccountResponse responseObject = await JsonSerializer.DeserializeAsync<CreateAccountResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Account,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.AccountCreation,
-                CreateAccountResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> LabelAccountAsync(uint account_index, string label, CancellationToken token = default)
-        {
-            if (string.IsNullOrWhiteSpace(label))
-                throw new InvalidOperationException("Label cannot be null of whitespace");
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                label = label,
-                account_index = account_index,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.AccountLabeling, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            AccountLabelResponse responseObject = await JsonSerializer.DeserializeAsync<AccountLabelResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Account,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.AccountLabeling,
-                AccountLabelResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> GetAccountTagsAsync(CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.AccountTags, null, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            AccountTagsResponse responseObject = await JsonSerializer.DeserializeAsync<AccountTagsResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Account,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.AccountTags,
-                AccountTagsResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> TagAccountsAsync(string tag, IEnumerable<uint> accounts, CancellationToken token = default)
-        {
-            if (string.IsNullOrWhiteSpace(tag))
-                throw new InvalidOperationException("Tag cannot be null of whitespace");
-            if (accounts == null || !accounts.Any())
-                throw new InvalidOperationException("Accounts is either null or empty");
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                tag = tag,
-                accounts = accounts,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.AccountTagging, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            TagAccountsResponse responseObject = await JsonSerializer.DeserializeAsync<TagAccountsResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Account,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.AccountTagging,
-                TagAccountsResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> UntagAccountsAsync(IEnumerable<uint> accounts, CancellationToken token = default)
-        {
-            if (accounts == null || !accounts.Any())
-                throw new InvalidOperationException("Accounts is either null or empty");
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                accounts = accounts,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.AccountUntagging, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            UntagAccountsResponse responseObject = await JsonSerializer.DeserializeAsync<UntagAccountsResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Account,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.AccountUntagging,
-                UntagAccountsResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> SetAccountTagDescriptionAsync(string tag, string description, CancellationToken token = default)
-        {
-            if (string.IsNullOrWhiteSpace(tag))
-                throw new InvalidOperationException("Tag cannot be null of whitespace");
-            if (string.IsNullOrWhiteSpace(description))
-                throw new InvalidOperationException("Description cannot be null of whitespace");
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                tag = tag,
-                description = description,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.AccountTagAndDescriptionSetting, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            AccountTagAndDescriptionResponse responseObject = await JsonSerializer.DeserializeAsync<AccountTagAndDescriptionResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Account,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.AccountTagAndDescriptionSetting,
-                AccountTagAndDescriptionResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> GetHeightAsync(CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.Height, null, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            BlockchainHeightResponse responseObject = await JsonSerializer.DeserializeAsync<BlockchainHeightResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Account,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.AccountTagAndDescriptionSetting,
-                BlockchainHeightResponse = responseObject,
-            };
-        }
-
-        private static List<FundTransferParameter> TransactionToFundTransferParameter(IEnumerable<(string address, ulong amount)> transactions)
-        {
-            List<FundTransferParameter> fundTransferParameters = new List<FundTransferParameter>();
-            foreach (var da in transactions)
-                fundTransferParameters.Add(new FundTransferParameter()
-                {
-                    address = da.address,
-                    amount = da.amount,
-                });
-            return fundTransferParameters;
-        }
-
-        private async Task<MoneroWalletResponse> TransferFundsAsync(WalletRequestParameters walletRequestParameters, CancellationToken token)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.FundTransfer, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            FundTransferResponse responseObject = await JsonSerializer.DeserializeAsync<FundTransferResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.FundTransfer,
-                FundTransferResponse = responseObject,
-            };
-        }
-
-        private async Task<MoneroWalletResponse> TransferSplitFundsAsync(WalletRequestParameters walletRequestParameters, CancellationToken token)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.FundTransferSplit, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            FundTransferSplitResponse responseObject = await JsonSerializer.DeserializeAsync<FundTransferSplitResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.FundTransferSplit,
-                FundTransferSplitResponse = responseObject,
-            };
-        }
-
-        public Task<MoneroWalletResponse> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                destinations = TransactionToFundTransferParameter(transactions),
-                priority = (uint)transfer_priority,
-            };
-            return TransferFundsAsync(walletRequestParameters, token);
-        }
-
-        public Task<MoneroWalletResponse> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, bool get_tx_key, bool get_tx_hex, uint unlock_time = 0, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                destinations = TransactionToFundTransferParameter(transactions),
-                priority = (uint)transfer_priority,
-                unlock_time = unlock_time,
-                get_tx_key = get_tx_key,
-                get_tx_hex = get_tx_hex,
-            };
-            return TransferFundsAsync(walletRequestParameters, token);
-        }
-
-        public Task<MoneroWalletResponse> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, uint unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
-        {
-            if (ring_size <= 1)
-                throw new InvalidOperationException($"ring_size must be at least 2");
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                destinations = TransactionToFundTransferParameter(transactions),
-                priority = (uint)transfer_priority,
-                unlock_time = unlock_time,
-                get_tx_key = get_tx_key,
-                get_tx_hex = get_tx_hex,
-                ring_size = ring_size,
-                mixin = ring_size - 1,
-            };
-            return TransferFundsAsync(walletRequestParameters, token);
-        }
-
-        public Task<MoneroWalletResponse> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, uint account_index, uint unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
-        {
-            if (ring_size <= 1)
-                throw new InvalidOperationException($"ring_size must be at least 2");
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                destinations = TransactionToFundTransferParameter(transactions),
-                priority = (uint)transfer_priority,
-                unlock_time = unlock_time,
-                get_tx_key = get_tx_key,
-                get_tx_hex = get_tx_hex,
-                ring_size = ring_size,
-                mixin = ring_size - 1,
-                account_index = account_index,
-            };
-            return TransferFundsAsync(walletRequestParameters, token);
-        }
-
-        public Task<MoneroWalletResponse> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, bool new_algorithm = true, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                destinations = TransactionToFundTransferParameter(transactions),
-                priority = (uint)transfer_priority,
-            };
-            return TransferSplitFundsAsync(walletRequestParameters, token);
-        }
-
-        public Task<MoneroWalletResponse> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, bool get_tx_key, bool get_tx_hex, bool new_algorithm = true, uint unlock_time = 0, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                destinations = TransactionToFundTransferParameter(transactions),
-                priority = (uint)transfer_priority,
-                get_tx_key = get_tx_key,
-                get_tx_hex = get_tx_hex,
-                new_algorithm = new_algorithm,
-                unlock_time = unlock_time,
-            };
-            return TransferSplitFundsAsync(walletRequestParameters, token);
-        }
-
-        public Task<MoneroWalletResponse> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, bool new_algorithm = true, uint unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                destinations = TransactionToFundTransferParameter(transactions),
-                priority = (uint)transfer_priority,
-                ring_size = ring_size,
-                get_tx_key = get_tx_key,
-                get_tx_hex = get_tx_hex,
-                new_algorithm = new_algorithm,
-                unlock_time = unlock_time,
-            };
-            return TransferSplitFundsAsync(walletRequestParameters, token);
-        }
-
-        public Task<MoneroWalletResponse> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, uint account_index, bool new_algorithm = true, uint unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
-        {
-            if (ring_size <= 1)
-                throw new InvalidOperationException($"ring_size must be at least 2");
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                destinations = TransactionToFundTransferParameter(transactions),
-                priority = (uint)transfer_priority,
-                ring_size = ring_size,
-                mixin = ring_size - 1,
-                account_index = account_index,
-                get_tx_key = get_tx_key,
-                get_tx_hex = get_tx_hex,
-                new_algorithm = new_algorithm,
-                unlock_time = unlock_time,
-            };
-            return TransferSplitFundsAsync(walletRequestParameters, token);
-        }
-
-        public async Task<MoneroWalletResponse> SignTransferAsync(string unsigned_txset, bool export_raw = false, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                unsigned_txset = unsigned_txset,
-                export_raw = export_raw,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.SignTransfer, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            SignTransferResponse responseObject = await JsonSerializer.DeserializeAsync<SignTransferResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.SignTransfer,
-                SignTransferResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> SubmitTransferAsync(string tx_data_hex, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                tx_data_hex = tx_data_hex,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.SubmitTransfer, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            SubmitTransferResponse responseObject = await JsonSerializer.DeserializeAsync<SubmitTransferResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.SubmitTransfer,
-                SubmitTransferResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> SweepDustAsync(bool get_tx_keys, bool get_tx_hex, bool get_tx_metadata, bool do_not_relay = false, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                get_tx_keys = get_tx_keys,
-                get_tx_hex = get_tx_hex,
-                get_tx_metadata = get_tx_metadata,
-                do_not_relay = do_not_relay,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.SweepDust, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            SweepDustResponse responseObject = await JsonSerializer.DeserializeAsync<SweepDustResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.SweepDust,
-                SweepDustResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> SweepAllAsync(string address, uint account_index, TransferPriority transaction_priority, uint ring_size, ulong unlock_time = 0, ulong below_amount = ulong.MaxValue, bool get_tx_keys = true, bool get_tx_hex = true, bool get_tx_metadata = true, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                address = address,
-                account_index = account_index,
-                priority = (uint)transaction_priority,
-                ring_size = ring_size,
-                mixin = ring_size - 1,
-                unlock_time = unlock_time,
-                get_tx_keys = get_tx_keys,
-                get_tx_hex = get_tx_hex,
-                get_tx_metadata = get_tx_metadata,
-                below_amount = below_amount,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.SweepAll, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            SweepAllResponse responseObject = await JsonSerializer.DeserializeAsync<SweepAllResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.SweepAll,
-                SweepAllResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> SaveWalletAsync(CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.SaveWallet, null, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            SaveWalletResponse responseObject = await JsonSerializer.DeserializeAsync<SaveWalletResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.SaveWallet,
-                SaveWalletResponse = responseObject,
-            };
-        }
-
-        public Task<MoneroWalletResponse> GetIncomingTransfersAsync(TransferType transfer_type, bool return_key_image = false, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                transfer_type = transfer_type.ToString().ToLowerInvariant(),
-                verbose = return_key_image,
-            };
-            return GetIncomingTransfersAsync(walletRequestParameters, token);
-        }
-
-        public Task<MoneroWalletResponse> GetIncomingTransfersAsync(TransferType transfer_type, uint account_index, bool return_key_image = false, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                transfer_type = transfer_type.ToString().ToLowerInvariant(),
-                verbose = return_key_image,
-                account_index = account_index,
-            };
-            return GetIncomingTransfersAsync(walletRequestParameters, token);
-        }
-
-        public Task<MoneroWalletResponse> GetIncomingTransfersAsync(TransferType transfer_type, uint account_index, IEnumerable<uint> subaddr_indices, bool return_key_image = false, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                transfer_type = transfer_type.ToString().ToLowerInvariant(),
-                verbose = return_key_image,
-                account_index = account_index,
-                subaddr_indices = subaddr_indices,
-            };
-            return GetIncomingTransfersAsync(walletRequestParameters, token);
-        }
-
-        private async Task<MoneroWalletResponse> GetIncomingTransfersAsync(WalletRequestParameters walletRequestParameters, CancellationToken token)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.IncomingTransfers, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            IncomingTransfersResponse responseObject = await JsonSerializer.DeserializeAsync<IncomingTransfersResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.IncomingTransfers,
-                IncomingTransfersResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> GetPrivateKey(KeyType key_type, CancellationToken token = default)
-        {
-            static string KeyTypeToString(KeyType keyType)
-            {
-                return keyType switch
-                {
-                    KeyType.Mnemonic => "mnemonic",
-                    KeyType.ViewKey => "view_key",
-                    _ => throw new InvalidOperationException($"Unknown KeyType ({keyType})"),
-                };
-            }
-
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                key_type = KeyTypeToString(key_type),
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.QueryPrivateKey, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            IncomingTransfersResponse responseObject = await JsonSerializer.DeserializeAsync<IncomingTransfersResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.QueryPrivateKey,
-                IncomingTransfersResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> StopWalletAsync(CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.StopWallet, null, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            StopWalletResponse responseObject = await JsonSerializer.DeserializeAsync<StopWalletResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.StopWallet,
-                StopWalletResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> SetTransactionNotesAsync(IEnumerable<string> txids, IEnumerable<string> notes, CancellationToken token = default)
-        {
-            if (txids == null || !txids.Any())
-                throw new InvalidOperationException("txids is either null or empty");
-            if (notes == null || !notes.Any())
-                throw new InvalidOperationException("notes is either null or empty");
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                txids = txids,
-                notes = notes,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.SetTransactionNotes, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            SetTransactionNotesResponse responseObject = await JsonSerializer.DeserializeAsync<SetTransactionNotesResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.SetTransactionNotes,
-                SetTransactionNotesResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> GetTransactionNotesAsync(IEnumerable<string> txids, CancellationToken token = default)
-        {
-            if (txids == null || !txids.Any())
-                throw new InvalidOperationException("txids is either null or empty");
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                txids = txids,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.GetTransactionNotes, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            GetTransactionNotesResponse responseObject = await JsonSerializer.DeserializeAsync<GetTransactionNotesResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.GetTransactionNotes,
-                GetTransactionNotesResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> GetTransactionKeyAsync(string txid, CancellationToken token = default)
-        {
-            if (string.IsNullOrWhiteSpace(txid))
-                throw new InvalidOperationException("txid cannot be null or whitespace");
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                txid = txid,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.GetTransactionKey, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            GetTransactionKeyResponse responseObject = await JsonSerializer.DeserializeAsync<GetTransactionKeyResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.GetTransactionKey,
-                GetTransactionKeyResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> CheckTransactionKeyAsync(string txid, string tx_key, string address, CancellationToken token = default)
-        {
-            if (string.IsNullOrWhiteSpace(txid))
-                throw new InvalidOperationException("txid cannot be null or whitespace");
-            if (string.IsNullOrWhiteSpace(tx_key))
-                throw new InvalidOperationException("tx_key cannot be null or whitespace");
-            if (string.IsNullOrWhiteSpace(address))
-                throw new InvalidOperationException("address cannot be null or whitespace");
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                txid = txid,
-                tx_key = tx_key,
-                address = address,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.CheckTransactionKey, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            CheckTransactionKeyResponse responseObject = await JsonSerializer.DeserializeAsync<CheckTransactionKeyResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.CheckTransactionKey,
-                CheckTransactionKeyResponse = responseObject,
-            };
-        }
-
-        public Task<MoneroWalletResponse> GetTransfersAsync(bool @in, bool @out, bool pending, bool failed, bool pool, CancellationToken token = default)
-        {
-            bool isValidRequest = false;
-            isValidRequest |= @in |= @out |= pending |= failed |= pool;
-            if (!isValidRequest)
-                throw new InvalidOperationException("Not requesting to view any form of transfer");
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                @in = @in,
-                @out = @out,
-                pending = pending,
-                failed = failed,
-                pool = pool,
-            };
-            return GetTransfersAsync(walletRequestParameters, token);
-        }
-
-        public Task<MoneroWalletResponse> GetTransfersAsync(bool @in, bool @out, bool pending, bool failed, bool pool, uint min_height, uint max_height, CancellationToken token = default)
-        {
-            bool isValidRequest = false;
-            isValidRequest |= @in |= @out |= pending |= failed |= pool;
-            if (!isValidRequest)
-                throw new InvalidOperationException("Not requesting to view any form of transfer");
-            if (max_height < min_height)
-                throw new InvalidOperationException($"max_height ({max_height}) cannot be less than min_height({min_height})");
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                @in = @in,
-                @out = @out,
-                pending = pending,
-                failed = failed,
-                pool = pool,
-                min_height = min_height,
-                max_height = max_height,
-                filter_by_height = true,
-            };
-            return GetTransfersAsync(walletRequestParameters, token);
-        }
-
-        private async Task<MoneroWalletResponse> GetTransfersAsync(WalletRequestParameters walletRequestParameters, CancellationToken token)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.Transfers, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            ShowTransfersResponse responseObject = await JsonSerializer.DeserializeAsync<ShowTransfersResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.Transfers,
-                ShowTransfersResponse = responseObject,
-            };
-        }
-
-        public Task<MoneroWalletResponse> GetTransferByTxidAsync(string txid, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                txid = txid,
-            };
-            return GetTransferByTxidAsync(walletRequestParameters, token);
-        }
-
-        public Task<MoneroWalletResponse> GetTransferByTxidAsync(string txid, uint account_index, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                txid = txid,
-                account_index = account_index,
-            };
-            return GetTransferByTxidAsync(walletRequestParameters, token);
-        }
-
-        private async Task<MoneroWalletResponse> GetTransferByTxidAsync(WalletRequestParameters walletRequestParameters, CancellationToken token)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.TransferByTxid, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            ShowTransferByTxidResponse responseObject = await JsonSerializer.DeserializeAsync<ShowTransferByTxidResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.TransferByTxid,
-                ShowTransferByTxidResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> SignAsync(string data, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                data = data,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.Sign, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            SignResponse responseObject = await JsonSerializer.DeserializeAsync<SignResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Miscellaneous,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.Sign,
-                SignResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> VerifyAsync(string data, string address, string signature, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                data = data,
-                address = address,
-                signature = signature,
-
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.Verify, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            VerifyResponse responseObject = await JsonSerializer.DeserializeAsync<VerifyResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Miscellaneous,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.Verify,
-                VerifyResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> ExportOutputsAsync(CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.ExportOutputs, null, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            ExportOutputsResponse responseObject = await JsonSerializer.DeserializeAsync<ExportOutputsResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.ExportOutputs,
-                ExportOutputsResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> ImportOutputsAsync(CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.ImportOutputs, null, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            ImportOutputsResponse responseObject = await JsonSerializer.DeserializeAsync<ImportOutputsResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.ImportOutputs,
-                ImportOutputsResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> ExportKeyImagesAsync(CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.ExportKeyImages, null, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            ExportKeyImagesResponse responseObject = await JsonSerializer.DeserializeAsync<ExportKeyImagesResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.ExportKeyImages,
-                ExportKeyImagesResponse = responseObject,
-            };
-        }
-
-        private static List<SignedKeyImage> KeyImageAndSignatureToSignedKeyImages(IEnumerable<(string key_image, string signature)> signed_key_images)
-        {
-            var signedKeyImages = new List<SignedKeyImage>();
-            foreach (var keyImagePair in signed_key_images)
-            {
-                signedKeyImages.Add(new SignedKeyImage()
-                {
-                    key_image = keyImagePair.key_image,
-                    signature = keyImagePair.signature,
-                });
-            }
-            return signedKeyImages;
-        }
-
-        public async Task<MoneroWalletResponse> ImportKeyImagesAsync(IEnumerable<(string key_image, string signature)> signed_key_images, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                signed_key_images = KeyImageAndSignatureToSignedKeyImages(signed_key_images),
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.ImportKeyImages, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            ImportKeyImagesResponse responseObject = await JsonSerializer.DeserializeAsync<ImportKeyImagesResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.ImportKeyImages,
-                ImportKeyImagesResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> MakeUriAsync(string address, ulong amount, string recipient_name, string tx_description = null, string payment_id = null, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                address = address,
-                amount = amount,
-                recipient_name = recipient_name,
-                tx_description = tx_description,
-                payment_id = payment_id,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.MakeUri, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            MakeUriResponse responseObject = await JsonSerializer.DeserializeAsync<MakeUriResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.MakeUri,
-                MakeUriResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> ParseUriAsync(string uri, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                uri = uri,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.ParseUri, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            ParseUriResponse responseObject = await JsonSerializer.DeserializeAsync<ParseUriResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.ParseUri,
-                ParseUriResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> GetAddressBookAsync(IEnumerable<uint> entries, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                entries = entries,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.GetAddressBook, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            GetAddressBookResponse responseObject = await JsonSerializer.DeserializeAsync<GetAddressBookResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.GetAddressBook,
-                GetAddressBookResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> AddAddressBookAsync(string address, string description = null, string payment_id = null, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                address = address,
-                description = description,
-                payment_id = payment_id,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.AddAddressBook, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            AddAddressBookResponse responseObject = await JsonSerializer.DeserializeAsync<AddAddressBookResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.AddAddressBook,
-                AddAddressBookResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> DeleteAddressBookAsync(uint index, CancellationToken token = default)
-        {
-            var walletRequestParameters = new
-            {
-                index = index,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.DeleteAddressBook, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            DeleteAddressBookResponse responseObject = await JsonSerializer.DeserializeAsync<DeleteAddressBookResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.DeleteAddressBook,
-                DeleteAddressBookResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> RefreshWalletAsync(uint start_height, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                start_height = start_height,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.Refresh, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            RefreshWalletResponse responseObject = await JsonSerializer.DeserializeAsync<RefreshWalletResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.Refresh,
-                RefreshWalletResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> RescanSpentAsync(CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.RescanSpent, null, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            RescanSpentResponse responseObject = await JsonSerializer.DeserializeAsync<RescanSpentResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.RescanSpent,
-                RescanSpentResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> CreateWalletAsync(string filename, string language, string password = null, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                filename = filename,
-                language = language,
-                password = password,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.CreateWallet, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            CreateWalletResponse responseObject = await JsonSerializer.DeserializeAsync<CreateWalletResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.CreateWallet,
-                CreateWalletResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> OpenWalletAsync(string filename, string password = null, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                filename = filename,
-                password = password,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.OpenWallet, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            OpenWalletResponse responseObject = await JsonSerializer.DeserializeAsync<OpenWalletResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.OpenWallet,
-                OpenWalletResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> CloseWalletAsync(CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.CloseWallet, null, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            CloseWalletResponse responseObject = await JsonSerializer.DeserializeAsync<CloseWalletResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.CloseWallet,
-                CloseWalletResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> ChangeWalletPasswordAsync(string old_password = null, string new_password = null, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                old_password = old_password,
-                new_password = new_password,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.ChangeWalletPassword, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            ChangeWalletPasswordResponse responseObject = await JsonSerializer.DeserializeAsync<ChangeWalletPasswordResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.ChangeWalletPassword,
-                ChangeWalletPasswordResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> GetVersionAsync(CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.RpcVersion, null, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            GetRpcVersionResponse responseObject = await JsonSerializer.DeserializeAsync<GetRpcVersionResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Miscellaneous,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.RpcVersion,
-                GetRpcVersionResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> IsMultiSigAsync(CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.IsMultiSig, null, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            IsMultiSigResponse responseObject = await JsonSerializer.DeserializeAsync<IsMultiSigResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.IsMultiSig,
-                IsMultiSigResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> PrepareMultiSigAsync(CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.PrepareMultiSig, null, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            PrepareMultiSigResponse responseObject = await JsonSerializer.DeserializeAsync<PrepareMultiSigResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.PrepareMultiSig,
-                PrepareMultiSigResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> MakeMultiSigAsync(IEnumerable<string> multisig_info, uint threshold, string password, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                multisig_info = multisig_info,
-                threshold = threshold,
-                password = password,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.MakeMultiSig, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            MakeMultiSigResponse responseObject = await JsonSerializer.DeserializeAsync<MakeMultiSigResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.MakeMultiSig,
-                MakeMultiSigResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> ExportMultiSigInfoAsync(CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.ExportMultiSigInfo, null, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            ExportMultiSigInfoResponse responseObject = await JsonSerializer.DeserializeAsync<ExportMultiSigInfoResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.ExportMultiSigInfo,
-                ExportMultiSigInfoResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> ImportMultiSigInfoAsync(IEnumerable<string> info, CancellationToken token = default)
-        {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.ImportMultiSigInfo, null, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            ImportMultiSigInfoResponse responseObject = await JsonSerializer.DeserializeAsync<ImportMultiSigInfoResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.ImportMultiSigInfo,
-                ImportMultiSigInfoResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> FinalizeMultiSigAsync(IEnumerable<string> multisig_info, string password, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                multisig_info = multisig_info,
-                password = password,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.FinalizeMultiSig, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            FinalizeMultiSigResponse responseObject = await JsonSerializer.DeserializeAsync<FinalizeMultiSigResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.FinalizeMultiSig,
-                FinalizeMultiSigResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> SignMultiSigAsync(string tx_data_hex, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                tx_data_hex = tx_data_hex,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.SignMultiSigTransaction, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            SignMultiSigTransactionResponse responseObject = await JsonSerializer.DeserializeAsync<SignMultiSigTransactionResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.SignMultiSigTransaction,
-                SignMultiSigTransactionResponse = responseObject,
-            };
-        }
-
-        public async Task<MoneroWalletResponse> SubmitMultiSigAsync(string tx_data_hex, CancellationToken token = default)
-        {
-            var walletRequestParameters = new WalletRequestParameters()
-            {
-                tx_data_hex = tx_data_hex,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.SubmitMultiSigTransaction, walletRequestParameters, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-            using Stream ms = new MemoryStream(responseBody);
-            SubmitMultiSigTransactionResponse responseObject = await JsonSerializer.DeserializeAsync<SubmitMultiSigTransactionResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletResponse()
-            {
-                MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
-                MoneroWalletResponseSubType = MoneroWalletResponseSubType.SubmitMultiSigTransaction,
-                SubmitMultiSigTransactionResponse = responseObject,
-            };
+            _moneroRpcWalletDataRetriever = new MoneroWalletDataRetriever(networkType);
         }
 
         public void Dispose()
         {
-            _httpClient.Dispose();
+            _moneroRpcWalletDataRetriever.Dispose();
+        }
+
+        public async Task<BalanceResult> GetBalanceAsync(uint accountIndex, IEnumerable<uint> addressIndices, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetBalanceAsync(accountIndex, addressIndices, token).ConfigureAwait(false);
+            if (result == null || result.BalanceResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.BalanceResponse.result;
+        }
+
+        public async Task<BalanceResult> GetBalanceAsync(uint accountIndex, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetBalanceAsync(accountIndex, token).ConfigureAwait(false);
+            if (result == null || result.BalanceResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.BalanceResponse.result;
+        }
+
+        public async Task<AddressResult> GetAddressAsync(uint accountIndex, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetAddressAsync(accountIndex, token).ConfigureAwait(false);
+            if (result == null || result.AddressResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.AddressResponse.result;
+        }
+
+        public async Task<AddressResult> GetAddressAsync(uint accountIndex, IEnumerable<uint> addressIndices, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetAddressAsync(accountIndex, addressIndices, token).ConfigureAwait(false);
+            if (result == null || result.AddressResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.AddressResponse.result;
+        }
+
+        public async Task<AddressIndexResult> GetAddressIndexAsync(string address, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetAddressIndexAsync(address, token).ConfigureAwait(false);
+            if (result == null || result.AddressIndexResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.AddressIndexResponse.result;
+        }
+
+        public async Task<AddressCreationResult> CreateAddressAsync(uint accountIndex, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.CreateAddressAsync(accountIndex, token).ConfigureAwait(false);
+            if (result == null || result.AddressCreationResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.AddressCreationResponse.result;
+        }
+
+        public async Task<AddressCreationResult> CreateAddressAsync(uint accountIndex, string label, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.CreateAddressAsync(accountIndex, label, token).ConfigureAwait(false);
+            if (result == null || result.AddressCreationResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.AddressCreationResponse.result;
+        }
+
+        public async Task<AddressLabelResult> LabelAddressAsync(uint majorIndex, uint minorIndex, string label, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.LabelAddressAsync(majorIndex, minorIndex, label, token).ConfigureAwait(false);
+            if (result == null || result.AddressLabelResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.AddressLabelResponse.result;
+        }
+
+        public async Task<AccountResult> GetAccountsAsync(CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetAccountsAsync(token).ConfigureAwait(false);
+            if (result == null || result.AccountResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.AccountResponse.result;
+        }
+
+        public async Task<AccountResult> GetAccountsAsync(string tag, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetAccountsAsync(tag, token).ConfigureAwait(false);
+            if (result == null || result.AccountResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.AccountResponse.result;
+        }
+
+        public async Task<CreateAccountResult> CreateAccountAsync(CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.CreateAccountAsync(token).ConfigureAwait(false);
+            if (result == null || result.CreateAccountResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.CreateAccountResponse.result;
+        }
+
+        public async Task<CreateAccountResult> CreateAccountAsync(string label, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.CreateAccountAsync(label, token).ConfigureAwait(false);
+            if (result == null || result.CreateAccountResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.CreateAccountResponse.result;
+        }
+
+        public async Task<AccountLabelResult> LabelAccountAsync(uint accountIndex, string label, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.LabelAccountAsync(accountIndex, label, token).ConfigureAwait(false);
+            if (result == null || result.AccountLabelResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.AccountLabelResponse.result;
+        }
+
+        public async Task<AccountTagsResult> GetAccountTagsAsync(CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetAccountTagsAsync(token).ConfigureAwait(false);
+            if (result == null || result.AccountTagsResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.AccountTagsResponse.result;
+        }
+
+        public async Task<TagAccountsResult> TagAccountsAsync(string tag, IEnumerable<uint> accounts, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.TagAccountsAsync(tag, accounts, token).ConfigureAwait(false);
+            if (result == null || result.TagAccountsResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.TagAccountsResponse.result;
+        }
+
+        public async Task<UntagAccountsResult> UntagAccountsAsync(IEnumerable<uint> accounts, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.UntagAccountsAsync(accounts, token).ConfigureAwait(false);
+            if (result == null || result.UntagAccountsResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.UntagAccountsResponse.result;
+        }
+
+        public async Task<AccountTagAndDescriptionResult> SetAccountTagDescriptionAsync(string tag, string description, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.SetAccountTagDescriptionAsync(tag, description, token).ConfigureAwait(false);
+            if (result == null || result.SetAccountTagAndDescriptionResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.SetAccountTagAndDescriptionResponse.result;
+        }
+
+        public async Task<BlockchainHeightResult> GetHeightAsync(CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetHeightAsync(token).ConfigureAwait(false);
+            if (result == null || result.BlockchainHeightResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.BlockchainHeightResponse.result;
+        }
+
+        public async Task<FundTransferResult> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.TransferAsync(transactions, transferPriority, token).ConfigureAwait(false);
+            if (result == null || result.FundTransferResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.FundTransferResponse.result;
+        }
+
+        public async Task<FundTransferResult> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, bool getTxKey, bool getTxHex, uint unlockTime = 0, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.TransferAsync(transactions, transferPriority, getTxKey, getTxHex, unlockTime, token).ConfigureAwait(false);
+            if (result == null || result.FundTransferResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.FundTransferResponse.result;
+        }
+
+        public async Task<FundTransferResult> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, uint ringSize, uint unlockTime = 0, bool getTxKey = true, bool getTxHex = true, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.TransferAsync(transactions, transferPriority, ringSize, unlockTime, getTxKey, getTxHex, token).ConfigureAwait(false);
+            if (result == null || result.FundTransferResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.FundTransferResponse.result;
+        }
+
+        public async Task<FundTransferResult> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, uint ringSize, uint accountIndex, uint unlockTime = 0, bool getTxKey = true, bool getTxHex = true, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.TransferAsync(transactions, transferPriority, ringSize, accountIndex, unlockTime, getTxKey, getTxHex, token).ConfigureAwait(false);
+            if (result == null || result.FundTransferResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.FundTransferResponse.result;
+        }
+
+        public async Task<FundTransferSplitResult> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, bool newAlgorithm = true, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.TransferSplitAsync(transactions, transferPriority, newAlgorithm, token).ConfigureAwait(false);
+            if (result == null || result.FundTransferSplitResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.FundTransferSplitResponse.result;
+        }
+
+        public async Task<FundTransferSplitResult> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, bool getTxKey, bool getTxHex, bool newAlgorithm = true, uint unlockTime = 0, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.TransferSplitAsync(transactions, transferPriority, getTxKey, getTxHex, newAlgorithm, unlockTime, token).ConfigureAwait(false);
+            if (result == null || result.FundTransferSplitResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.FundTransferSplitResponse.result;
+        }
+
+        public async Task<FundTransferSplitResult> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, uint ringSize, bool newAlgorithm = true, uint unlockTime = 0, bool getTxKey = true, bool getTxHex = true, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.TransferSplitAsync(transactions, transferPriority, ringSize, newAlgorithm, unlockTime, getTxKey, getTxHex, token).ConfigureAwait(false);
+            if (result == null || result.FundTransferSplitResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.FundTransferSplitResponse.result;
+        }
+
+        public async Task<FundTransferSplitResult> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, uint ringSize, uint accountIndex, bool newAlgorithm = true, uint unlockTime = 0, bool getTxKey = true, bool getTxHex = true, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.TransferSplitAsync(transactions, transferPriority, ringSize, accountIndex, newAlgorithm, unlockTime, getTxKey, getTxHex, token).ConfigureAwait(false);
+            if (result == null || result.FundTransferSplitResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.FundTransferSplitResponse.result;
+        }
+
+        public async Task<SignTransferResult> SignTransferAsync(string unsignedTxSet, bool exportRaw = false, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.SignTransferAsync(unsignedTxSet, exportRaw, token).ConfigureAwait(false);
+            if (result == null || result.SignTransferResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.SignTransferResponse.result;
+        }
+
+        public async Task<SubmitTransferResult> SubmitTransferAsync(string txDataHex, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.SubmitTransferAsync(txDataHex, token).ConfigureAwait(false);
+            if (result == null || result.SubmitTransferResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.SubmitTransferResponse.result;
+        }
+
+        public async Task<SweepDustResult> SweepDustAsync(bool getTxKey, bool getTxHex, bool getTxMetadata, bool doNotRelay = false, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.SweepDustAsync(getTxKey, getTxHex, getTxMetadata, doNotRelay, token).ConfigureAwait(false);
+            if (result == null || result.SweepDustResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.SweepDustResponse.result;
+        }
+
+        public async Task<FundTransferSplitResult> SweepAllAsync(string address, uint accountIndex, TransferPriority transactionPriority, uint ringSize, ulong unlockTime = 0, ulong belowAmount = ulong.MaxValue, bool getTxKeys = true, bool getTxHex = true, bool getTxMetadata = true, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.SweepAllAsync(address, accountIndex, transactionPriority, ringSize, unlockTime, belowAmount, getTxKeys, getTxHex, getTxMetadata, token).ConfigureAwait(false);
+            if (result == null || result.SweepAllResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.SweepAllResponse.result;
+        }
+
+        public async Task<SaveWalletResult> SaveWalletAsync(CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.SaveWalletAsync(token).ConfigureAwait(false);
+            if (result == null || result.SaveWalletResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.SaveWalletResponse.result;
+        }
+
+        public async Task<IncomingTransferResult> GetIncomingTransfersAsync(TransferType transferType, bool returnKeyImage = false, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetIncomingTransfersAsync(transferType, returnKeyImage, token).ConfigureAwait(false);
+            if (result == null || result.IncomingTransfersResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.IncomingTransfersResponse.result;
+        }
+
+        public async Task<IncomingTransferResult> GetIncomingTransfersAsync(TransferType transferType, uint accountIndex, bool returnKeyImage = false, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetIncomingTransfersAsync(transferType, accountIndex, returnKeyImage, token).ConfigureAwait(false);
+            if (result == null || result.IncomingTransfersResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.IncomingTransfersResponse.result;
+        }
+
+        public async Task<IncomingTransferResult> GetIncomingTransfersAsync(TransferType transferType, uint accountIndex, IEnumerable<uint> subaddrIndices, bool returnKeyImage = false, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetIncomingTransfersAsync(transferType, accountIndex, subaddrIndices, returnKeyImage, token).ConfigureAwait(false);
+            if (result == null || result.IncomingTransfersResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.IncomingTransfersResponse.result;
+        }
+
+        public async Task<QueryKeyResult> GetPrivateKey(KeyType keyType, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetPrivateKey(keyType, token).ConfigureAwait(false);
+            if (result == null || result.QueryKeyResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.QueryKeyResponse.result;
+        }
+
+        public async Task<StopWalletResult> StopWalletAsync(CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.StopWalletAsync(token).ConfigureAwait(false);
+            if (result == null || result.StopWalletResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.StopWalletResponse.result;
+        }
+
+        public async Task<SetTransactionNotesResult> SetTransactionNotesAsync(IEnumerable<string> txids, IEnumerable<string> notes, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.SetTransactionNotesAsync(txids, notes, token).ConfigureAwait(false);
+            if (result == null || result.SetTransactionNotesResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.SetTransactionNotesResponse.result;
+        }
+
+        public async Task<GetTransactionNotesResult> GetTransactionNotesAsync(IEnumerable<string> txids, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetTransactionNotesAsync(txids, token).ConfigureAwait(false);
+            if (result == null || result.GetTransactionNotesResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.GetTransactionNotesResponse.result;
+        }
+
+        public async Task<GetTransactionKeyResult> GetTransactionKeyAsync(string txid, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetTransactionKeyAsync(txid, token).ConfigureAwait(false);
+            if (result == null || result.GetTransactionKeyResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.GetTransactionKeyResponse.result;
+        }
+
+        public async Task<CheckTransactionKeyResult> CheckTransactionKeyAsync(string txid, string txKey, string address, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.CheckTransactionKeyAsync(txid, txKey, address, token).ConfigureAwait(false);
+            if (result == null || result.CheckTransactionKeyResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.CheckTransactionKeyResponse.result;
+        }
+
+        public async Task<ShowTransfersResult> GetTransfersAsync(bool @in, bool @out, bool pending, bool failed, bool pool, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetTransfersAsync(@in, @out, pending, failed, pool, token).ConfigureAwait(false);
+            if (result == null || result.ShowTransfersResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.ShowTransfersResponse.result;
+        }
+
+        public async Task<ShowTransfersResult> GetTransfersAsync(bool @in, bool @out, bool pending, bool failed, bool pool, uint minHeight, uint maxHeight, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetTransfersAsync(@in, @out, pending, failed, pool, minHeight, maxHeight, token).ConfigureAwait(false);
+            if (result == null || result.ShowTransfersResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.ShowTransfersResponse.result;
+        }
+
+        public async Task<ShowTransferByTxidResult> GetTransferByTxidAsync(string txid, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetTransferByTxidAsync(txid, token).ConfigureAwait(false);
+            if (result == null || result.TransferByTxidResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.TransferByTxidResponse.result;
+        }
+
+        public async Task<ShowTransferByTxidResult> GetTransferByTxidAsync(string txid, uint accountIndex, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetTransferByTxidAsync(txid, accountIndex, token).ConfigureAwait(false);
+            if (result == null || result.TransferByTxidResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.TransferByTxidResponse.result;
+        }
+
+        public async Task<SignResult> SignAsync(string data, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.SignAsync(data, token).ConfigureAwait(false);
+            if (result == null || result.SignResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.SignResponse.result;
+        }
+
+        public async Task<VerifyResult> VerifyAsync(string data, string address, string signature, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.VerifyAsync(data, address, signature, token).ConfigureAwait(false);
+            if (result == null || result.VerifyResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.VerifyResponse.result;
+        }
+
+        public async Task<ExportOutputsResult> ExportOutputsAsync(CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.ExportOutputsAsync(token).ConfigureAwait(false);
+            if (result == null || result.ExportOutputsResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.ExportOutputsResponse.result;
+        }
+
+        public async Task<ImportOutputsResult> ImportOutputsAsync(CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.ImportOutputsAsync(token).ConfigureAwait(false);
+            if (result == null || result.ImportOutputsResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.ImportOutputsResponse.result;
+        }
+
+        public async Task<ExportKeyImagesResult> ExportKeyImagesAsync(CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.ExportKeyImagesAsync(token).ConfigureAwait(false);
+            if (result == null || result.ExportKeyImagesResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.ExportKeyImagesResponse.result;
+        }
+
+        public async Task<ImportKeyImagesResult> ImportKeyImagesAsync(IEnumerable<(string keyImage, string signature)> signedKeyImages, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.ImportKeyImagesAsync(signedKeyImages, token).ConfigureAwait(false);
+            if (result == null || result.ImportKeyImagesResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.ImportKeyImagesResponse.result;
+        }
+
+        public async Task<MakeUriResult> MakeUriAsync(string address, ulong amount, string recipientName, string txDescription = null, string paymentId = null, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.MakeUriAsync(address, amount, recipientName, txDescription, paymentId, token).ConfigureAwait(false);
+            if (result == null || result.MakeUriResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.MakeUriResponse.result;
+        }
+
+        public async Task<ParseUriResult> ParseUriAsync(string uri, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.ParseUriAsync(uri, token).ConfigureAwait(false);
+            if (result == null || result.ParseUriResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.ParseUriResponse.result;
+        }
+
+        public async Task<GetAddressBookResult> GetAddressBookAsync(IEnumerable<uint> entries, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetAddressBookAsync(entries, token).ConfigureAwait(false);
+            if (result == null || result.GetAddressBookResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.GetAddressBookResponse.result;
+        }
+
+        public async Task<AddAddressBookResult> AddAddressBookAsync(string address, string description = null, string paymentId = null, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.AddAddressBookAsync(address, description, paymentId, token).ConfigureAwait(false);
+            if (result == null || result.AddAddressBookResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.AddAddressBookResponse.result;
+        }
+
+        public async Task<DeleteAddressBookResult> DeleteAddressBookAsync(uint index, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.DeleteAddressBookAsync(index, token).ConfigureAwait(false);
+            if (result == null || result.DeleteAddressBookResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.DeleteAddressBookResponse.result;
+        }
+
+        public async Task<RefreshWalletResult> RefreshWalletAsync(uint startHeight, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.RefreshWalletAsync(startHeight, token).ConfigureAwait(false);
+            if (result == null || result.RefreshWalletResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.RefreshWalletResponse.result;
+        }
+
+        public async Task<RescanSpentResult> RescanSpentAsync(CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.RescanSpentAsync(token).ConfigureAwait(false);
+            if (result == null || result.RescanSpentResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.RescanSpentResponse.result;
+        }
+
+        public async Task<CreateWalletResult> CreateWalletAsync(string filename, string language, string password = null, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.CreateWalletAsync(filename, language, password, token).ConfigureAwait(false);
+            if (result == null || result.CreateWalletResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.CreateWalletResponse.result;
+        }
+
+        public async Task<OpenWalletResult> OpenWalletAsync(string filename, string password = null, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.OpenWalletAsync(filename, password, token).ConfigureAwait(false);
+            if (result == null || result.OpenWalletResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.OpenWalletResponse.result;
+        }
+
+        public async Task<CloseWalletResult> CloseWalletAsync(CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.CloseWalletAsync(token).ConfigureAwait(false);
+            if (result == null || result.CloseWalletResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.CloseWalletResponse.result;
+        }
+
+        public async Task<ChangeWalletPasswordResult> ChangeWalletPasswordAsync(string oldPassword = null, string newPassword = null, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.ChangeWalletPasswordAsync(oldPassword, newPassword, token).ConfigureAwait(false);
+            if (result == null || result.ChangeWalletPasswordResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.ChangeWalletPasswordResponse.result;
+        }
+
+        public async Task<GetVersionResult> GetVersionAsync(CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.GetVersionAsync(token).ConfigureAwait(false);
+            if (result == null || result.GetRpcVersionResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.GetRpcVersionResponse.result;
+        }
+
+        public async Task<IsMultiSigResult> IsMultiSigAsync(CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.IsMultiSigAsync(token).ConfigureAwait(false);
+            if (result == null || result.IsMultiSigResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.IsMultiSigResponse.result;
+        }
+
+        public async Task<PrepareMultiSigResult> PrepareMultiSigAsync(CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.PrepareMultiSigAsync(token).ConfigureAwait(false);
+            if (result == null || result.PrepareMultiSigResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.PrepareMultiSigResponse.result;
+        }
+
+        public async Task<MakeMultiSigResult> MakeMultiSigAsync(IEnumerable<string> multiSigInfo, uint threshold, string password, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.MakeMultiSigAsync(multiSigInfo, threshold, password, token).ConfigureAwait(false);
+            if (result == null || result.MakeMultiSigResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.MakeMultiSigResponse.result;
+        }
+
+        public async Task<ExportMultiSigInfoResult> ExportMultiSigInfoAsync(CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.ExportMultiSigInfoAsync(token).ConfigureAwait(false);
+            if (result == null || result.ExportMultiSigInfoResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.ExportMultiSigInfoResponse.result;
+        }
+
+        public async Task<ImportMultiSigInfoResult> ImportMultiSigInfoAsync(IEnumerable<string> info, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.ImportMultiSigInfoAsync(info, token).ConfigureAwait(false);
+            if (result == null || result.ImportMultiSigInfoResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.ImportMultiSigInfoResponse.result;
+        }
+
+        public async Task<FinalizeMultiSigResult> FinalizeMultiSigAsync(IEnumerable<string> multiSigInfo, string password, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.FinalizeMultiSigAsync(multiSigInfo, password, token).ConfigureAwait(false);
+            if (result == null || result.FinalizeMultiSigResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.FinalizeMultiSigResponse.result;
+        }
+
+        public async Task<SignMultiSigTransactionResult> SignMultiSigAsync(string txDataHex, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.SignMultiSigAsync(txDataHex, token).ConfigureAwait(false);
+            if (result == null || result.SignMultiSigTransactionResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.SignMultiSigTransactionResponse.result;
+        }
+
+        public async Task<SubmitMultiSigResult> SubmitMultiSigAsync(string txDataHex, CancellationToken token = default)
+        {
+            var result = await _moneroRpcWalletDataRetriever.SubmitMultiSigAsync(txDataHex, token).ConfigureAwait(false);
+            if (result == null || result.SubmitMultiSigTransactionResponse == null)
+                throw new RpcResponseException("Error experienced when making RPC call");
+            return result.SubmitMultiSigTransactionResponse.result;
         }
     }
 }

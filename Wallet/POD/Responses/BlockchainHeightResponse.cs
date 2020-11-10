@@ -6,7 +6,7 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-    public class BlockchainHeightResponse : RpcResponse
+    internal class BlockchainHeightResponse : RpcResponse
     {
         public BlockchainHeightResult result { get; set; }
     }

@@ -7,7 +7,7 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Daemon.POD.Responses
 {
-    public class NodeInformationResponse : RpcResponse
+    internal class DaemonInformationResponse : RpcResponse
     {
         public InformationResult result { get; set; }
 

@@ -6,7 +6,7 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Daemon.POD.Responses
 {
-    public class FlushTransactionPoolResponse : RpcResponse
+    internal class FlushTransactionPoolResponse : RpcResponse
     {
         public FlushTransactionPoolResult result { get; set; }
     }

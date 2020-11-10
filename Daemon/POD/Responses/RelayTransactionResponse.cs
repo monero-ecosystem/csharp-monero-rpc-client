@@ -6,7 +6,7 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Daemon.POD.Responses
 {
-    public class RelayTransactionResponse : RpcResponse
+    internal class RelayTransactionResponse : RpcResponse
     {
         public RelayTransactionResult result { get; set; }
     }

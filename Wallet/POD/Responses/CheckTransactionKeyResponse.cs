@@ -7,7 +7,7 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-    public class CheckTransactionKeyResponse : RpcResponse
+    internal class CheckTransactionKeyResponse : RpcResponse
     {
         public CheckTransactionKeyResult result { get; set; }
     }

@@ -6,7 +6,7 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Daemon.POD.Responses
 {
-    public class CoinbaseTransactionSumResponse : RpcResponse
+    internal class CoinbaseTransactionSumResponse : RpcResponse
     {
         public CoinbaseTransactionSumResult result { get; set; }
     }

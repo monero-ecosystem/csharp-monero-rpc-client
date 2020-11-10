@@ -6,7 +6,7 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-    public class MakeMultiSigResponse : RpcResponse
+    internal class MakeMultiSigResponse : RpcResponse
     {
         public MakeMultiSigResult result { get; set; }
     }

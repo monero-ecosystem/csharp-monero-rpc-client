@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Monero.Client.Network
 {
-    public class RpcResponse
+    internal class RpcResponse
     {
         public string id { get; set; }
         public string jsonrpc { get; set; }

@@ -6,7 +6,7 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Daemon.POD.Responses
 {
-    public class SetBansResponse : RpcResponse
+    internal class SetBansResponse : RpcResponse
     {
         public SetBansResult result { get; set; }
     }

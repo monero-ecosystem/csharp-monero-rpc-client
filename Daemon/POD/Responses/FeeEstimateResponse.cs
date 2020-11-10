@@ -6,7 +6,7 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Daemon.POD.Responses
 {
-    public class FeeEstimateResponse : RpcResponse
+    internal class FeeEstimateResponse : RpcResponse
     {
         public FeeEstimateResult result { get; set; }
     }

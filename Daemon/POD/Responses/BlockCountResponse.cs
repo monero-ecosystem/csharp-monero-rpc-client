@@ -6,7 +6,7 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Daemon.POD.Responses
 {
-    public class BlockCountResponse : RpcResponse
+    internal class BlockCountResponse : RpcResponse
     {
         public BlockCountResult result { get; set; }
     }

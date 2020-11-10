@@ -6,7 +6,7 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Daemon.POD.Responses
 {
-    public class SyncronizeInformationResponse : RpcResponse
+    internal class SyncronizeInformationResponse : RpcResponse
     {
         public SyncronizeInformationResult result { get; set; }
     }

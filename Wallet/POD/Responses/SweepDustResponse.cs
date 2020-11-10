@@ -6,13 +6,13 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-    public class SweepDustResponse : RpcResponse
+    internal class SweepDustResponse : RpcResponse
     {
         public SweepDustResult result { get; set; }
     }
 
     public class SweepDustResult
     {
-
+        // ...
     }
 }

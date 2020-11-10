@@ -9,7 +9,7 @@ namespace Monero.Client.Wallet.POD
         /// <summary>
         /// Fee multiplier 1x
         /// </summary>
-        Unimportant = 1,
+        Unimportant = 0,
         /// <summary>
         /// Fee multiplier 4x (default)
         /// </summary>

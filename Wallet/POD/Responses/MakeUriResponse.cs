@@ -6,7 +6,7 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-    public class MakeUriResponse : RpcResponse
+    internal class MakeUriResponse : RpcResponse
     {
         public MakeUriResult result { get; set; }
     }

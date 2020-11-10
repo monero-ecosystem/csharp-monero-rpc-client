@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-    public class SubmitMultiSigTransactionResponse : RpcResponse
+    internal class SubmitMultiSigTransactionResponse : RpcResponse
     {
         public SubmitMultiSigResult result { get; set; }
     }

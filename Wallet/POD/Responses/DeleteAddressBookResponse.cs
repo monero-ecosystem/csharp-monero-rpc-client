@@ -6,7 +6,7 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-    public class DeleteAddressBookResponse : RpcResponse
+    internal class DeleteAddressBookResponse : RpcResponse
     {
         public DeleteAddressBookResult result { get; set; }
     }

@@ -6,7 +6,7 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-    public class ImportKeyImagesResponse : RpcResponse
+    internal class ImportKeyImagesResponse : RpcResponse
     {
         public ImportKeyImagesResult result { get; set; }
     }
