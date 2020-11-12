@@ -16,42 +16,42 @@ using Monero.Client.Wallet.POD.Responses;
 
 namespace Monero.Client.Wallet
 {
-    internal class MoneroWalletDataRetriever : IMoneroWalletDataRetriever
+    internal class MoneroWalletRpcCommunicator : IMoneroWalletRpcCommunicator
     {
         private readonly HttpClient _httpClient;
         private readonly MoneroWalletClientRequestAdapter _requestAdapter;
 
-        private MoneroWalletDataRetriever()
+        private MoneroWalletRpcCommunicator()
         {
             _httpClient = new HttpClient();
         }
 
-        private MoneroWalletDataRetriever(HttpMessageHandler httpMessageHandler)
+        private MoneroWalletRpcCommunicator(HttpMessageHandler httpMessageHandler)
         {
             _httpClient = new HttpClient(httpMessageHandler);
         }
 
-        private MoneroWalletDataRetriever(HttpMessageHandler httpMessageHandler, bool disposeHandler)
+        private MoneroWalletRpcCommunicator(HttpMessageHandler httpMessageHandler, bool disposeHandler)
         {
             _httpClient = new HttpClient(httpMessageHandler, disposeHandler);
         }
 
-        public MoneroWalletDataRetriever(Uri uri, HttpMessageHandler httpMessageHandler) : this(httpMessageHandler)
+        public MoneroWalletRpcCommunicator(Uri uri, HttpMessageHandler httpMessageHandler) : this(httpMessageHandler)
         {
             _requestAdapter = new MoneroWalletClientRequestAdapter(uri);
         }
 
-        public MoneroWalletDataRetriever(Uri uri, HttpMessageHandler httpMessageHandler, bool disposeHandler) : this(httpMessageHandler, disposeHandler)
+        public MoneroWalletRpcCommunicator(Uri uri, HttpMessageHandler httpMessageHandler, bool disposeHandler) : this(httpMessageHandler, disposeHandler)
         {
             _requestAdapter = new MoneroWalletClientRequestAdapter(uri);
         }
 
-        public MoneroWalletDataRetriever(Uri uri) : this()
+        public MoneroWalletRpcCommunicator(Uri uri) : this()
         {
             _requestAdapter = new MoneroWalletClientRequestAdapter(uri);
         }
 
-        public MoneroWalletDataRetriever(MoneroNetwork networkType) : this()
+        public MoneroWalletRpcCommunicator(MoneroNetwork networkType) : this()
         {
             Uri uri;
             switch (networkType)
@@ -71,7 +71,7 @@ namespace Monero.Client.Wallet
             _requestAdapter = new MoneroWalletClientRequestAdapter(uri);
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> GetBalanceAsync(uint account_index, IEnumerable<uint> address_indices, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> GetBalanceAsync(uint account_index, IEnumerable<uint> address_indices, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -84,7 +84,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             BalanceResponse responseObject = await JsonSerializer.DeserializeAsync<BalanceResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Account,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.Balance,
@@ -92,7 +92,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> GetBalanceAsync(uint account_index, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> GetBalanceAsync(uint account_index, CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.Balance, new WalletRequestParameters() { account_index = account_index, }, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -100,7 +100,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             BalanceResponse responseObject = await JsonSerializer.DeserializeAsync<BalanceResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Account,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.Balance,
@@ -108,7 +108,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> GetAddressAsync(uint account_index, IEnumerable<uint> address_indices, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> GetAddressAsync(uint account_index, IEnumerable<uint> address_indices, CancellationToken token = default)
         {
             var walletParameters = new WalletRequestParameters()
             {
@@ -121,7 +121,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             AddressResponse responseObject = await JsonSerializer.DeserializeAsync<AddressResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Account,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.Address,
@@ -129,7 +129,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> GetAddressAsync(uint account_index, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> GetAddressAsync(uint account_index, CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.Address, new WalletRequestParameters() { account_index = account_index, }, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -137,7 +137,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             AddressResponse responseObject = await JsonSerializer.DeserializeAsync<AddressResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Account,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.Address,
@@ -145,7 +145,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> GetAddressIndexAsync(string address, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> GetAddressIndexAsync(string address, CancellationToken token = default)
         {
             if (string.IsNullOrWhiteSpace(address))
                 throw new InvalidOperationException("Address cannot be null of whitespace");
@@ -155,7 +155,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             AddressIndexResponse responseObject = await JsonSerializer.DeserializeAsync<AddressIndexResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Account,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.AddressIndex,
@@ -163,7 +163,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> CreateAddressAsync(uint account_index, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> CreateAddressAsync(uint account_index, CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.AddressCreation, new WalletRequestParameters() { account_index = account_index, }, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -171,7 +171,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             AddressCreationResponse responseObject = await JsonSerializer.DeserializeAsync<AddressCreationResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Address,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.AddressCreation,
@@ -179,7 +179,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> CreateAddressAsync(uint account_index, string label, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> CreateAddressAsync(uint account_index, string label, CancellationToken token = default)
         {
             if (string.IsNullOrWhiteSpace(label))
                 throw new InvalidOperationException("Label cannot be null of whitespace");
@@ -194,7 +194,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             AddressCreationResponse responseObject = await JsonSerializer.DeserializeAsync<AddressCreationResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Address,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.AddressCreation,
@@ -202,7 +202,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> LabelAddressAsync(uint major_index, uint minor_index, string label, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> LabelAddressAsync(uint major_index, uint minor_index, string label, CancellationToken token = default)
         {
             if (string.IsNullOrWhiteSpace(label))
                 throw new InvalidOperationException("Label cannot be null of whitespace");
@@ -220,7 +220,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             AddressLabelResponse responseObject = await JsonSerializer.DeserializeAsync<AddressLabelResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Address,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.AddressCreation,
@@ -228,7 +228,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> GetAccountsAsync(string tag, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> GetAccountsAsync(string tag, CancellationToken token = default)
         {
             if (string.IsNullOrWhiteSpace(tag))
                 throw new InvalidOperationException("Tag used to filter accounts on cannot be null of whitespace");
@@ -242,7 +242,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             AccountResponse responseObject = await JsonSerializer.DeserializeAsync<AccountResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Account,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.Account,
@@ -250,7 +250,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> GetAccountsAsync(CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> GetAccountsAsync(CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.Account, null, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -258,7 +258,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             AccountResponse responseObject = await JsonSerializer.DeserializeAsync<AccountResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Account,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.Account,
@@ -266,7 +266,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> CreateAccountAsync(string label, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> CreateAccountAsync(string label, CancellationToken token = default)
         {
             if (string.IsNullOrWhiteSpace(label))
                 throw new InvalidOperationException("Label cannot be null of whitespace");
@@ -276,7 +276,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             CreateAccountResponse responseObject = await JsonSerializer.DeserializeAsync<CreateAccountResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Account,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.AccountCreation,
@@ -284,7 +284,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> CreateAccountAsync(CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> CreateAccountAsync(CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.AccountCreation, null, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -292,7 +292,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             CreateAccountResponse responseObject = await JsonSerializer.DeserializeAsync<CreateAccountResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Account,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.AccountCreation,
@@ -300,7 +300,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> LabelAccountAsync(uint account_index, string label, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> LabelAccountAsync(uint account_index, string label, CancellationToken token = default)
         {
             if (string.IsNullOrWhiteSpace(label))
                 throw new InvalidOperationException("Label cannot be null of whitespace");
@@ -315,7 +315,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             AccountLabelResponse responseObject = await JsonSerializer.DeserializeAsync<AccountLabelResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Account,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.AccountLabeling,
@@ -323,7 +323,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> GetAccountTagsAsync(CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> GetAccountTagsAsync(CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.AccountTags, null, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -331,7 +331,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             AccountTagsResponse responseObject = await JsonSerializer.DeserializeAsync<AccountTagsResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Account,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.AccountTags,
@@ -339,7 +339,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> TagAccountsAsync(string tag, IEnumerable<uint> accounts, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> TagAccountsAsync(string tag, IEnumerable<uint> accounts, CancellationToken token = default)
         {
             if (string.IsNullOrWhiteSpace(tag))
                 throw new InvalidOperationException("Tag cannot be null of whitespace");
@@ -356,7 +356,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             TagAccountsResponse responseObject = await JsonSerializer.DeserializeAsync<TagAccountsResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Account,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.AccountTagging,
@@ -364,7 +364,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> UntagAccountsAsync(IEnumerable<uint> accounts, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> UntagAccountsAsync(IEnumerable<uint> accounts, CancellationToken token = default)
         {
             if (accounts == null || !accounts.Any())
                 throw new InvalidOperationException("Accounts is either null or empty");
@@ -378,7 +378,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             UntagAccountsResponse responseObject = await JsonSerializer.DeserializeAsync<UntagAccountsResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Account,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.AccountUntagging,
@@ -386,7 +386,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> SetAccountTagDescriptionAsync(string tag, string description, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> SetAccountTagDescriptionAsync(string tag, string description, CancellationToken token = default)
         {
             if (string.IsNullOrWhiteSpace(tag))
                 throw new InvalidOperationException("Tag cannot be null of whitespace");
@@ -403,7 +403,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             AccountTagAndDescriptionResponse responseObject = await JsonSerializer.DeserializeAsync<AccountTagAndDescriptionResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Account,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.AccountTagAndDescriptionSetting,
@@ -411,7 +411,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> GetHeightAsync(CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> GetHeightAsync(CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.Height, null, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -419,7 +419,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             BlockchainHeightResponse responseObject = await JsonSerializer.DeserializeAsync<BlockchainHeightResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Account,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.AccountTagAndDescriptionSetting,
@@ -439,7 +439,7 @@ namespace Monero.Client.Wallet
             return fundTransferParameters;
         }
 
-        private async Task<MoneroWalletDataRetrieverResponse> TransferFundsAsync(WalletRequestParameters walletRequestParameters, CancellationToken token)
+        private async Task<MoneroWalletCommunicatorResponse> TransferFundsAsync(WalletRequestParameters walletRequestParameters, CancellationToken token)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.FundTransfer, walletRequestParameters, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -447,7 +447,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             FundTransferResponse responseObject = await JsonSerializer.DeserializeAsync<FundTransferResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.FundTransfer,
@@ -455,7 +455,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        private async Task<MoneroWalletDataRetrieverResponse> TransferSplitFundsAsync(WalletRequestParameters walletRequestParameters, CancellationToken token)
+        private async Task<MoneroWalletCommunicatorResponse> TransferSplitFundsAsync(WalletRequestParameters walletRequestParameters, CancellationToken token)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.FundTransferSplit, walletRequestParameters, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -463,7 +463,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             SplitFundTransferResponse responseObject = await JsonSerializer.DeserializeAsync<SplitFundTransferResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.FundTransferSplit,
@@ -471,7 +471,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public Task<MoneroWalletDataRetrieverResponse> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, CancellationToken token = default)
+        public Task<MoneroWalletCommunicatorResponse> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -481,7 +481,7 @@ namespace Monero.Client.Wallet
             return TransferFundsAsync(walletRequestParameters, token);
         }
 
-        public Task<MoneroWalletDataRetrieverResponse> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, bool get_tx_key, bool get_tx_hex, uint unlock_time = 0, CancellationToken token = default)
+        public Task<MoneroWalletCommunicatorResponse> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, bool get_tx_key, bool get_tx_hex, uint unlock_time = 0, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -494,7 +494,7 @@ namespace Monero.Client.Wallet
             return TransferFundsAsync(walletRequestParameters, token);
         }
 
-        public Task<MoneroWalletDataRetrieverResponse> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, uint unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
+        public Task<MoneroWalletCommunicatorResponse> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, uint unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
         {
             if (ring_size <= 1)
                 throw new InvalidOperationException($"ring_size must be at least 2");
@@ -511,7 +511,7 @@ namespace Monero.Client.Wallet
             return TransferFundsAsync(walletRequestParameters, token);
         }
 
-        public Task<MoneroWalletDataRetrieverResponse> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, uint account_index, uint unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
+        public Task<MoneroWalletCommunicatorResponse> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, uint account_index, uint unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
         {
             if (ring_size <= 1)
                 throw new InvalidOperationException($"ring_size must be at least 2");
@@ -529,7 +529,7 @@ namespace Monero.Client.Wallet
             return TransferFundsAsync(walletRequestParameters, token);
         }
 
-        public Task<MoneroWalletDataRetrieverResponse> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, bool new_algorithm = true, CancellationToken token = default)
+        public Task<MoneroWalletCommunicatorResponse> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, bool new_algorithm = true, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -539,7 +539,7 @@ namespace Monero.Client.Wallet
             return TransferSplitFundsAsync(walletRequestParameters, token);
         }
 
-        public Task<MoneroWalletDataRetrieverResponse> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, bool get_tx_key, bool get_tx_hex, bool new_algorithm = true, uint unlock_time = 0, CancellationToken token = default)
+        public Task<MoneroWalletCommunicatorResponse> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, bool get_tx_key, bool get_tx_hex, bool new_algorithm = true, uint unlock_time = 0, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -553,7 +553,7 @@ namespace Monero.Client.Wallet
             return TransferSplitFundsAsync(walletRequestParameters, token);
         }
 
-        public Task<MoneroWalletDataRetrieverResponse> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, bool new_algorithm = true, uint unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
+        public Task<MoneroWalletCommunicatorResponse> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, bool new_algorithm = true, uint unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -568,7 +568,7 @@ namespace Monero.Client.Wallet
             return TransferSplitFundsAsync(walletRequestParameters, token);
         }
 
-        public Task<MoneroWalletDataRetrieverResponse> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, uint account_index, bool new_algorithm = true, uint unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
+        public Task<MoneroWalletCommunicatorResponse> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, uint account_index, bool new_algorithm = true, uint unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
         {
             if (ring_size <= 1)
                 throw new InvalidOperationException($"ring_size must be at least 2");
@@ -587,7 +587,7 @@ namespace Monero.Client.Wallet
             return TransferSplitFundsAsync(walletRequestParameters, token);
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> SignTransferAsync(string unsigned_txset, bool export_raw = false, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> SignTransferAsync(string unsigned_txset, bool export_raw = false, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -600,7 +600,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             SignTransferResponse responseObject = await JsonSerializer.DeserializeAsync<SignTransferResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.SignTransfer,
@@ -608,7 +608,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> SubmitTransferAsync(string tx_data_hex, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> SubmitTransferAsync(string tx_data_hex, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -620,7 +620,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             SubmitTransferResponse responseObject = await JsonSerializer.DeserializeAsync<SubmitTransferResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.SubmitTransfer,
@@ -628,7 +628,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> SweepDustAsync(bool get_tx_keys, bool get_tx_hex, bool get_tx_metadata, bool do_not_relay = false, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> SweepDustAsync(bool get_tx_keys, bool get_tx_hex, bool get_tx_metadata, bool do_not_relay = false, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -643,7 +643,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             SweepDustResponse responseObject = await JsonSerializer.DeserializeAsync<SweepDustResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.SweepDust,
@@ -651,7 +651,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> SweepAllAsync(string address, uint account_index, TransferPriority transaction_priority, uint ring_size, ulong unlock_time = 0, ulong below_amount = ulong.MaxValue, bool get_tx_keys = true, bool get_tx_hex = true, bool get_tx_metadata = true, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> SweepAllAsync(string address, uint account_index, TransferPriority transaction_priority, uint ring_size, ulong unlock_time = 0, ulong below_amount = ulong.MaxValue, bool get_tx_keys = true, bool get_tx_hex = true, bool get_tx_metadata = true, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -672,7 +672,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             SweepAllResponse responseObject = await JsonSerializer.DeserializeAsync<SweepAllResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.SweepAll,
@@ -680,7 +680,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> SaveWalletAsync(CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> SaveWalletAsync(CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.SaveWallet, null, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -688,7 +688,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             SaveWalletResponse responseObject = await JsonSerializer.DeserializeAsync<SaveWalletResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.SaveWallet,
@@ -696,7 +696,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public Task<MoneroWalletDataRetrieverResponse> GetIncomingTransfersAsync(TransferType transfer_type, bool return_key_image = false, CancellationToken token = default)
+        public Task<MoneroWalletCommunicatorResponse> GetIncomingTransfersAsync(TransferType transfer_type, bool return_key_image = false, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -706,7 +706,7 @@ namespace Monero.Client.Wallet
             return GetIncomingTransfersAsync(walletRequestParameters, token);
         }
 
-        public Task<MoneroWalletDataRetrieverResponse> GetIncomingTransfersAsync(TransferType transfer_type, uint account_index, bool return_key_image = false, CancellationToken token = default)
+        public Task<MoneroWalletCommunicatorResponse> GetIncomingTransfersAsync(TransferType transfer_type, uint account_index, bool return_key_image = false, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -717,7 +717,7 @@ namespace Monero.Client.Wallet
             return GetIncomingTransfersAsync(walletRequestParameters, token);
         }
 
-        public Task<MoneroWalletDataRetrieverResponse> GetIncomingTransfersAsync(TransferType transfer_type, uint account_index, IEnumerable<uint> subaddr_indices, bool return_key_image = false, CancellationToken token = default)
+        public Task<MoneroWalletCommunicatorResponse> GetIncomingTransfersAsync(TransferType transfer_type, uint account_index, IEnumerable<uint> subaddr_indices, bool return_key_image = false, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -729,7 +729,7 @@ namespace Monero.Client.Wallet
             return GetIncomingTransfersAsync(walletRequestParameters, token);
         }
 
-        private async Task<MoneroWalletDataRetrieverResponse> GetIncomingTransfersAsync(WalletRequestParameters walletRequestParameters, CancellationToken token)
+        private async Task<MoneroWalletCommunicatorResponse> GetIncomingTransfersAsync(WalletRequestParameters walletRequestParameters, CancellationToken token)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.IncomingTransfers, walletRequestParameters, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -737,7 +737,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             IncomingTransfersResponse responseObject = await JsonSerializer.DeserializeAsync<IncomingTransfersResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.IncomingTransfers,
@@ -745,7 +745,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> GetPrivateKey(KeyType key_type, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> GetPrivateKey(KeyType key_type, CancellationToken token = default)
         {
             static string KeyTypeToString(KeyType keyType)
             {
@@ -767,7 +767,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             QueryKeyResponse responseObject = await JsonSerializer.DeserializeAsync<QueryKeyResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.QueryPrivateKey,
@@ -775,7 +775,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> StopWalletAsync(CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> StopWalletAsync(CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.StopWallet, null, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -783,7 +783,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             StopWalletResponse responseObject = await JsonSerializer.DeserializeAsync<StopWalletResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.StopWallet,
@@ -791,7 +791,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> SetTransactionNotesAsync(IEnumerable<string> txids, IEnumerable<string> notes, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> SetTransactionNotesAsync(IEnumerable<string> txids, IEnumerable<string> notes, CancellationToken token = default)
         {
             if (txids == null || !txids.Any())
                 throw new InvalidOperationException("txids is either null or empty");
@@ -808,7 +808,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             SetTransactionNotesResponse responseObject = await JsonSerializer.DeserializeAsync<SetTransactionNotesResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.SetTransactionNotes,
@@ -816,7 +816,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> GetTransactionNotesAsync(IEnumerable<string> txids, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> GetTransactionNotesAsync(IEnumerable<string> txids, CancellationToken token = default)
         {
             if (txids == null || !txids.Any())
                 throw new InvalidOperationException("txids is either null or empty");
@@ -830,7 +830,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             GetTransactionNotesResponse responseObject = await JsonSerializer.DeserializeAsync<GetTransactionNotesResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.GetTransactionNotes,
@@ -838,7 +838,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> GetTransactionKeyAsync(string txid, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> GetTransactionKeyAsync(string txid, CancellationToken token = default)
         {
             if (string.IsNullOrWhiteSpace(txid))
                 throw new InvalidOperationException("txid cannot be null or whitespace");
@@ -852,7 +852,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             GetTransactionKeyResponse responseObject = await JsonSerializer.DeserializeAsync<GetTransactionKeyResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.GetTransactionKey,
@@ -860,7 +860,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> CheckTransactionKeyAsync(string txid, string tx_key, string address, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> CheckTransactionKeyAsync(string txid, string tx_key, string address, CancellationToken token = default)
         {
             if (string.IsNullOrWhiteSpace(txid))
                 throw new InvalidOperationException("txid cannot be null or whitespace");
@@ -868,7 +868,7 @@ namespace Monero.Client.Wallet
                 throw new InvalidOperationException("tx_key cannot be null or whitespace");
             if (string.IsNullOrWhiteSpace(address))
                 throw new InvalidOperationException("address cannot be null or whitespace");
-            var walletRequestParameters = new WalletRequestParameters()
+            var walletRequestParameters = new
             {
                 txid = txid,
                 tx_key = tx_key,
@@ -880,7 +880,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             CheckTransactionKeyResponse responseObject = await JsonSerializer.DeserializeAsync<CheckTransactionKeyResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.CheckTransactionKey,
@@ -888,7 +888,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public Task<MoneroWalletDataRetrieverResponse> GetTransfersAsync(bool @in, bool @out, bool pending, bool failed, bool pool, CancellationToken token = default)
+        public Task<MoneroWalletCommunicatorResponse> GetTransfersAsync(bool @in, bool @out, bool pending, bool failed, bool pool, CancellationToken token = default)
         {
             bool isValidRequest = false;
             isValidRequest |= @in |= @out |= pending |= failed |= pool;
@@ -905,7 +905,7 @@ namespace Monero.Client.Wallet
             return GetTransfersAsync(walletRequestParameters, token);
         }
 
-        public Task<MoneroWalletDataRetrieverResponse> GetTransfersAsync(bool @in, bool @out, bool pending, bool failed, bool pool, uint min_height, uint max_height, CancellationToken token = default)
+        public Task<MoneroWalletCommunicatorResponse> GetTransfersAsync(bool @in, bool @out, bool pending, bool failed, bool pool, uint min_height, uint max_height, CancellationToken token = default)
         {
             bool isValidRequest = false;
             isValidRequest |= @in |= @out |= pending |= failed |= pool;
@@ -927,7 +927,7 @@ namespace Monero.Client.Wallet
             return GetTransfersAsync(walletRequestParameters, token);
         }
 
-        private async Task<MoneroWalletDataRetrieverResponse> GetTransfersAsync(WalletRequestParameters walletRequestParameters, CancellationToken token)
+        private async Task<MoneroWalletCommunicatorResponse> GetTransfersAsync(WalletRequestParameters walletRequestParameters, CancellationToken token)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.Transfers, walletRequestParameters, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -935,7 +935,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             ShowTransfersResponse responseObject = await JsonSerializer.DeserializeAsync<ShowTransfersResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.Transfers,
@@ -943,7 +943,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public Task<MoneroWalletDataRetrieverResponse> GetTransferByTxidAsync(string txid, CancellationToken token = default)
+        public Task<MoneroWalletCommunicatorResponse> GetTransferByTxidAsync(string txid, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -952,7 +952,7 @@ namespace Monero.Client.Wallet
             return GetTransferByTxidAsync(walletRequestParameters, token);
         }
 
-        public Task<MoneroWalletDataRetrieverResponse> GetTransferByTxidAsync(string txid, uint account_index, CancellationToken token = default)
+        public Task<MoneroWalletCommunicatorResponse> GetTransferByTxidAsync(string txid, uint account_index, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -962,7 +962,7 @@ namespace Monero.Client.Wallet
             return GetTransferByTxidAsync(walletRequestParameters, token);
         }
 
-        private async Task<MoneroWalletDataRetrieverResponse> GetTransferByTxidAsync(WalletRequestParameters walletRequestParameters, CancellationToken token)
+        private async Task<MoneroWalletCommunicatorResponse> GetTransferByTxidAsync(WalletRequestParameters walletRequestParameters, CancellationToken token)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.TransferByTxid, walletRequestParameters, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -970,7 +970,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             GetTransferByTxidResponse responseObject = await JsonSerializer.DeserializeAsync<GetTransferByTxidResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.TransferByTxid,
@@ -978,7 +978,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> SignAsync(string data, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> SignAsync(string data, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -990,7 +990,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             SignResponse responseObject = await JsonSerializer.DeserializeAsync<SignResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Miscellaneous,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.Sign,
@@ -998,7 +998,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> VerifyAsync(string data, string address, string signature, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> VerifyAsync(string data, string address, string signature, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -1013,7 +1013,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             VerifyResponse responseObject = await JsonSerializer.DeserializeAsync<VerifyResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Miscellaneous,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.Verify,
@@ -1021,7 +1021,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> ExportOutputsAsync(CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> ExportOutputsAsync(CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.ExportOutputs, null, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -1029,7 +1029,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             ExportOutputsResponse responseObject = await JsonSerializer.DeserializeAsync<ExportOutputsResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.ExportOutputs,
@@ -1037,7 +1037,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> ImportOutputsAsync(CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> ImportOutputsAsync(CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.ImportOutputs, null, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -1045,7 +1045,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             ImportOutputsResponse responseObject = await JsonSerializer.DeserializeAsync<ImportOutputsResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.ImportOutputs,
@@ -1053,7 +1053,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> ExportKeyImagesAsync(CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> ExportKeyImagesAsync(CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.ExportKeyImages, null, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -1061,7 +1061,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             ExportKeyImagesResponse responseObject = await JsonSerializer.DeserializeAsync<ExportKeyImagesResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.ExportKeyImages,
@@ -1083,7 +1083,7 @@ namespace Monero.Client.Wallet
             return signedKeyImages;
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> ImportKeyImagesAsync(IEnumerable<(string key_image, string signature)> signed_key_images, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> ImportKeyImagesAsync(IEnumerable<(string key_image, string signature)> signed_key_images, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -1095,7 +1095,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             ImportKeyImagesResponse responseObject = await JsonSerializer.DeserializeAsync<ImportKeyImagesResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.ImportKeyImages,
@@ -1103,7 +1103,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> MakeUriAsync(string address, ulong amount, string recipient_name, string tx_description = null, string payment_id = null, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> MakeUriAsync(string address, ulong amount, string recipient_name, string tx_description = null, string payment_id = null, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -1119,7 +1119,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             MakeUriResponse responseObject = await JsonSerializer.DeserializeAsync<MakeUriResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.MakeUri,
@@ -1127,7 +1127,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> ParseUriAsync(string uri, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> ParseUriAsync(string uri, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -1139,7 +1139,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             ParseUriResponse responseObject = await JsonSerializer.DeserializeAsync<ParseUriResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.ParseUri,
@@ -1147,7 +1147,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> GetAddressBookAsync(IEnumerable<uint> entries, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> GetAddressBookAsync(IEnumerable<uint> entries, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -1159,7 +1159,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             GetAddressBookResponse responseObject = await JsonSerializer.DeserializeAsync<GetAddressBookResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.GetAddressBook,
@@ -1167,7 +1167,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> AddAddressBookAsync(string address, string description = null, string payment_id = null, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> AddAddressBookAsync(string address, string description = null, string payment_id = null, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -1181,7 +1181,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             AddAddressBookResponse responseObject = await JsonSerializer.DeserializeAsync<AddAddressBookResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.AddAddressBook,
@@ -1189,7 +1189,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> DeleteAddressBookAsync(uint index, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> DeleteAddressBookAsync(uint index, CancellationToken token = default)
         {
             var walletRequestParameters = new
             {
@@ -1201,7 +1201,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             DeleteAddressBookResponse responseObject = await JsonSerializer.DeserializeAsync<DeleteAddressBookResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.DeleteAddressBook,
@@ -1209,7 +1209,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> RefreshWalletAsync(uint start_height, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> RefreshWalletAsync(uint start_height, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -1221,7 +1221,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             RefreshWalletResponse responseObject = await JsonSerializer.DeserializeAsync<RefreshWalletResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.Refresh,
@@ -1229,7 +1229,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> RescanSpentAsync(CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> RescanSpentAsync(CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.RescanSpent, null, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -1237,7 +1237,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             RescanSpentResponse responseObject = await JsonSerializer.DeserializeAsync<RescanSpentResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.RescanSpent,
@@ -1245,7 +1245,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> CreateWalletAsync(string filename, string language, string password = null, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> CreateWalletAsync(string filename, string language, string password = null, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -1259,7 +1259,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             CreateWalletResponse responseObject = await JsonSerializer.DeserializeAsync<CreateWalletResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.CreateWallet,
@@ -1267,7 +1267,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> OpenWalletAsync(string filename, string password = null, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> OpenWalletAsync(string filename, string password = null, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -1280,7 +1280,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             OpenWalletResponse responseObject = await JsonSerializer.DeserializeAsync<OpenWalletResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.OpenWallet,
@@ -1288,7 +1288,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> CloseWalletAsync(CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> CloseWalletAsync(CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.CloseWallet, null, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -1296,7 +1296,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             CloseWalletResponse responseObject = await JsonSerializer.DeserializeAsync<CloseWalletResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.CloseWallet,
@@ -1304,7 +1304,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> ChangeWalletPasswordAsync(string oldPassword = null, string newPassword = null, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> ChangeWalletPasswordAsync(string oldPassword = null, string newPassword = null, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -1317,7 +1317,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             ChangeWalletPasswordResponse responseObject = await JsonSerializer.DeserializeAsync<ChangeWalletPasswordResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.ChangeWalletPassword,
@@ -1325,7 +1325,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> GetVersionAsync(CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> GetVersionAsync(CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.RpcVersion, null, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -1333,7 +1333,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             GetRpcVersionResponse responseObject = await JsonSerializer.DeserializeAsync<GetRpcVersionResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Miscellaneous,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.RpcVersion,
@@ -1341,7 +1341,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> IsMultiSigAsync(CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> IsMultiSigAsync(CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.IsMultiSig, null, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -1349,7 +1349,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             IsMultiSigInformationResponse responseObject = await JsonSerializer.DeserializeAsync<IsMultiSigInformationResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.IsMultiSig,
@@ -1357,7 +1357,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> PrepareMultiSigAsync(CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> PrepareMultiSigAsync(CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.PrepareMultiSig, null, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -1365,7 +1365,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             PrepareMultiSigResponse responseObject = await JsonSerializer.DeserializeAsync<PrepareMultiSigResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.PrepareMultiSig,
@@ -1373,7 +1373,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> MakeMultiSigAsync(IEnumerable<string> multisig_info, uint threshold, string password, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> MakeMultiSigAsync(IEnumerable<string> multisig_info, uint threshold, string password, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -1387,7 +1387,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             MakeMultiSigResponse responseObject = await JsonSerializer.DeserializeAsync<MakeMultiSigResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.MakeMultiSig,
@@ -1395,7 +1395,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> ExportMultiSigInfoAsync(CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> ExportMultiSigInfoAsync(CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.ExportMultiSigInfo, null, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -1403,7 +1403,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             ExportMultiSigInfoResponse responseObject = await JsonSerializer.DeserializeAsync<ExportMultiSigInfoResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.ExportMultiSigInfo,
@@ -1411,7 +1411,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> ImportMultiSigInfoAsync(IEnumerable<string> info, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> ImportMultiSigInfoAsync(IEnumerable<string> info, CancellationToken token = default)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroWalletResponseSubType.ImportMultiSigInfo, null, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -1419,7 +1419,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             ImportMultiSigInfoResponse responseObject = await JsonSerializer.DeserializeAsync<ImportMultiSigInfoResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.ImportMultiSigInfo,
@@ -1427,7 +1427,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> FinalizeMultiSigAsync(IEnumerable<string> multisigInfo, string password, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> FinalizeMultiSigAsync(IEnumerable<string> multisigInfo, string password, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -1440,7 +1440,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             FinalizeMultiSigResponse responseObject = await JsonSerializer.DeserializeAsync<FinalizeMultiSigResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.FinalizeMultiSig,
@@ -1448,7 +1448,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> SignMultiSigAsync(string tx_data_hex, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> SignMultiSigAsync(string tx_data_hex, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -1460,7 +1460,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             SignMultiSigTransactionResponse responseObject = await JsonSerializer.DeserializeAsync<SignMultiSigTransactionResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.SignMultiSigTransaction,
@@ -1468,7 +1468,7 @@ namespace Monero.Client.Wallet
             };
         }
 
-        public async Task<MoneroWalletDataRetrieverResponse> SubmitMultiSigAsync(string txDataHex, CancellationToken token = default)
+        public async Task<MoneroWalletCommunicatorResponse> SubmitMultiSigAsync(string txDataHex, CancellationToken token = default)
         {
             var walletRequestParameters = new WalletRequestParameters()
             {
@@ -1480,7 +1480,7 @@ namespace Monero.Client.Wallet
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
             SubmitMultiSigTransactionResponse responseObject = await JsonSerializer.DeserializeAsync<SubmitMultiSigTransactionResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
-            return new MoneroWalletDataRetrieverResponse()
+            return new MoneroWalletCommunicatorResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.SubmitMultiSigTransaction,

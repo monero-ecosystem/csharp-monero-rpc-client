@@ -12,21 +12,21 @@ namespace Monero.Client.Daemon
 {
     public class MoneroDaemonClient : IMoneroDaemonClient
     {
-        private readonly IMoneroDaemonDataRetriever _moneroRpcDaemonDataRetriever;
+        private readonly IMoneroDaemonRpcCommunicator _moneroRpcDaemonDataRetriever;
 
         public MoneroDaemonClient(Uri uri)
         {
-            _moneroRpcDaemonDataRetriever = new MoneroDaemonDataRetriever(uri);
+            _moneroRpcDaemonDataRetriever = new MoneroDaemonRpcCommunicator(uri);
         }
 
         public MoneroDaemonClient(Uri uri, HttpMessageHandler httpMessageHandler)
         {
-            _moneroRpcDaemonDataRetriever = new MoneroDaemonDataRetriever(uri, httpMessageHandler);
+            _moneroRpcDaemonDataRetriever = new MoneroDaemonRpcCommunicator(uri, httpMessageHandler);
         }
 
         public MoneroDaemonClient(Uri uri, HttpMessageHandler httpMessageHandler, bool disposeHandler)
         {
-            _moneroRpcDaemonDataRetriever = new MoneroDaemonDataRetriever(uri, httpMessageHandler, disposeHandler);
+            _moneroRpcDaemonDataRetriever = new MoneroDaemonRpcCommunicator(uri, httpMessageHandler, disposeHandler);
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Monero.Client.Daemon
         /// </summary>
         public MoneroDaemonClient(MoneroNetwork networkType)
         {
-            _moneroRpcDaemonDataRetriever = new MoneroDaemonDataRetriever(networkType);
+            _moneroRpcDaemonDataRetriever = new MoneroDaemonRpcCommunicator(networkType);
         }
 
         public void Dispose()

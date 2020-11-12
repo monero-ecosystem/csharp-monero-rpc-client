@@ -77,7 +77,7 @@ namespace Monero.Client.Wallet
         SubmitMultiSigTransaction,
     }
 
-    internal class MoneroWalletDataRetrieverResponse
+    internal class MoneroWalletCommunicatorResponse
     {
         internal MoneroWalletResponseType MoneroWalletResponseType { get; set; } = MoneroWalletResponseType.None;
         internal MoneroWalletResponseSubType MoneroWalletResponseSubType { get; set; }

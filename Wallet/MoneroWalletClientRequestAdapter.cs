@@ -46,6 +46,13 @@ namespace Monero.Client.Wallet
                     method = "delete_address_book",
                     @params = requestParams,
                 },
+                MoneroWalletResponseSubType.CheckTransactionKey => new AnonymousWalletRequest
+                {
+                    jsonrpc = FieldAndHeaderDefaults.ApplicationJson,
+                    id = FieldAndHeaderDefaults.Id,
+                    method = "check_tx_key",
+                    @params = requestParams,
+                },
                 _ => throw new InvalidOperationException($"Unknown MoneroWalletResponseSubType ({subType})"),
             };
         }

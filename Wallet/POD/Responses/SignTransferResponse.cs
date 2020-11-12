@@ -10,10 +10,10 @@ namespace Monero.Client.Wallet.POD.Responses
     internal class SignTransferResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public SignTransferResult Result { get; set; }
+        public SignTransfer Result { get; set; }
     }
 
-    public class SignTransferResult
+    public class SignTransfer
     {
         [JsonPropertyName("signed_txset")]
         public string SignedTransactionSet { get; set; }

@@ -117,7 +117,7 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Sign a transaction created on a read-only wallet (in cold-signing process).
         /// </summary>
-        Task<SignTransferResult> SignTransferAsync(string unsignedTxSet, bool exportRaw = false, CancellationToken token = default);
+        Task<SignTransfer> SignTransferAsync(string unsignedTxSet, bool exportRaw = false, CancellationToken token = default);
         /// <summary>
         /// Submit a previously signed transaction on a read-only wallet (in cold-signing process).
         /// </summary>

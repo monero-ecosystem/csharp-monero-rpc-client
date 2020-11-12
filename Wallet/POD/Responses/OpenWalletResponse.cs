@@ -2,12 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
     internal class OpenWalletResponse : RpcResponse
     {
-        public OpenWallet result { get; set; }
+        [JsonPropertyName("result")]
+        public OpenWallet Result { get; set; }
     }
 
     public class OpenWallet

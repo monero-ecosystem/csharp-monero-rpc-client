@@ -44,7 +44,7 @@ namespace Monero.Client.Daemon
         SetBans,
     }
 
-    internal class MoneroDaemonResponse
+    internal class MoneroDaemonCommunicatorResponse
     {
         public MoneroDaemonResponseType MoneroNodeResponseType { get; set; } = MoneroDaemonResponseType.None;
         public MoneroDaemonResponseSubType MoneroNodeResponseSubType { get; set; }
