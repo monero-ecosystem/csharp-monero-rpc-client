@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -8,12 +9,15 @@ namespace Monero.Client.Wallet.POD.Responses
 {
     internal class SignMultiSigTransactionResponse : RpcResponse
     {
-        public SignMultiSigTransactionResult result { get; set; }
+        [JsonPropertyName("result")]
+        public SignMultiSigTransactionResult Result { get; set; }
     }
 
     public class SignMultiSigTransactionResult
     {
-        public string tx_data_hex { get; set; }
-        public List<string> tx_hash_list { get; set; } = new List<string>();
+        [JsonPropertyName("tx_data_hex")]
+        public string TransactionDataHex { get; set; }
+        [JsonPropertyName("tx_hash_list")]
+        public List<string> TransactionHashes { get; set; } = new List<string>();
     }
 }

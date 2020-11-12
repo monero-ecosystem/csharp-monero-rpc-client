@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Monero.Client.Daemon.POD
 {
     public class Chain
     {
-        public string block_hash { get; set; }
-        public ulong difficulty { get; set; }
-        public uint height { get; set; }
-        public uint length { get; set; }
+        [JsonPropertyName("block_hash")]
+        public string BlockHash { get; set; }
+        [JsonPropertyName("difficulty")]
+        public ulong Difficulty { get; set; }
+        [JsonPropertyName("height")]
+        public ulong Height { get; set; }
+        [JsonPropertyName("length")]
+        public uint Length { get; set; }
     }
 }

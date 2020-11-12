@@ -462,7 +462,7 @@ namespace Monero.Client.Wallet
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
-            FundTransferSplitResponse responseObject = await JsonSerializer.DeserializeAsync<FundTransferSplitResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            SplitFundTransferResponse responseObject = await JsonSerializer.DeserializeAsync<SplitFundTransferResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
             return new MoneroWalletDataRetrieverResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Transaction,
@@ -969,7 +969,7 @@ namespace Monero.Client.Wallet
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
-            ShowTransferByTxidResponse responseObject = await JsonSerializer.DeserializeAsync<ShowTransferByTxidResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            GetTransferByTxidResponse responseObject = await JsonSerializer.DeserializeAsync<GetTransferByTxidResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
             return new MoneroWalletDataRetrieverResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
@@ -1076,8 +1076,8 @@ namespace Monero.Client.Wallet
             {
                 signedKeyImages.Add(new SignedKeyImage()
                 {
-                    key_image = keyImagePair.key_image,
-                    signature = keyImagePair.signature,
+                    Image = keyImagePair.key_image,
+                    Signature = keyImagePair.signature,
                 });
             }
             return signedKeyImages;
@@ -1348,12 +1348,12 @@ namespace Monero.Client.Wallet
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
-            IsMultiSigResponse responseObject = await JsonSerializer.DeserializeAsync<IsMultiSigResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            IsMultiSigInformationResponse responseObject = await JsonSerializer.DeserializeAsync<IsMultiSigInformationResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
             return new MoneroWalletDataRetrieverResponse()
             {
                 MoneroWalletResponseType = MoneroWalletResponseType.Wallet,
                 MoneroWalletResponseSubType = MoneroWalletResponseSubType.IsMultiSig,
-                IsMultiSigResponse = responseObject,
+                IsMultiSigInformationResponse = responseObject,
             };
         }
 

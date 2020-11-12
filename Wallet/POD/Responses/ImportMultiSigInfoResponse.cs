@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -8,11 +9,13 @@ namespace Monero.Client.Wallet.POD.Responses
 {
     internal class ImportMultiSigInfoResponse : RpcResponse
     {
-        public ImportMultiSigInfoResult result { get; set; }
+        [JsonPropertyName("result")]
+        public ImportMultiSigInformation Result { get; set; }
     }
 
-    public class ImportMultiSigInfoResult
+    public class ImportMultiSigInformation
     {
-        public uint n_outputs { get; set; }
+        [JsonPropertyName("n_outputs")]
+        public uint N_Outputs { get; set; }
     }
 }

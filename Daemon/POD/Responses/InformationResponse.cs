@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Numerics;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -9,52 +10,108 @@ namespace Monero.Client.Daemon.POD.Responses
 {
     internal class DaemonInformationResponse : RpcResponse
     {
-        public InformationResult result { get; set; }
+        [JsonPropertyName("result")]
+        public DaemonInformation Result { get; set; }
 
     }
 
-    public class InformationResult
+    public class DaemonInformation
     {
-        public ulong adjusted_time { get; set; }
-        public uint alt_blocks_count { get; set; }
-        public uint block_size_limit { get; set; }
-        public uint block_size_median { get; set; }
-        public uint block_weight_limit { get; set; }
-        public uint block_weight_median { get; set; }
-        public string bootstrap_daemon_address { get; set; }
-        public uint credits { get; set; }
-        public ulong cumulative_difficulty { get; set; }
-        public ulong cumulative_difficulty_top64 { get; set; }
-        public ulong database_size { get; set; }
-        public ulong difficulty { get; set; }
-        public ulong difficulty_top64 { get; set; }
-        public ulong free_space { get; set; }
-        public uint grey_peerlist_size { get; set; }
-        public uint height { get; set; }
-        public uint height_without_bootstrap { get; set; }
-        public uint incoming_connections_count { get; set; }
-        public bool mainnet { get; set; }
-        public string nettype { get; set; }
-        public bool offline { get; set; }
-        public uint outgoing_connections_count { get; set; }
-        public uint rpc_connections_count { get; set; }
-        public bool stagenet { get; set; }
-        public uint start_time { get; set; }
-        public string status { get; set; }
-        public uint target { get; set; }
-        public uint target_height { get; set; }
-        public bool testnet { get; set; }
-        public string top_block_hash { get; set; }
-        public string top_hash { get; set; }
-        public uint tx_count { get; set; }
-        public uint tx_pool_size { get; set; }
-        public bool untrusted { get; set; }
-        public bool update_available { get; set; }
-        public string version { get; set; }
-        public bool was_bootstrap_ever_used { get; set; }
-        public uint white_peerlist_size { get; set; }
-        public string wide_cumulative_difficulty { get; set; }
-        public string wide_difficulty { get; set; }
+        [JsonPropertyName("adjusted_time")]
+        public ulong AdjustedTime { get; set; }
+        [JsonPropertyName("alt_blocks_count")]
+        public ulong AltBlocksCount { get; set; }
+        [JsonPropertyName("block_size_limit")]
+        public ulong BlockSizeLimit { get; set; }
+        [JsonPropertyName("block_size_median")]
+        public ulong BlockSizeMedian { get; set; }
+        [JsonPropertyName("block_weight_limit")]
+        public ulong BlockWeightLimit { get; set; }
+        [JsonPropertyName("block_weight_median")]
+        public ulong BlockWeightMedian { get; set; }
+        [JsonPropertyName("bootstrap_daemon_address")]
+        public string BootstrapDaemonAddress { get; set; }
+        [JsonPropertyName("credits")]
+        public ulong Credits { get; set; }
+        [JsonPropertyName("cumulative_difficulty")]
+        public ulong CumulativeDifficulty { get; set; }
+        [JsonPropertyName("cumulative_difficulty_top64")]
+        public ulong CumulativeDifficultyTop64 { get; set; }
+        [JsonPropertyName("database_size")]
+        public ulong DatabaseSize { get; set; }
+        [JsonPropertyName("difficulty")]
+        public ulong Difficulty { get; set; }
+        [JsonPropertyName("difficulty_top64")]
+        public ulong DifficultyTop64 { get; set; }
+        [JsonPropertyName("free_space")]
+        public ulong FreeSpace { get; set; }
+        [JsonPropertyName("grey_peerlist_size")]
+        public ulong GreyPeerlistSize { get; set; }
+        [JsonPropertyName("height")]
+        public ulong Height { get; set; }
+        [JsonPropertyName("height_without_bootstrap")]
+        public ulong HeightWithoutBootstrap { get; set; }
+        [JsonPropertyName("incoming_connections_count")]
+        public ulong IncomingConnectionsCount { get; set; }
+        [JsonPropertyName("mainnet")]
+        public bool IsMainnet { get; set; }
+        [JsonPropertyName("nettype")]
+        public string NetType { get; set; }
+        [JsonPropertyName("offline")]
+        public bool Offline { get; set; }
+        [JsonPropertyName("outgoing_connections_count")]
+        public ulong OutgoingConnectionsCount { get; set; }
+        [JsonPropertyName("rpc_connections_count")]
+        public ulong RpcConnectionsCount { get; set; }
+        [JsonPropertyName("stagenet")]
+        public bool IsStagenet { get; set; }
+        [JsonPropertyName("start_time")]
+        public ulong StartTime { get; set; }
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+        [JsonPropertyName("target")]
+        public ulong Target { get; set; }
+        [JsonPropertyName("target_height")]
+        public ulong TargetHeight { get; set; }
+        [JsonPropertyName("testnet")]
+        public bool IsTestnet { get; set; }
+        [JsonPropertyName("top_block_hash")]
+        public string TopBlockHash { get; set; }
+        [JsonPropertyName("top_hash")]
+        public string TopHash { get; set; }
+        [JsonPropertyName("tx_count")]
+        public ulong TxCount { get; set; }
+        [JsonPropertyName("tx_pool_size")]
+        public ulong TxPoolSize { get; set; }
+        [JsonPropertyName("untrusted")]
+        public bool Untrusted { get; set; }
+        [JsonPropertyName("update_available")]
+        public bool UpdateAvailable { get; set; }
+        [JsonPropertyName("version")]
+        public string Version { get; set; }
+        [JsonPropertyName("was_bootstrap_ever_used")]
+        public bool WasBootstrapEverUsed { get; set; }
+        [JsonPropertyName("white_peerlist_size")]
+        public ulong WhitePeerlistSize { get; set; }
+        [JsonPropertyName("wide_cumulative_difficulty")]
+        public string WideCumulativeDifficulty { get; set; }
+        [JsonPropertyName("wide_difficulty")]
+        public string WideDifficulty { get; set; }
+        [JsonIgnore()]
+        public MoneroNetwork NetworkType
+        {
+            get
+            {
+                if (this.IsMainnet)
+                    return MoneroNetwork.Mainnet;
+                else if (this.IsStagenet)
+                    return MoneroNetwork.Stagenet;
+                else if (this.IsTestnet)
+                    return MoneroNetwork.Testnet;
+                else
+                    throw new InvalidOperationException("Unknown network type");
+            }
+        }
 
     }
 }

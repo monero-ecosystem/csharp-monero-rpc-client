@@ -7,13 +7,21 @@ namespace Monero.Client.Daemon.POD
 {
     public class Block
     {
-        public string blob { get; set; }
-        public uint credits { get; set; }
-        public BlockHeader block_header { get; set; }
-        public string json { get; set; }
-        public string miner_tx_hash { get; set; }
-        public string status { get; set; }
-        public string top_hash { get; set; }
-        public bool untrusted { get; set; }
+        [JsonPropertyName("blob")]
+        public string Blob { get; set; }
+        [JsonPropertyName("credits")]
+        public ulong Credits { get; set; }
+        [JsonPropertyName("block_header")]
+        public BlockHeader BlockHeader { get; set; }
+        [JsonPropertyName("json")]
+        public string Json { get; set; }
+        [JsonPropertyName("miner_tx_hash")]
+        public string MinerTxHash { get; set; }
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+        [JsonPropertyName("top_hash")]
+        public string TopHash { get; set; }
+        [JsonPropertyName("untrusted")]
+        public bool Untrusted { get; set; }
     }
 }

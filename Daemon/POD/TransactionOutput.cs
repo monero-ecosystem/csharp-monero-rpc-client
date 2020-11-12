@@ -1,21 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Monero.Client.Daemon.POD
 {
     public class TransactionOutput
     {
-        public List<Output> vout { get; set; } = new List<Output>();
+        [JsonPropertyName("vout")]
+        public List<Output> Vout { get; set; } = new List<Output>();
     }
 
     public class Output
     {
-        public ulong amount { get; set; }
-        public Target target { get; set; }
+        [JsonPropertyName("amount")]
+        public ulong Amount { get; set; }
+        [JsonPropertyName("target")]
+        public Target Target { get; set; }
     }
     public class Target
     {
-        public string key { get; set; }
+        [JsonPropertyName("key")]
+        public string Key { get; set; }
     }
 }

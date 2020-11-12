@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -8,11 +9,13 @@ namespace Monero.Client.Wallet.POD.Responses
 {
     internal class BlockchainHeightResponse : RpcResponse
     {
-        public BlockchainHeightResult result { get; set; }
+        [JsonPropertyName("result")]
+        public BlockchainHeight Result { get; set; }
     }
 
-    public class BlockchainHeightResult
+    public class BlockchainHeight
     {
-        public uint height { get; set; }
+        [JsonPropertyName("height")]
+        public ulong Height { get; set; }
     }
 }

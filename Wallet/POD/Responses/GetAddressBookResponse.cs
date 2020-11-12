@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -8,19 +9,25 @@ namespace Monero.Client.Wallet.POD.Responses
 {
     internal class GetAddressBookResponse : RpcResponse
     {
-        public GetAddressBookResult result { get; set; }
+        [JsonPropertyName("result")]
+        public GetAddressBook Result { get; set; }
     }
 
-    public class GetAddressBookResult
+    public class GetAddressBook
     {
-        public List<AddressBookEntry> entries { get; set; } = new List<AddressBookEntry>();
+        [JsonPropertyName("entries")]
+        public List<AddressBookEntry> Entries { get; set; } = new List<AddressBookEntry>();
     }
 
     public class AddressBookEntry
     {
-        public string address { get; set; }
-        public string description { get; set; }
-        public uint index { get; set; }
-        public string payment_id { get; set; }
+        [JsonPropertyName("address")]
+        public string Address { get; set; }
+        [JsonPropertyName("description")]
+        public string Description { get; set; }
+        [JsonPropertyName("index")]
+        public ulong Index { get; set; }
+        [JsonPropertyName("payment_id")]
+        public string PaymentID { get; set; }
     }
 }

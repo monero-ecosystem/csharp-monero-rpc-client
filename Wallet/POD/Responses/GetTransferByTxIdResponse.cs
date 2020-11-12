@@ -7,14 +7,15 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-    internal class RescanSpentResponse : RpcResponse
+    internal class GetTransferByTxidResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public RescanSpent Result { get; set; }
+        public ShowTransferByTxid Result { get; set; }
     }
 
-    public class RescanSpent
+    public class ShowTransferByTxid
     {
-        // ...
+        [JsonPropertyName("transfer")]
+        public Transfer Transfer { get; set; }
     }
 }

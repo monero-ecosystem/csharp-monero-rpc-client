@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -8,11 +9,13 @@ namespace Monero.Client.Wallet.POD.Responses
 {
     internal class ExportOutputsResponse : RpcResponse
     {
-        public ExportOutputsResult result { get; set; }
+        [JsonPropertyName("result")]
+        public ExportOutputs Result { get; set; }
     }
 
-    public class ExportOutputsResult
+    public class ExportOutputs
     {
-        public string outputs_data_hex { get; set; }
+        [JsonPropertyName("outputs_data_hex")]
+        public string OutputsDataHex { get; set; }
     }
 }

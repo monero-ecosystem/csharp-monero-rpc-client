@@ -2,16 +2,19 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
     internal class SubmitMultiSigTransactionResponse : RpcResponse
     {
-        public SubmitMultiSigResult result { get; set; }
+        [JsonPropertyName("result")]
+        public SubmitMultiSig Result { get; set; }
     }
 
-    public class SubmitMultiSigResult
+    public class SubmitMultiSig
     {
-        public List<string> tx_hash_list { get; set; } = new List<string>();
+        [JsonPropertyName("tx_hash_list")]
+        public List<string> TransactionHashes { get; set; } = new List<string>();
     }
 }

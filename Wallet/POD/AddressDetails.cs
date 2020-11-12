@@ -2,19 +2,39 @@
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
+using System.Text.Json.Serialization;
+
+using Monero.Client.Network;
 
 namespace Monero.Client.Wallet.POD
 {
     public class AddressDetails
     {
-        public uint account_index { get; set; }
-        public string address { get; set; }
-        public uint address_index { get; set; }
-        public ulong balance { get; set; }
-        public uint blocks_to_unlock { get; set; }
-        public string label { get; set; }
-        public uint num_unspect_outputs { get; set; }
-        public ulong time_to_unlock { get; set; }
-        public ulong unlocked_balance { get; set; }
+        [JsonPropertyName("account_index")]
+        public uint AccountIndex { get; set; }
+        [JsonPropertyName("address")]
+        public string Address { get; set; }
+        [JsonPropertyName("address_index")]
+        public uint AddressIndex { get; set; }
+        [JsonPropertyName("balance")]
+        public ulong Balance { get; set; }
+        [JsonPropertyName("blocks_to_unlock")]
+        public uint BlocksToUnlock { get; set; }
+        [JsonPropertyName("label")]
+        public string Label { get; set; }
+        [JsonPropertyName("num_unspect_outputs")]
+        public ulong NumUnspectOutputs { get; set; }
+        [JsonPropertyName("time_to_unlock")]
+        public ulong TimeToUnlock { get; set; }
+        [JsonPropertyName("unlocked_balance")]
+        public ulong UnlockedBalance { get; set; }
+        [JsonIgnore()]
+        public TimeSpan EstimatedTimeTillUnlock
+        {
+            get
+            {
+                return BlockchainNetworkDefaults.AverageBlockTime * this.BlocksToUnlock;
+            }
+        }
     }
 }

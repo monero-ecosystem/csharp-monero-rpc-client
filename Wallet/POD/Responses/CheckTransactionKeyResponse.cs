@@ -9,21 +9,25 @@ namespace Monero.Client.Wallet.POD.Responses
 {
     internal class CheckTransactionKeyResponse : RpcResponse
     {
-        public CheckTransactionKeyResult result { get; set; }
+        [JsonPropertyName("result")]
+        public CheckTransactionKey Result { get; set; }
     }
 
-    public class CheckTransactionKeyResult
+    public class CheckTransactionKey
     {
-        public uint confirmations { get; set; }
-        public bool in_pool { get; set; }
-        public ulong received { get; set; }
+        [JsonPropertyName("confirmations")]
+        public ulong Confirmations { get; set; }
+        [JsonPropertyName("in_pool")]
+        public bool IsInPool { get; set; }
+        [JsonPropertyName("received")]
+        public ulong Received { get; set; }
 
         [JsonIgnore()]
-        public bool in_blockchain 
+        public bool IsInBlockchain 
         { 
             get
             {
-                return !in_pool;
+                return !IsInPool || Confirmations > 0ul;
             }
         }
     }

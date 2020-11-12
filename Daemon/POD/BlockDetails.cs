@@ -1,18 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Monero.Client.Daemon.POD
 {
     public class BlockDetails
     {
-        public uint major_version { get; set; }
-        public uint minor_version { get; set; }
-        public ulong timestamp { get; set; }
-        public string prev_id { get; set; }
-        public uint nonce { get; set; }
-        public MinerTransaction miner_tx { get; set; }
-        public List<string> tx_hashes { get; set; } = new List<string>();
+        [JsonPropertyName("major_version")]
+        public byte MajorVersion { get; set; }
+        [JsonPropertyName("minor_version")]
+        public byte MinorVersion { get; set; }
+        [JsonPropertyName("timestamp")]
+        public ulong Timestamp { get; set; }
+        [JsonPropertyName("prev_id")]
+        public string PrevID { get; set; }
+        [JsonPropertyName("nonce")]
+        public uint Nonce { get; set; }
+        [JsonPropertyName("miner_tx")]
+        public MinerTransaction MinerTx { get; set; }
+        [JsonPropertyName("tx_hashes")]
+        public List<string> TxHashes { get; set; } = new List<string>();
     }
 
 }

@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using System.Text.Json.Serialization;
 using Monero.Client.Network;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
     internal class GetTransactionNotesResponse : RpcResponse
     {
-        public GetTransactionNotesResult result { get; set; }
+        [JsonPropertyName("result")]
+        public GetTransactionNotes Result { get; set; }
     }
 
-    public class GetTransactionNotesResult
+    public class GetTransactionNotes
     {
-        public List<string> notes { get; set; } = new List<string>();
+        [JsonPropertyName("notes")]
+        public List<string> Notes { get; set; } = new List<string>();
     }
 }

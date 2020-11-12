@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -8,15 +9,21 @@ namespace Monero.Client.Daemon.POD.Responses
 {
     internal class BlockHeaderResponse : RpcResponse
     {
-        public BlockHeaderResult result { get; set; }
+        [JsonPropertyName("result")]
+        public BlockHeaderResult Result { get; set; }
     }
 
     public class BlockHeaderResult
     {
-        public BlockHeader block_header { get; set; }
-        public string status { get; set; }
-        public bool untrusted { get; set; }
-        public string top_hash { get; set; }
-        public uint credits { get; set; }
+        [JsonPropertyName("block_header")]
+        public BlockHeader BlockHeader { get; set; }
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+        [JsonPropertyName("untrusted")]
+        public bool Untrusted { get; set; }
+        [JsonPropertyName("top_hash")]
+        public string TopHash { get; set; }
+        [JsonPropertyName("credits")]
+        public ulong Credits { get; set; }
     }
 }

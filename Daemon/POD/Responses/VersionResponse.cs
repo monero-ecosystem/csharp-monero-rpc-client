@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -8,13 +9,17 @@ namespace Monero.Client.Daemon.POD.Responses
 {
     internal class VersionResponse : RpcResponse
     {
-        public VersionResult result { get; set; }
+        [JsonPropertyName("result")]
+        public DaemonVersion Result { get; set; }
     }
 
-    public class VersionResult
+    public class DaemonVersion
     {
-        public string status { get; set; }
-        public bool untrusted { get; set; }
-        public uint version { get; set; }
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+        [JsonPropertyName("untrusted")]
+        public bool Untrusted { get; set; }
+        [JsonPropertyName("version")]
+        public uint Version { get; set; }
     }
 }

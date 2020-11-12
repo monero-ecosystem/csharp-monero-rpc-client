@@ -22,4 +22,9 @@ namespace Monero.Client.Network
         public const string CharsetUtf8 = "utf-8";
         public const string CharsetUtf16 = "utf-16";
     }
+
+    internal static class BlockchainNetworkDefaults
+    {
+        public readonly static TimeSpan AverageBlockTime = TimeSpan.FromMinutes(2);
+    }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -8,16 +9,23 @@ namespace Monero.Client.Daemon.POD.Responses
 {
     internal class FeeEstimateResponse : RpcResponse
     {
-        public FeeEstimateResult result { get; set; }
+        [JsonPropertyName("result")]
+        public FeeEstimate Result { get; set; }
     }
 
-    public class FeeEstimateResult
+    public class FeeEstimate
     {
-        public uint credits { get; set; }
-        public ulong fee { get; set; }
-        public uint quantization_mask { get; set; }
-        public string status { get; set; }
-        public string top_hash { get; set; }
-        public bool untrusted { get; set; }
+        [JsonPropertyName("credits")]
+        public ulong Credits { get; set; }
+        [JsonPropertyName("fee")]
+        public ulong Fee { get; set; }
+        [JsonPropertyName("quantization_mask")]
+        public ulong QuantizationMask { get; set; }
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+        [JsonPropertyName("top_hash")]
+        public string TopHash { get; set; }
+        [JsonPropertyName("untrusted")]
+        public bool Untrusted { get; set; }
     }
 }

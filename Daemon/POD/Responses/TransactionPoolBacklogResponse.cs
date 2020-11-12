@@ -10,15 +10,21 @@ namespace Monero.Client.Daemon.POD.Responses
 {
     internal class TransactionPoolBacklogResponse : RpcResponse
     {
-        public TransactionPoolBacklogResult result { get; set; }
+        [JsonPropertyName("result")]
+        public TransactionPoolBacklogResult Result { get; set; }
     }
 
     public class TransactionPoolBacklogResult
     {      
-        public string backlog { get; set; }
-        public uint credits { get; set; }
-        public string status { get; set; }
-        public string top_hash { get; set; }
-        public bool untrusted { get; set; }
+        [JsonPropertyName("backlog")]
+        public string Backlog { get; set; }
+        [JsonPropertyName("credits")]
+        public ulong Credits { get; set; }
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+        [JsonPropertyName("top_hash")]
+        public string TopHash { get; set; }
+        [JsonPropertyName("untrusted")]
+        public bool Untrusted { get; set; }
     }
 }

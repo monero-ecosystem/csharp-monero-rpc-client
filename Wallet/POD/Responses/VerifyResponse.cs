@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -8,11 +9,13 @@ namespace Monero.Client.Wallet.POD.Responses
 {
     internal class VerifyResponse : RpcResponse
     {
-        public VerifyResult result { get; set; }
+        [JsonPropertyName("result")]
+        public VerifyResult Result { get; set; }
     }
 
     public class VerifyResult
     {
-        public bool good { get; set; }
+        [JsonPropertyName("good")]
+        public bool IsGood { get; set; }
     }
 }

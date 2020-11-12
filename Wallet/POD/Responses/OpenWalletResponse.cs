@@ -7,10 +7,10 @@ namespace Monero.Client.Wallet.POD.Responses
 {
     internal class OpenWalletResponse : RpcResponse
     {
-        public OpenWalletResult result { get; set; }
+        public OpenWallet result { get; set; }
     }
 
-    public class OpenWalletResult
+    public class OpenWallet
     {
         // ...
     }

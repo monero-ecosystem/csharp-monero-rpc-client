@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -8,21 +9,33 @@ namespace Monero.Client.Daemon.POD.Responses
 {
     internal class HardforkInformationResponse : RpcResponse
     {
-        public HardforkInformationResult result { get; set; }
+        [JsonPropertyName("result")]
+        public HardforkInformation Result { get; set; }
     }
 
-    public class HardforkInformationResult
+    public class HardforkInformation
     {
-        public uint credits { get; set; }
-        public uint earliest_height { get; set; }
-        public uint state { get; set; }
-        public string status { get; set; }
-        public uint threshold { get; set; }
-        public string top_hash { get; set; }
-        public bool untrusted { get; set; }
-        public uint version { get; set; }
-        public uint votes { get; set; }
-        public uint voting { get; set; }
-        public uint window { get; set; }
+        [JsonPropertyName("credits")]
+        public ulong Credits { get; set; }
+        [JsonPropertyName("earliest_height")]
+        public ulong EarliestHeight { get; set; }
+        [JsonPropertyName("state")]
+        public uint State { get; set; }
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+        [JsonPropertyName("threshold")]
+        public byte Threshold { get; set; }
+        [JsonPropertyName("top_hash")]
+        public string TopHash { get; set; }
+        [JsonPropertyName("untrusted")]
+        public bool Untrusted { get; set; }
+        [JsonPropertyName("version")]
+        public byte Version { get; set; }
+        [JsonPropertyName("votes")]
+        public uint Votes { get; set; }
+        [JsonPropertyName("voting")]
+        public byte Voting { get; set; }
+        [JsonPropertyName("window")]
+        public uint Window { get; set; }
     }
 }

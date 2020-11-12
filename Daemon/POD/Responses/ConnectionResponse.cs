@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -8,13 +9,17 @@ namespace Monero.Client.Daemon.POD.Responses
 {
     internal class ConnectionResponse : RpcResponse
     {
-        public ConnectionResult result { get; set; }
+        [JsonPropertyName("result")]
+        public ConnectionResult Result { get; set; }
     }
 
     public class ConnectionResult
     {
-        public List<Connection> connections { get; set; } = new List<Connection>();
-        public string status { get; set; }
-        public bool untrusted { get; set; }
+        [JsonPropertyName("connections")]
+        public List<Connection> Connections { get; set; } = new List<Connection>();
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+        [JsonPropertyName("untrusted")]
+        public bool Untrusted { get; set; }
     }
 }

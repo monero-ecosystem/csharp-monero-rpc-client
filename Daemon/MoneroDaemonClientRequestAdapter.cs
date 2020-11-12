@@ -159,6 +159,13 @@ namespace Monero.Client.Daemon
                     method = "set_bans",
                     @params = requestParams,
                 },
+                MoneroDaemonResponseSubType.Version => new DaemonRequest
+                {
+                    jsonrpc = FieldAndHeaderDefaults.JsonRpc,
+                    id = FieldAndHeaderDefaults.Id,
+                    method = "get_version",
+                    @params = requestParams,
+                },
                 _ => throw new InvalidOperationException($"Unknown MoneroDaemonResponseSubType ({subType})"),
             };
         }

@@ -30,6 +30,6 @@ namespace Monero.Client.Daemon
         Task<MoneroDaemonResponse> SyncInformationAsync(CancellationToken token = default);
         Task<MoneroDaemonResponse> GetBlockAsync(uint height, CancellationToken token = default);
         Task<MoneroDaemonResponse> GetBlockAsync(string hash, CancellationToken token = default);
-        Task<MoneroDaemonResponse> SetBansAsync(IEnumerable<(string host, uint ip, bool ban,uint seconds)> bans, CancellationToken token = default);
+        Task<MoneroDaemonResponse> SetBansAsync(IEnumerable<(string host, ulong ip, bool ban,uint seconds)> bans, CancellationToken token = default);
     }
 }

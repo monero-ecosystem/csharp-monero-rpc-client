@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Monero.Client.Daemon.POD
 {
     public class TransactionInput
     {
-        public List<Gen> gen { get; set; } = new List<Gen>();
+        [JsonPropertyName("gen")]
+        public List<Gen> Gens { get; set; } = new List<Gen>();
     }
 
     public class Gen
     {
-        public uint height { get; set; }
+        [JsonPropertyName("height")]
+        public ulong Height { get; set; }
     }
 }

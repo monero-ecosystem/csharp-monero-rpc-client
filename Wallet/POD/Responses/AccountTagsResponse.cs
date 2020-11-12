@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -8,18 +9,23 @@ namespace Monero.Client.Wallet.POD.Responses
 {
     internal class AccountTagsResponse : RpcResponse
     {
-        public AccountTagsResult result { get; set; }
+        [JsonPropertyName("result")]
+        public AccountTags Result { get; set; }
     }
 
-    public class AccountTagsResult
+    public class AccountTags
     {
-        public List<AccountTag> account_tags = new List<AccountTag>();
+        [JsonPropertyName("account_tags")]
+        public List<AccountTag> AcccountTags { get; set; } = new List<AccountTag>();
     }
 
     public class AccountTag
     {
-        public List<uint> accounts { get; set; } = new List<uint>();
-        public string tag { get; set; }
-        public string label { get; set; }
+        [JsonPropertyName("accounts")]
+        public List<uint> Accounts { get; set; } = new List<uint>();
+        [JsonPropertyName("tag")]
+        public string Tag { get; set; }
+        [JsonPropertyName("label")]
+        public string Label { get; set; }
     }
 }

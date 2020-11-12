@@ -2,29 +2,41 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
     internal class IncomingTransfersResponse : RpcResponse
     {
-        public IncomingTransferResult result { get; set; }
+        [JsonPropertyName("result")]
+        public IncomingTransfers Result { get; set; }
     }
 
-    public class IncomingTransferResult
+    public class IncomingTransfers
     {
-        public List<IncomingTransfer> transfers { get; set; } = new List<IncomingTransfer>();
+        [JsonPropertyName("transfers")]
+        public List<IncomingTransfer> Transfers { get; set; } = new List<IncomingTransfer>();
     }
 
     public class IncomingTransfer
     {
-        public ulong amount { get; set; }
-        public uint block_height { get; set; }
-        public uint global_index { get; set; }
-        public bool frozen { get; set; }
-        public string key_image { get; set; }
-        public bool spent { get; set; }
-        public SubaddressIndex subaddr_index { get; set; }
-        public string tx_hash { get; set; }
-        public bool unlocked { get; set; }
+        [JsonPropertyName("amount")]
+        public ulong Amount { get; set; }
+        [JsonPropertyName("block_height")]
+        public ulong BlockHeight { get; set; }
+        [JsonPropertyName("global_index")]
+        public ulong GlobalIndex { get; set; }
+        [JsonPropertyName("frozen")]
+        public bool Frozen { get; set; }
+        [JsonPropertyName("key_image")]
+        public string KeyImage { get; set; }
+        [JsonPropertyName("spent")]
+        public bool IsSpent { get; set; }
+        [JsonPropertyName("subaddr_index")]
+        public SubaddressIndex SubaddressIndex { get; set; }
+        [JsonPropertyName("tx_hash")]
+        public string TransactionHash { get; set; }
+        [JsonPropertyName("unlocked")]
+        public bool IsUnlocked { get; set; }
     }
 }

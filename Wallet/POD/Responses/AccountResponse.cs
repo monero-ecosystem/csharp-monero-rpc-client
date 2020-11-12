@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -8,13 +9,17 @@ namespace Monero.Client.Wallet.POD.Responses
 {
     internal class AccountResponse : RpcResponse
     {
-        public AccountResult result { get; set; }
+        [JsonPropertyName("result")]
+        public AccountResult Result { get; set; }
     }
 
     public class AccountResult
     {
-        public List<SubaddressDetails> subaddress_accounts { get; set; } = new List<SubaddressDetails>();
-        public ulong total_balance { get; set; }
-        public ulong total_unlocked_balance { get; set; }
+        [JsonPropertyName("subaddress_accounts")]
+        public List<SubaddressDetails> SubaddressAccounts { get; set; } = new List<SubaddressDetails>();
+        [JsonPropertyName("total_balance")]
+        public ulong TotalBalance { get; set; }
+        [JsonPropertyName("total_unlocked_balance")]
+        public ulong TotalUnlockedBalance { get; set; }
     }
 }

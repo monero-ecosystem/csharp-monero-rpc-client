@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -8,36 +9,75 @@ namespace Monero.Client.Wallet.POD.Responses
 {
     internal class ShowTransfersResponse : RpcResponse
     {
-        public ShowTransfersResult result { get; set; }
+        [JsonPropertyName("result")]
+        public ShowTransfers Result { get; set; }
     }
 
-    public class ShowTransfersResult
+    public class ShowTransfers
     {
-        public List<Transfer> @in { get; set; } = new List<Transfer>();
-        public List<Transfer> @out { get; set; } = new List<Transfer>();
-        public List<Transfer> pending { get; set; } = new List<Transfer>();
-        public List<Transfer> failed { get; set; } = new List<Transfer>();
-        public List<Transfer> pool { get; set; } = new List<Transfer>();
+        [JsonPropertyName("in")]
+        public List<Transfer> IncomingTransfers { get; set; } = new List<Transfer>();
+        [JsonPropertyName("out")]
+        public List<Transfer> OutgoingTransfers { get; set; } = new List<Transfer>();
+        [JsonPropertyName("pending")]
+        public List<Transfer> PendingTransfers { get; set; } = new List<Transfer>();
+        [JsonPropertyName("failed")]
+        public List<Transfer> FailedTransfers { get; set; } = new List<Transfer>();
+        [JsonPropertyName("pool")]
+        public List<Transfer> PooledTransfers { get; set; } = new List<Transfer>();
     }
 
     public class Transfer
     {
-        public string address { get; set; }
-        public ulong amount { get; set; }
-        public List<ulong> amounts { get; set; } = new List<ulong>();
-        public uint confirmations { get; set; }
-        public ulong fee { get; set; }
-        public bool double_spend_seen { get; set; }
-        public uint height { get; set; }
-        public bool locked { get; set; }
-        public string note { get; set; }
-        public string payment_id { get; set; }
-        public SubaddressIndex subaddr_index { get; set; }
-        public List<SubaddressIndex> subaddr_indices { get; set; } = new List<SubaddressIndex>();
-        public uint suggested_confirmations_threshold { get; set; }
-        public ulong timestamp { get; set; }
-        public string txid { get; set; }
-        public string type { get; set; }
-        public ulong unlock_time { get; set; }
+        [JsonPropertyName("address")]
+        public string Address { get; set; }
+        [JsonPropertyName("amount")]
+        public ulong Amount { get; set; }
+        [JsonPropertyName("amounts")]
+        public List<ulong> Amounts { get; set; } = new List<ulong>();
+        [JsonPropertyName("confirmations")]
+        public ulong Confirmations { get; set; }
+        [JsonPropertyName("fee")]
+        public ulong Fee { get; set; }
+        [JsonPropertyName("double_spend_seen")]
+        public bool IsDoubleSpendSeen { get; set; }
+        [JsonPropertyName("height")]
+        public ulong Height { get; set; }
+        [JsonPropertyName("locked")]
+        public bool IsLocked { get; set; }
+        [JsonPropertyName("note")]
+        public string Note { get; set; }
+        [JsonPropertyName("payment_id")]
+        public string PaymentID { get; set; }
+        [JsonPropertyName("subaddr_index")]
+        public SubaddressIndex SubaddressIndex { get; set; }
+        [JsonPropertyName("subaddr_indices")]
+        public List<SubaddressIndex> SubaddressIndices { get; set; } = new List<SubaddressIndex>();
+        [JsonPropertyName("suggested_confirmations_threshold")]
+        public ulong SuggestedConfirmationsThreshold { get; set; }
+        [JsonPropertyName("timestamp")]
+        public ulong Timestamp { get; set; }
+        [JsonPropertyName("txid")]
+        public string TransactionID { get; set; }
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+        [JsonPropertyName("unlock_time")]
+        public ulong UnlockTime { get; set; }
+        [JsonIgnore()]
+        public TimeSpan EstimatedTimeTillUnlock
+        {
+            get
+            {
+                return BlockchainNetworkDefaults.AverageBlockTime * this.UnlockTime;
+            }
+        }
+        [JsonIgnore()]
+        public DateTime DateTime
+        {
+            get
+            {
+                return new DateTime(1970, 1, 1).AddSeconds(this.Timestamp);
+            }
+        }
     }
 }

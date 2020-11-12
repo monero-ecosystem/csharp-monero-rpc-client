@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -8,20 +9,27 @@ namespace Monero.Client.Wallet.POD.Responses
 {
     internal class ParseUriResponse : RpcResponse
     {
-        public ParseUriResult result { get; set; }
+        [JsonPropertyName("result")]
+        public ParseUri Result { get; set; }
     }
 
-    public class ParseUriResult
+    public class ParseUri
     {
-        public MoneroUri uri { get; set; }
+        [JsonPropertyName("uri")]
+        public MoneroUri Uri { get; set; }
     }
 
     public class MoneroUri
     {
-        public string address { get; set; }
-        public ulong amount { get; set; }
-        public string payment_id { get; set; }
-        public string recipient_name { get; set; }
-        public string tx_description { get; set; }
+        [JsonPropertyName("address")]
+        public string Address { get; set; }
+        [JsonPropertyName("amount")]
+        public ulong Amount { get; set; }
+        [JsonPropertyName("payment_id")]
+        public string PaymentID { get; set; }
+        [JsonPropertyName("recipient_name")]
+        public string RecipientName { get; set; }
+        [JsonPropertyName("tx_description")]
+        public string TransactionDescription { get; set; }
     }
 }

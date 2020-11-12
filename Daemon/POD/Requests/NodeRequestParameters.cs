@@ -21,6 +21,6 @@ namespace Monero.Client.Daemon.POD.Requests
         public bool? cumulative { get; set; } = null;
         public uint? from_height { get; set; } = null;
         public uint? to_height { get; set; } = null;
-        public List<Ban> bans { get; set; } = null;
+        public List<NodeBan> bans { get; set; } = null;
     }
 }

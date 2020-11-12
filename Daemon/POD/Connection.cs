@@ -1,33 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Monero.Client.Daemon.POD
 {
     public class Connection
     {
-        public string address { get; set; }
-        public uint address_type { get; set; }
-        public uint avg_download { get; set; }
-        public uint avg_upload { get; set; }
-        public string connection_id { get; set; }
-        public uint current_download { get; set; }
-        public uint current_upload { get; set; }
-        public uint height { get; set; }
-        public string host { get; set; }
-        public uint live_time { get; set; }
-        public bool local_ip { get; set; }
-        public bool localhost { get; set; }
-        public string peer_id { get; set; }
-        public string port { get; set; }
-        public uint pruning_seed { get; set; }
-        public uint recv_count { get; set; }
-        public uint recv_idle_time { get; set; }
-        public uint recv_credits_per_hash { get; set; }
-        public uint rpc_port { get; set; }
-        public uint send_count { get; set; }
-        public uint send_idle_time { get; set; }
-        public string state { get; set; }
-        public uint support_flags { get; set; }
+        [JsonPropertyName("address")]
+        public string Address { get; set; }
+        [JsonPropertyName("address_type")]
+        public byte AddressType { get; set; }
+        [JsonPropertyName("avg_download")]
+        public ulong AvgDownload { get; set; }
+        [JsonPropertyName("avg_upload")]
+        public ulong AvgUpload { get; set; }
+        [JsonPropertyName("connection_id")]
+        public string ConnectionID { get; set; }
+        [JsonPropertyName("current_download")]
+        public uint CurrentDownload { get; set; }
+        [JsonPropertyName("current_upload")]
+        public uint CurrentUpload { get; set; }
+        [JsonPropertyName("height")]
+        public ulong Height { get; set; }
+        [JsonPropertyName("host")]
+        public string Host { get; set; }
+        [JsonPropertyName("live_time")]
+        public ulong LiveTime { get; set; }
+        [JsonPropertyName("local_ip")]
+        public bool LocalID { get; set; }
+        [JsonPropertyName("localhost")]
+        public bool Localhost { get; set; }
+        [JsonPropertyName("peer_id")]
+        public string PeerID { get; set; }
+        [JsonPropertyName("port")]
+        public string Port { get; set; }
+        [JsonPropertyName("pruning_seed")]
+        public uint PruningSeed { get; set; }
+        [JsonPropertyName("recv_count")]
+        public ulong RecvCount { get; set; }
+        [JsonPropertyName("recv_idle_time")]
+        public ulong RecvIdleTime { get; set; }
+        [JsonPropertyName("recv_credits_per_hash")]
+        public uint RecvCreditsPerHash { get; set; }
+        [JsonPropertyName("rpc_port")]
+        public UInt16 RpcPort { get; set; }
+        [JsonPropertyName("send_count")]
+        public ulong SendCount { get; set; }
+        [JsonPropertyName("send_idle_time")]
+        public ulong SendIdleTime { get; set; }
+        [JsonPropertyName("state")]
+        public string State { get; set; }
+        [JsonPropertyName("support_flags")]
+        public uint SupportFlags { get; set; }
+        [JsonIgnore()]
+        public TimeSpan ConnectionTime
+        {
+            get
+            {
+                return TimeSpan.FromSeconds(this.LiveTime);
+            }
+        }
     }
 }

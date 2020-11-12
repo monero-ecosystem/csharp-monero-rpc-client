@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -8,19 +9,29 @@ namespace Monero.Client.Wallet.POD.Responses
 {
     internal class FundTransferResponse : RpcResponse
     {
-        public FundTransferResult result { get; set; }
+        [JsonPropertyName("address")]
+        public FundTransfer Result { get; set; }
     }
 
-    public class FundTransferResult
+    public class FundTransfer
     {
-        public ulong amount { get; set; }
-        public ulong fee { get; set; }
-        public string multisig_txset { get; set; }
-        public string tx_blob { get; set; }
-        public string tx_hash { get; set; }
-        public string tx_key { get; set; }
-        public string tx_metadata { get; set; }
-        public string unsigned_txset { get; set; }
-        public uint weight { get; set; }
+        [JsonPropertyName("amount")]
+        public ulong Amount { get; set; }
+        [JsonPropertyName("fee")]
+        public ulong Fee { get; set; }
+        [JsonPropertyName("multisig_txset")]
+        public string MultiSigTxSet { get; set; }
+        [JsonPropertyName("tx_blob")]
+        public string TransactionBlob { get; set; }
+        [JsonPropertyName("tx_hash")]
+        public string TransactionHash { get; set; }
+        [JsonPropertyName("tx_key")]
+        public string TransactionKey { get; set; }
+        [JsonPropertyName("tx_metadata")]
+        public string TransactionMetadata { get; set; }
+        [JsonPropertyName("unsigned_txset")]
+        public string UnsignedTxSet { get; set; }
+        [JsonPropertyName("weight")]
+        public ulong Weight { get; set; }
     }
 }

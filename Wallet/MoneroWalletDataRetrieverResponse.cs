@@ -95,7 +95,7 @@ namespace Monero.Client.Wallet
         internal AccountTagAndDescriptionResponse SetAccountTagAndDescriptionResponse { get; set; }
         internal BlockchainHeightResponse BlockchainHeightResponse { get; set; }
         internal FundTransferResponse FundTransferResponse { get; set; }
-        internal FundTransferSplitResponse FundTransferSplitResponse { get; set; }
+        internal SplitFundTransferResponse FundTransferSplitResponse { get; set; }
         internal SignTransferResponse SignTransferResponse { get; set; }
         internal SubmitTransferResponse SubmitTransferResponse { get; set; }
         internal SweepDustResponse SweepDustResponse { get; set; }
@@ -109,7 +109,7 @@ namespace Monero.Client.Wallet
         internal GetTransactionKeyResponse GetTransactionKeyResponse { get; set; }
         internal CheckTransactionKeyResponse CheckTransactionKeyResponse { get; set; }
         internal ShowTransfersResponse ShowTransfersResponse { get; set; }
-        internal ShowTransferByTxidResponse TransferByTxidResponse { get; set; }
+        internal GetTransferByTxidResponse TransferByTxidResponse { get; set; }
         internal SignResponse SignResponse { get; set; }
         internal VerifyResponse VerifyResponse { get; set; }
         internal ExportOutputsResponse ExportOutputsResponse { get; set; }
@@ -129,7 +129,7 @@ namespace Monero.Client.Wallet
         internal CloseWalletResponse CloseWalletResponse { get; set; }
         internal ChangeWalletPasswordResponse ChangeWalletPasswordResponse { get; set; }
         internal GetRpcVersionResponse GetRpcVersionResponse { get; set; }
-        internal IsMultiSigResponse IsMultiSigResponse { get; set; }
+        internal IsMultiSigInformationResponse IsMultiSigInformationResponse { get; set; }
         internal PrepareMultiSigResponse PrepareMultiSigResponse { get; set; }
         internal MakeMultiSigResponse MakeMultiSigResponse { get; set; }
         internal ExportMultiSigInfoResponse ExportMultiSigInfoResponse { get; set; }

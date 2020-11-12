@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Numerics;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -9,17 +10,32 @@ namespace Monero.Client.Wallet.POD.Responses
 {
     internal class BalanceResponse : RpcResponse
     {
-        public BalanceResult result { get; set; }
+        [JsonPropertyName("result")]
+        public Balance Result { get; set; }
 
     }
 
-    public class BalanceResult
+    public class Balance
     {
-        public ulong balance { get; set; }
-        public uint blocks_to_unlock { get; set; }
-        public bool multisig_import_needed { get; set; }
-        public List<AddressDetails> per_subaddress { get; set; } = new List<AddressDetails>();
-        public ulong time_to_unlock { get; set; }
-        public ulong unlocked_balance { get; set; }
+        [JsonPropertyName("balance")]
+        public ulong TotalBalance { get; set; }
+        [JsonPropertyName("blocks_to_unlock")]
+        public ulong BlocksToUnlock { get; set; }
+        [JsonPropertyName("multisig_import_needed")]
+        public bool IsMultiSigImportNeeded { get; set; }
+        [JsonPropertyName("per_subaddress")]
+        public List<AddressDetails> SubaddressDetails { get; set; } = new List<AddressDetails>();
+        [JsonPropertyName("time_to_unlock")]
+        public ulong TimeToUnlock { get; set; }
+        [JsonPropertyName("unlocked_balance")]
+        public ulong UnlockedBalance { get; set; }
+        [JsonIgnore()]
+        public TimeSpan EstimatedTimeTillUnlock
+        {
+            get
+            {
+                return BlockchainNetworkDefaults.AverageBlockTime * this.BlocksToUnlock;
+            }
+        }
     }
 }

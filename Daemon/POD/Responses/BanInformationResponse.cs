@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -8,20 +9,27 @@ namespace Monero.Client.Daemon.POD.Responses
 {
     internal class GetBansResponse : RpcResponse
     {
-        public BanInformationResult result { get; set; }
+        [JsonPropertyName("result")]
+        public BanInformation Result { get; set; }
     }
 
-    public class BanInformationResult
+    public class BanInformation
     {
-        public List<Ban> bans { get; set; } = new List<Ban>();
-        public string status { get; set; }
-        public bool untrusted { get; set; }
+        [JsonPropertyName("bans")]
+        public List<Ban> Bans { get; set; } = new List<Ban>();
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
+        [JsonPropertyName("untrusted")]
+        public bool Untrusted { get; set; }
     }
     
     public class Ban
     {
-        public string host { get; set; }
-        public ulong ip { get; set; }
-        public uint seconds { get; set; }
+        [JsonPropertyName("host")]
+        public string Host { get; set; }
+        [JsonPropertyName("ip")]
+        public ulong IP { get; set; }
+        [JsonPropertyName("seconds")]
+        public uint Seconds { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.Json.Serialization;
 
 using Monero.Client.Network;
 
@@ -8,11 +9,13 @@ namespace Monero.Client.Daemon.POD.Responses
 {
     internal class FlushTransactionPoolResponse : RpcResponse
     {
-        public FlushTransactionPoolResult result { get; set; }
+        [JsonPropertyName("result")]
+        public FlushTransactionPoolResult Result { get; set; }
     }
 
     public class FlushTransactionPoolResult
     {
-        public string status { get; set; }
+        [JsonPropertyName("status")]
+        public string Status { get; set; }
     }
 }
