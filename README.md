@@ -27,16 +27,22 @@ using Monero.Client.Wallet.POD;
 
 var moneroWalletClient = new MoneroWalletClient(MoneroNetwork.Testnet);
 ```
+**Open Wallet**
+```
+await moneroWalletClient.OpenWalletAsync("new_wallet3", "banana").ConfigureAwait(false);
+```
 **Transfer Funds**
 ```
+var cts = new CancellationTokenSource();
 var dA = new List<(string address, ulong amount)>() 
 { 
 	("BfukYd1Dv5YDgkZDhffjmHb1SfzT7Wr1HNTYkyxEmfnXiGepCHgPiaWicRCLHpM2moVNWAxNEVKogU2w58fT", 1000ul),
 	("SomeOtherMoneroAddress", 3233100ul),
 };
-var response = await moneroWalletClient.TransferAsync(dA, TransferPriority.Normal).ConfigureAwait(false);
+var response = await moneroWalletClient.TransferAsync(dA, TransferPriority.Normal, cts.token).ConfigureAwait(false);
 ```
 For the entire MoneroWalletClient interface, please click [here](https://github.com/Agorist-Action/csharp-monero-rpc-client/blob/master/Wallet/IMoneroWalletClient.cs).
+**Note:** Unlike the Daemon Client, to perform any action with the Wallet Client, one must first either create a new wallet, or open an existing one (as shown above).
 # Latest Stable Release
 Available on Nuget [here](https://www.nuget.org/packages/Monero.Client/).
 ```
