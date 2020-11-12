@@ -45,7 +45,7 @@ namespace Monero.Client.Daemon
         public async Task<ulong> GetBlockCountAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.GetBlockCountAsync(token).ConfigureAwait(false);
-            if (result == null || result.BlockCountResponse == null || result.BlockCountResponse.Result == null)
+            if ( result?.BlockCountResponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.BlockCountResponse.Result.Count;
         }
@@ -53,7 +53,7 @@ namespace Monero.Client.Daemon
         public async Task<BlockHeader> GetLastBlockHeaderAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.GetLastBlockHeaderAsync(token).ConfigureAwait(false);
-            if (result == null || result.BlockHeaderResponse == null || result.BlockHeaderResponse.Result == null)
+            if (result?.BlockHeaderResponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.BlockHeaderResponse.Result.BlockHeader;
         }
@@ -69,7 +69,7 @@ namespace Monero.Client.Daemon
         public async Task<BlockHeader> GetBlockHeaderByHeightAsync(uint height, CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.GetBlockHeaderByHeightAsync(height, token).ConfigureAwait(false);
-            if (result == null || result.BlockHeaderResponse == null || result.BlockHeaderResponse.Result == null)
+            if (result?.BlockHeaderResponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.BlockHeaderResponse.Result.BlockHeader;
         }
@@ -77,7 +77,7 @@ namespace Monero.Client.Daemon
         public async Task<List<BlockHeader>> GetBlockHeaderRangeAsync(uint startHeight, uint endHeight, CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.GetBlockHeaderRangeAsync(startHeight, endHeight, token).ConfigureAwait(false);
-            if (result == null || result.BlockHeaderRangeResponse == null || result.BlockHeaderRangeResponse.Result == null)
+            if (result?.BlockHeaderRangeResponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.BlockHeaderRangeResponse.Result.Headers;
         }
@@ -85,7 +85,7 @@ namespace Monero.Client.Daemon
         public async Task<List<Connection>> GetConnectionsAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.GetConnectionsAsync(token).ConfigureAwait(false);
-            if (result == null || result.ConnectionResponse == null || result.ConnectionResponse.Result == null)
+            if (result?.ConnectionResponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.ConnectionResponse.Result.Connections;
         }
@@ -93,7 +93,7 @@ namespace Monero.Client.Daemon
         public async Task<DaemonInformation> GetDaemonInformationAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.GetDaemonInformationAsync(token).ConfigureAwait(false);
-            if (result == null || result.DaemonInformationResponse == null)
+            if (result?.DaemonInformationResponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.DaemonInformationResponse.Result;
         }
@@ -101,7 +101,7 @@ namespace Monero.Client.Daemon
         public async Task<HardforkInformation> GetHardforkInformationAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.GetHardforkInformationAsync(token).ConfigureAwait(false);
-            if (result == null || result.HardforkInformationResponse == null)
+            if (result?.HardforkInformationResponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.HardforkInformationResponse.Result;
         }
@@ -109,7 +109,7 @@ namespace Monero.Client.Daemon
         public async Task<List<Ban>> GetBanInformationAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.GetBansAsync(token).ConfigureAwait(false);
-            if (result == null || result.GetBansResponse == null || result.GetBansResponse.Result == null)
+            if (result?.GetBansResponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.GetBansResponse.Result.Bans;
         }
@@ -117,7 +117,7 @@ namespace Monero.Client.Daemon
         public async Task<string> FlushTransactionPoolAsync(IEnumerable<string> txids, CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.FlushTransactionPoolAsync(txids, token).ConfigureAwait(false);
-            if (result == null || result.FlushTransactionPoolResponse == null || result.FlushTransactionPoolResponse.Result == null)
+            if (result?.FlushTransactionPoolResponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.FlushTransactionPoolResponse.Result.Status;
         }
@@ -125,7 +125,7 @@ namespace Monero.Client.Daemon
         public async Task<List<Histogram>> GetOutputHistogramAsync(IEnumerable<ulong> amounts, uint minCount, uint maxCount, bool unlocked, uint recentCutoff, CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.GetOutputHistogramAsync(amounts, minCount, maxCount, unlocked, recentCutoff, token).ConfigureAwait(false);
-            if (result == null || result.OutputHistogramResponse == null || result.OutputHistogramResponse.Result == null)
+            if (result?.OutputHistogramResponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.OutputHistogramResponse.Result.Histograms;
         }
@@ -133,7 +133,7 @@ namespace Monero.Client.Daemon
         public async Task<CoinbaseTransactionSumResult> GetCoinbaseTransactionSumAsync(uint height, uint count, CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.GetCoinbaseTransactionSumAsync(height, count, token).ConfigureAwait(false);
-            if (result == null || result.CoinbaseTransactionSumReponse == null)
+            if (result?.CoinbaseTransactionSumReponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.CoinbaseTransactionSumReponse.Result;
         }
@@ -141,7 +141,7 @@ namespace Monero.Client.Daemon
         public async Task<uint> GetVersionAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.GetVersionAsync(token).ConfigureAwait(false);
-            if (result == null || result.VersionResponse == null || result.VersionResponse.Result == null)
+            if (result?.VersionResponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.VersionResponse.Result.Version;
         }
@@ -149,7 +149,7 @@ namespace Monero.Client.Daemon
         public async Task<ulong> GetFeeEstimateAsync(uint graceBlocks, CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.GetFeeEstimateAsync(graceBlocks, token).ConfigureAwait(false);
-            if (result == null || result.FeeEstimateResponse == null || result.FeeEstimateResponse.Result == null)
+            if (result?.FeeEstimateResponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.FeeEstimateResponse.Result.Fee;
         }
@@ -157,7 +157,7 @@ namespace Monero.Client.Daemon
         public async Task<List<Chain>> GetAlternateChainsAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.GetAlternateChainsAsync(token).ConfigureAwait(false);
-            if (result == null || result.AlternateChainResponse == null || result.AlternateChainResponse.Result == null)
+            if (result?.AlternateChainResponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.AlternateChainResponse.Result.Chains;
         }
@@ -165,7 +165,7 @@ namespace Monero.Client.Daemon
         public async Task<string> RelayTransactionsAsync(IEnumerable<string> txids, CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.RelayTransactionsAsync(txids, token).ConfigureAwait(false);
-            if (result == null || result.RelayTransactionResponse == null || result.RelayTransactionResponse.Result == null)
+            if (result?.RelayTransactionResponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.RelayTransactionResponse.Result.Status;
         }
@@ -173,7 +173,7 @@ namespace Monero.Client.Daemon
         public async Task<SyncronizationInformation> SyncInformationAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.SyncInformationAsync(token).ConfigureAwait(false);
-            if (result == null || result.SyncronizeInformationResponse == null)
+            if (result?.SyncronizeInformationResponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.SyncronizeInformationResponse.Result;
         }
@@ -181,7 +181,7 @@ namespace Monero.Client.Daemon
         public async Task<Block> GetBlockAsync(uint height, CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.GetBlockAsync(height, token).ConfigureAwait(false);
-            if (result == null || result.BlockResponse == null)
+            if (result.BlockResponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.BlockResponse.Result;
         }
@@ -189,7 +189,7 @@ namespace Monero.Client.Daemon
         public async Task<Block> GetBlockAsync(string hash, CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.GetBlockAsync(hash, token).ConfigureAwait(false);
-            if (result == null || result.BlockResponse == null)
+            if (result?.BlockResponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.BlockResponse.Result;
         }
@@ -197,7 +197,7 @@ namespace Monero.Client.Daemon
         public async Task<string> SetBansAsync(IEnumerable<(string host, ulong ip, bool ban, uint seconds)> bans, CancellationToken token = default)
         {
             var result = await _moneroRpcDaemonDataRetriever.SetBansAsync(bans, token).ConfigureAwait(false);
-            if (result == null || result.SetBansResponse == null || result.SetBansResponse.Result == null)
+            if (result?.SetBansResponse?.Result == null)
                 throw new RpcResponseException("Error experienced when making RPC call");
             return result.SetBansResponse.Result.Status;
         }
