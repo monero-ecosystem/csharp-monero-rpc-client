@@ -25,7 +25,7 @@ namespace Monero.Client.Network
     {
         public RpcErrorCode RpcErrorCode { get; private set; } = RpcErrorCode.UnknownError;
 
-        public RpcResponseException()
+        public RpcResponseException() : base()
         {
         }
 
