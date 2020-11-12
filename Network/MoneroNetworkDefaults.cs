@@ -26,5 +26,6 @@ namespace Monero.Client.Network
     internal static class BlockchainNetworkDefaults
     {
         public readonly static TimeSpan AverageBlockTime = TimeSpan.FromMinutes(2);
+        public const int BaseBlockUnlockThreshold = 10;
     }
 }

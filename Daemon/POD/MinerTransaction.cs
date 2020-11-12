@@ -25,7 +25,7 @@ namespace Monero.Client.Daemon.POD
         {
             get
             {
-                return BlockchainNetworkDefaults.AverageBlockTime * this.UnlockTime;
+                return BlockchainNetworkDefaults.AverageBlockTime * (BlockchainNetworkDefaults.BaseBlockUnlockThreshold + this.UnlockTime);
             }
         }
     }
