@@ -12,7 +12,7 @@ namespace Monero.Client.Daemon.POD.Requests
         [JsonPropertyName("ip")]
         public ulong IP { get; set; }
         [JsonPropertyName("ban")]
-        public bool Ban { get; set; }
+        public bool IsBanned { get; set; }
         [JsonPropertyName("seconds")]
         public uint Seconds { get; set; }
     }

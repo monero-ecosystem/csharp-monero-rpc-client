@@ -38,7 +38,7 @@ namespace Monero.Client.Daemon.POD
         [JsonPropertyName("num_txes")]
         public ulong NumTxes { get; set; }
         [JsonPropertyName("orphan_status")]
-        public bool OrphanStatus { get; set; }
+        public bool IsOrphan { get; set; }
         [JsonPropertyName("pow_hash")]
         public string PowHash { get; set; }
         [JsonPropertyName("prev_hash")]

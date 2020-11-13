@@ -30,7 +30,7 @@ namespace Monero.Client.Daemon.POD.Responses
         [JsonPropertyName("peers")]
         public List<GeneralSyncronizationInformation> Peers { get; set; } = new List<GeneralSyncronizationInformation>();
         [JsonPropertyName("untrusted")]
-        public bool Untrusted { get; set; }
+        public bool IsUntrusted { get; set; }
         [JsonPropertyName("next_needed_pruning_seed")]
         public uint NextNeededPruningSeed { get; set; }
     }

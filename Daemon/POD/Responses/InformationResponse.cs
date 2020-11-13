@@ -58,7 +58,7 @@ namespace Monero.Client.Daemon.POD.Responses
         [JsonPropertyName("nettype")]
         public string NetType { get; set; }
         [JsonPropertyName("offline")]
-        public bool Offline { get; set; }
+        public bool IsOffline { get; set; }
         [JsonPropertyName("outgoing_connections_count")]
         public ulong OutgoingConnectionsCount { get; set; }
         [JsonPropertyName("rpc_connections_count")]
@@ -84,9 +84,9 @@ namespace Monero.Client.Daemon.POD.Responses
         [JsonPropertyName("tx_pool_size")]
         public ulong TxPoolSize { get; set; }
         [JsonPropertyName("untrusted")]
-        public bool Untrusted { get; set; }
+        public bool IsUntrusted { get; set; }
         [JsonPropertyName("update_available")]
-        public bool UpdateAvailable { get; set; }
+        public bool IsUpdateAvailable { get; set; }
         [JsonPropertyName("version")]
         public string Version { get; set; }
         [JsonPropertyName("was_bootstrap_ever_used")]

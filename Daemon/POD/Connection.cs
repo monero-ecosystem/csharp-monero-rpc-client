@@ -28,9 +28,9 @@ namespace Monero.Client.Daemon.POD
         [JsonPropertyName("live_time")]
         public ulong LiveTime { get; set; }
         [JsonPropertyName("local_ip")]
-        public bool LocalID { get; set; }
+        public bool IsLocalID { get; set; }
         [JsonPropertyName("localhost")]
-        public bool Localhost { get; set; }
+        public bool IsLocalhost { get; set; }
         [JsonPropertyName("peer_id")]
         public string PeerID { get; set; }
         [JsonPropertyName("port")]

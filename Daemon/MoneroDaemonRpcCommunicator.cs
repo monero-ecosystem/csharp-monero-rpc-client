@@ -395,7 +395,7 @@ namespace Monero.Client.Daemon
                 {
                     Host = ban.host,
                     IP = ban.ip,
-                    Ban = ban.ban,
+                    IsBanned = ban.ban,
                     Seconds = ban.seconds,
                 });
             }

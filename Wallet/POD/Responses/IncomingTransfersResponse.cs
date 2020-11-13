@@ -27,7 +27,7 @@ namespace Monero.Client.Wallet.POD.Responses
         [JsonPropertyName("global_index")]
         public ulong GlobalIndex { get; set; }
         [JsonPropertyName("frozen")]
-        public bool Frozen { get; set; }
+        public bool IsFrozen { get; set; }
         [JsonPropertyName("key_image")]
         public string KeyImage { get; set; }
         [JsonPropertyName("spent")]

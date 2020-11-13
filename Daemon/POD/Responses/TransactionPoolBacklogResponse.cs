@@ -25,6 +25,6 @@ namespace Monero.Client.Daemon.POD.Responses
         [JsonPropertyName("top_hash")]
         public string TopHash { get; set; }
         [JsonPropertyName("untrusted")]
-        public bool Untrusted { get; set; }
+        public bool IsUntrusted { get; set; }
     }
 }
