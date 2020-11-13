@@ -27,7 +27,7 @@ namespace Monero.Client.Wallet.POD.Responses
         { 
             get
             {
-                return !IsInPool || Confirmations > 0ul;
+                return Confirmations > 0ul;
             }
         }
     }
