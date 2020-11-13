@@ -14,7 +14,7 @@ var daemonClient = new MoneroDaemonClient(new Uri("http://127.0.0.1:18082/json_r
 ```
 **Get Connections**
 ```
-var token = CancellationToken();
+var token = new CancellationToken();
 List<Connection> connections = await daemonClient.GetConnectionsAsync(token).ConfigureAwait(false);
 ```
 ![](gif/connectionsdemo.gif)
