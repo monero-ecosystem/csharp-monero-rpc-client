@@ -173,7 +173,7 @@ namespace Monero.Client.Daemon
         private static async Task<HttpRequestMessage> SerializeRequest(HttpRequestMessage httpRequestMessage, DaemonRequest request, CancellationToken token)
         {
             using var ms = new MemoryStream();
-            await JsonSerializer.SerializeAsync<DaemonRequest>(ms, request, new JsonSerializerOptions() { IgnoreNullValues = true, }).ConfigureAwait(false);
+            await JsonSerializer.SerializeAsync<DaemonRequest>(ms, request, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
             var messageContent = ms.ToArray();
             httpRequestMessage.Content = new ByteArrayContent(messageContent);
             httpRequestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(FieldAndHeaderDefaults.ApplicationJson);

@@ -446,7 +446,7 @@ namespace Monero.Client.Wallet
         private static async Task<HttpRequestMessage> SerializeRequest(HttpRequestMessage httpRequestMessage, AnonymousWalletRequest anonymousRequest, CancellationToken token)
         {
             using var ms = new MemoryStream();
-            await JsonSerializer.SerializeAsync<AnonymousWalletRequest>(ms, anonymousRequest, new JsonSerializerOptions() { IgnoreNullValues = true, }).ConfigureAwait(false);
+            await JsonSerializer.SerializeAsync<AnonymousWalletRequest>(ms, anonymousRequest, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
             var messageContent = ms.ToArray();
             httpRequestMessage.Content = new ByteArrayContent(messageContent);
             httpRequestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(FieldAndHeaderDefaults.ApplicationJson);
@@ -456,7 +456,7 @@ namespace Monero.Client.Wallet
         private static async Task<HttpRequestMessage> SerializeRequest(HttpRequestMessage httpRequestMessage, WalletRequest request, CancellationToken token)
         {
             using var ms = new MemoryStream();
-            await JsonSerializer.SerializeAsync<WalletRequest>(ms, request, new JsonSerializerOptions() { IgnoreNullValues = true, }).ConfigureAwait(false);
+            await JsonSerializer.SerializeAsync<WalletRequest>(ms, request, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
             var messageContent = ms.ToArray();
             httpRequestMessage.Content = new ByteArrayContent(messageContent);
             httpRequestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(FieldAndHeaderDefaults.ApplicationJson);
