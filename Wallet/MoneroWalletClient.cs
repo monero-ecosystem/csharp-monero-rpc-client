@@ -4,7 +4,9 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Monero.Client.Network;
+using Monero.Client.Utilities;
 using Monero.Client.Wallet.POD;
 using Monero.Client.Wallet.POD.Responses;
 
@@ -51,8 +53,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetBalanceAsync));
             var result = await _moneroRpcWalletCommunicator.GetBalanceAsync(accountIndex, addressIndices, token).ConfigureAwait(false);
-            if (result?.BalanceResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.BalanceResponse?.Result == null, nameof(GetBalanceAsync));
             return result.BalanceResponse.Result;
         }
 
@@ -60,8 +61,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetBalanceAsync));
             var result = await _moneroRpcWalletCommunicator.GetBalanceAsync(accountIndex, token).ConfigureAwait(false);
-            if (result?.BalanceResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.BalanceResponse?.Result == null, nameof(GetBalanceAsync));
             return result.BalanceResponse.Result;
         }
 
@@ -69,8 +69,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetAddressAsync));
             var result = await _moneroRpcWalletCommunicator.GetAddressAsync(accountIndex, token).ConfigureAwait(false);
-            if (result?.AddressResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.AddressResponse?.Result == null, nameof(GetAddressAsync));
             return result.AddressResponse.Result;
         }
 
@@ -78,8 +77,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetAddressAsync));
             var result = await _moneroRpcWalletCommunicator.GetAddressAsync(accountIndex, addressIndices, token).ConfigureAwait(false);
-            if (result?.AddressResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.AddressResponse?.Result == null, nameof(GetAddressAsync));
             return result.AddressResponse.Result;
         }
 
@@ -87,8 +85,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetAddressIndexAsync));
             var result = await _moneroRpcWalletCommunicator.GetAddressIndexAsync(address, token).ConfigureAwait(false);
-            if (result?.AddressIndexResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.AddressIndexResponse?.Result == null, nameof(GetAddressIndexAsync));
             return result.AddressIndexResponse.Result;
         }
 
@@ -96,8 +93,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(CreateAddressAsync));
             var result = await _moneroRpcWalletCommunicator.CreateAddressAsync(accountIndex, token).ConfigureAwait(false);
-            if (result?.AddressCreationResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.AddressCreationResponse?.Result == null, nameof(CreateAddressAsync));
             return result.AddressCreationResponse.Result;
         }
 
@@ -105,8 +101,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(CreateAddressAsync));
             var result = await _moneroRpcWalletCommunicator.CreateAddressAsync(accountIndex, label, token).ConfigureAwait(false);
-            if (result?.AddressCreationResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.AddressCreationResponse?.Result == null, nameof(CreateAddressAsync));
             return result.AddressCreationResponse.Result;
         }
 
@@ -114,8 +109,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(LabelAddressAsync));
             var result = await _moneroRpcWalletCommunicator.LabelAddressAsync(majorIndex, minorIndex, label, token).ConfigureAwait(false);
-            if (result?.AddressLabelResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.AddressLabelResponse?.Result == null, nameof(LabelAddressAsync));
             return result.AddressLabelResponse.Result;
         }
 
@@ -123,8 +117,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetAccountsAsync));
             var result = await _moneroRpcWalletCommunicator.GetAccountsAsync(token).ConfigureAwait(false);
-            if (result?.AccountResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.AccountResponse?.Result == null, nameof(GetAccountsAsync));
             return result.AccountResponse.Result;
         }
 
@@ -132,8 +125,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetAccountsAsync));
             var result = await _moneroRpcWalletCommunicator.GetAccountsAsync(tag, token).ConfigureAwait(false);
-            if (result?.AccountResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.AccountResponse?.Result == null, nameof(GetAccountsAsync));
             return result.AccountResponse.Result;
         }
 
@@ -141,8 +133,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(CreateAccountAsync));
             var result = await _moneroRpcWalletCommunicator.CreateAccountAsync(token).ConfigureAwait(false);
-            if (result?.CreateAccountResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.CreateAccountResponse?.Result == null, nameof(CreateAccountAsync));
             return result.CreateAccountResponse.Result;
         }
 
@@ -150,8 +141,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(CreateAccountAsync));
             var result = await _moneroRpcWalletCommunicator.CreateAccountAsync(label, token).ConfigureAwait(false);
-            if (result?.CreateAccountResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.CreateAccountResponse?.Result == null, nameof(CreateAccountAsync));
             return result.CreateAccountResponse.Result;
         }
 
@@ -159,8 +149,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(LabelAccountAsync));
             var result = await _moneroRpcWalletCommunicator.LabelAccountAsync(accountIndex, label, token).ConfigureAwait(false);
-            if (result?.AccountLabelResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.AccountLabelResponse?.Result == null, nameof(LabelAccountAsync));
             return result.AccountLabelResponse.Result;
         }
 
@@ -168,8 +157,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetAccountTagsAsync));
             var result = await _moneroRpcWalletCommunicator.GetAccountTagsAsync(token).ConfigureAwait(false);
-            if (result?.AccountTagsResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.AccountTagsResponse?.Result == null, nameof(GetAccountTagsAsync));
             return result.AccountTagsResponse.Result;
         }
 
@@ -177,8 +165,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(TagAccountsAsync));
             var result = await _moneroRpcWalletCommunicator.TagAccountsAsync(tag, accounts, token).ConfigureAwait(false);
-            if (result?.TagAccountsResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.TagAccountsResponse?.Result == null, nameof(TagAccountsAsync));
             return result.TagAccountsResponse.Result;
         }
 
@@ -186,8 +173,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(UntagAccountsAsync));
             var result = await _moneroRpcWalletCommunicator.UntagAccountsAsync(accounts, token).ConfigureAwait(false);
-            if (result?.UntagAccountsResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.UntagAccountsResponse?.Result == null, nameof(UntagAccountsAsync));
             return result.UntagAccountsResponse.Result;
         }
 
@@ -195,8 +181,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(SetAccountTagDescriptionAsync));
             var result = await _moneroRpcWalletCommunicator.SetAccountTagDescriptionAsync(tag, description, token).ConfigureAwait(false);
-            if (result?.SetAccountTagAndDescriptionResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.SetAccountTagAndDescriptionResponse?.Result == null, nameof(SetAccountTagDescriptionAsync));
             return result.SetAccountTagAndDescriptionResponse.Result;
         }
 
@@ -204,8 +189,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetHeightAsync));
             var result = await _moneroRpcWalletCommunicator.GetHeightAsync(token).ConfigureAwait(false);
-            if (result?.BlockchainHeightResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.BlockchainHeightResponse?.Result == null, nameof(GetHeightAsync));
             return result.BlockchainHeightResponse.Result;
         }
 
@@ -213,8 +197,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(TransferAsync));
             var result = await _moneroRpcWalletCommunicator.TransferAsync(transactions, transferPriority, token).ConfigureAwait(false);
-            if (result?.FundTransferResponse == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.FundTransferResponse?.Result == null, nameof(TransferAsync));
             return result.FundTransferResponse.Result;
         }
 
@@ -222,8 +205,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(TransferAsync));
             var result = await _moneroRpcWalletCommunicator.TransferAsync(transactions, transferPriority, getTxKey, getTxHex, unlockTime, token).ConfigureAwait(false);
-            if (result?.FundTransferResponse == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.FundTransferResponse?.Result == null, nameof(TransferAsync));
             return result.FundTransferResponse.Result;
         }
 
@@ -231,8 +213,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(TransferAsync));
             var result = await _moneroRpcWalletCommunicator.TransferAsync(transactions, transferPriority, ringSize, unlockTime, getTxKey, getTxHex, token).ConfigureAwait(false);
-            if (result?.FundTransferResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.FundTransferResponse?.Result == null, nameof(TransferAsync));
             return result.FundTransferResponse.Result;
         }
 
@@ -240,8 +221,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(TransferAsync));
             var result = await _moneroRpcWalletCommunicator.TransferAsync(transactions, transferPriority, ringSize, accountIndex, unlockTime, getTxKey, getTxHex, token).ConfigureAwait(false);
-            if (result?.FundTransferResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.FundTransferResponse?.Result == null, nameof(TransferAsync));
             return result.FundTransferResponse.Result;
         }
 
@@ -249,8 +229,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(TransferSplitAsync));
             var result = await _moneroRpcWalletCommunicator.TransferSplitAsync(transactions, transferPriority, newAlgorithm, token).ConfigureAwait(false);
-            if (result?.FundTransferSplitResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.FundTransferSplitResponse?.Result == null, nameof(TransferSplitAsync));
             return result.FundTransferSplitResponse.Result;
         }
 
@@ -258,8 +237,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(TransferSplitAsync));
             var result = await _moneroRpcWalletCommunicator.TransferSplitAsync(transactions, transferPriority, getTxKey, getTxHex, newAlgorithm, unlockTime, token).ConfigureAwait(false);
-            if (result?.FundTransferSplitResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.FundTransferSplitResponse?.Result == null, nameof(TransferSplitAsync));
             return result.FundTransferSplitResponse.Result;
         }
 
@@ -267,8 +245,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(TransferSplitAsync));
             var result = await _moneroRpcWalletCommunicator.TransferSplitAsync(transactions, transferPriority, ringSize, newAlgorithm, unlockTime, getTxKey, getTxHex, token).ConfigureAwait(false);
-            if (result?.FundTransferSplitResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.FundTransferSplitResponse?.Result == null, nameof(TransferSplitAsync));
             return result.FundTransferSplitResponse.Result;
         }
 
@@ -276,8 +253,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(TransferSplitAsync));
             var result = await _moneroRpcWalletCommunicator.TransferSplitAsync(transactions, transferPriority, ringSize, accountIndex, newAlgorithm, unlockTime, getTxKey, getTxHex, token).ConfigureAwait(false);
-            if (result?.FundTransferSplitResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.FundTransferSplitResponse?.Result == null, nameof(TransferSplitAsync));
             return result.FundTransferSplitResponse.Result;
         }
 
@@ -285,8 +261,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(SignTransferAsync));
             var result = await _moneroRpcWalletCommunicator.SignTransferAsync(unsignedTxSet, exportRaw, token).ConfigureAwait(false);
-            if (result?.SignTransferResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.SignTransferResponse?.Result == null, nameof(SignTransferAsync));
             return result.SignTransferResponse.Result;
         }
 
@@ -294,8 +269,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(SubmitTransferAsync));
             var result = await _moneroRpcWalletCommunicator.SubmitTransferAsync(txDataHex, token).ConfigureAwait(false);
-            if (result?.SubmitTransferResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.SubmitTransferResponse?.Result == null, nameof(SubmitTransferAsync));
             return result.SubmitTransferResponse.Result;
         }
 
@@ -303,8 +277,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(SweepDustAsync));
             var result = await _moneroRpcWalletCommunicator.SweepDustAsync(getTxKey, getTxHex, getTxMetadata, doNotRelay, token).ConfigureAwait(false);
-            if (result?.SweepDustResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.SweepDustResponse?.Result == null, nameof(SweepDustAsync));
             return result.SweepDustResponse.Result;
         }
 
@@ -312,8 +285,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(SweepAllAsync));
             var result = await _moneroRpcWalletCommunicator.SweepAllAsync(address, accountIndex, transactionPriority, ringSize, unlockTime, belowAmount, getTxKeys, getTxHex, getTxMetadata, token).ConfigureAwait(false);
-            if (result?.SweepAllResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.SweepAllResponse?.Result == null, nameof(SweepAllAsync));
             return result.SweepAllResponse.Result;
         }
 
@@ -321,8 +293,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(SaveWalletAsync));
             var result = await _moneroRpcWalletCommunicator.SaveWalletAsync(token).ConfigureAwait(false);
-            if (result?.SaveWalletResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.SaveWalletResponse?.Result == null, nameof(SaveWalletAsync));
             return result.SaveWalletResponse.Result;
         }
 
@@ -330,8 +301,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetIncomingTransfersAsync));
             var result = await _moneroRpcWalletCommunicator.GetIncomingTransfersAsync(transferType, returnKeyImage, token).ConfigureAwait(false);
-            if (result?.IncomingTransfersResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.IncomingTransfersResponse?.Result == null, nameof(GetIncomingTransfersAsync));
             return result.IncomingTransfersResponse.Result;
         }
 
@@ -339,8 +309,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetIncomingTransfersAsync));
             var result = await _moneroRpcWalletCommunicator.GetIncomingTransfersAsync(transferType, accountIndex, returnKeyImage, token).ConfigureAwait(false);
-            if (result?.IncomingTransfersResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.IncomingTransfersResponse?.Result == null, nameof(GetIncomingTransfersAsync));
             return result.IncomingTransfersResponse.Result;
         }
 
@@ -348,8 +317,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetIncomingTransfersAsync));
             var result = await _moneroRpcWalletCommunicator.GetIncomingTransfersAsync(transferType, accountIndex, subaddrIndices, returnKeyImage, token).ConfigureAwait(false);
-            if (result?.IncomingTransfersResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.IncomingTransfersResponse?.Result == null, nameof(GetIncomingTransfersAsync));
             return result.IncomingTransfersResponse.Result;
         }
 
@@ -357,8 +325,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetPrivateKey));
             var result = await _moneroRpcWalletCommunicator.GetPrivateKey(keyType, token).ConfigureAwait(false);
-            if (result?.QueryKeyResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.QueryKeyResponse?.Result == null, nameof(GetPrivateKey));
             return result.QueryKeyResponse.Result;
         }
 
@@ -366,8 +333,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(StopWalletAsync));
             var result = await _moneroRpcWalletCommunicator.StopWalletAsync(token).ConfigureAwait(false);
-            if (result?.StopWalletResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.StopWalletResponse?.Result == null, nameof(StopWalletAsync));
             return result.StopWalletResponse.Result;
         }
 
@@ -375,8 +341,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(SetTransactionNotesAsync));
             var result = await _moneroRpcWalletCommunicator.SetTransactionNotesAsync(txids, notes, token).ConfigureAwait(false);
-            if (result?.SetTransactionNotesResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.SetTransactionNotesResponse?.Result == null, nameof(SetTransactionNotesAsync));
             return result.SetTransactionNotesResponse.Result;
         }
 
@@ -384,8 +349,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetTransactionNotesAsync));
             var result = await _moneroRpcWalletCommunicator.GetTransactionNotesAsync(txids, token).ConfigureAwait(false);
-            if (result?.GetTransactionNotesResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.GetTransactionNotesResponse?.Result == null, nameof(GetTransactionNotesAsync));
             return result.GetTransactionNotesResponse.Result;
         }
 
@@ -393,8 +357,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetTransactionKeyAsync));
             var result = await _moneroRpcWalletCommunicator.GetTransactionKeyAsync(txid, token).ConfigureAwait(false);
-            if (result?.GetTransactionKeyResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.GetTransactionKeyResponse?.Result == null, nameof(GetTransactionKeyAsync));
             return result.GetTransactionKeyResponse.Result;
         }
 
@@ -402,8 +365,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(CheckTransactionKeyAsync));
             var result = await _moneroRpcWalletCommunicator.CheckTransactionKeyAsync(txid, txKey, address, token).ConfigureAwait(false);
-            if (result?.CheckTransactionKeyResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.CheckTransactionKeyResponse?.Result == null, nameof(CheckTransactionKeyAsync));
             return result.CheckTransactionKeyResponse.Result;
         }
 
@@ -411,8 +373,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetTransfersAsync));
             var result = await _moneroRpcWalletCommunicator.GetTransfersAsync(@in, @out, pending, failed, pool, token).ConfigureAwait(false);
-            if (result?.ShowTransfersResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.ShowTransfersResponse?.Result == null, nameof(GetTransfersAsync));
             return result.ShowTransfersResponse.Result;
         }
 
@@ -420,8 +381,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetTransfersAsync));
             var result = await _moneroRpcWalletCommunicator.GetTransfersAsync(@in, @out, pending, failed, pool, minHeight, maxHeight, token).ConfigureAwait(false);
-            if (result?.ShowTransfersResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.ShowTransfersResponse?.Result == null, nameof(GetTransfersAsync));
             return result.ShowTransfersResponse.Result;
         }
 
@@ -429,8 +389,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetTransferByTxidAsync));
             var result = await _moneroRpcWalletCommunicator.GetTransferByTxidAsync(txid, token).ConfigureAwait(false);
-            if (result?.TransferByTxidResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.TransferByTxidResponse?.Result == null, nameof(GetTransferByTxidAsync));
             return result.TransferByTxidResponse.Result;
         }
 
@@ -438,8 +397,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetTransferByTxidAsync));
             var result = await _moneroRpcWalletCommunicator.GetTransferByTxidAsync(txid, accountIndex, token).ConfigureAwait(false);
-            if (result?.TransferByTxidResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.TransferByTxidResponse?.Result == null, nameof(GetTransferByTxidAsync));
             return result.TransferByTxidResponse.Result;
         }
 
@@ -447,8 +405,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(SignAsync));
             var result = await _moneroRpcWalletCommunicator.SignAsync(data, token).ConfigureAwait(false);
-            if (result?.SignResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.SignResponse?.Result == null, nameof(SignAsync));
             return result.SignResponse.Result;
         }
 
@@ -456,8 +413,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(VerifyAsync));
             var result = await _moneroRpcWalletCommunicator.VerifyAsync(data, address, signature, token).ConfigureAwait(false);
-            if (result?.VerifyResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.VerifyResponse?.Result == null, nameof(VerifyAsync));
             return result.VerifyResponse.Result;
         }
 
@@ -465,8 +421,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(ExportOutputsAsync));
             var result = await _moneroRpcWalletCommunicator.ExportOutputsAsync(token).ConfigureAwait(false);
-            if (result?.ExportOutputsResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.ExportOutputsResponse?.Result == null, nameof(ExportOutputsAsync));
             return result.ExportOutputsResponse.Result;
         }
 
@@ -474,8 +429,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(ImportOutputsAsync));
             var result = await _moneroRpcWalletCommunicator.ImportOutputsAsync(token).ConfigureAwait(false);
-            if (result?.ImportOutputsResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.ImportOutputsResponse?.Result == null, nameof(ImportOutputsAsync));
             return result.ImportOutputsResponse.Result;
         }
 
@@ -483,8 +437,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(ExportKeyImagesAsync));
             var result = await _moneroRpcWalletCommunicator.ExportKeyImagesAsync(token).ConfigureAwait(false);
-            if (result?.ExportKeyImagesResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.ExportKeyImagesResponse?.Result == null, nameof(ExportKeyImagesAsync));
             return result.ExportKeyImagesResponse.Result;
         }
 
@@ -492,8 +445,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(ImportKeyImagesAsync));
             var result = await _moneroRpcWalletCommunicator.ImportKeyImagesAsync(signedKeyImages, token).ConfigureAwait(false);
-            if (result?.ImportKeyImagesResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.ImportKeyImagesResponse?.Result == null, nameof(ImportKeyImagesAsync));
             return result.ImportKeyImagesResponse.Result;
         }
 
@@ -501,8 +453,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(MakeUriAsync));
             var result = await _moneroRpcWalletCommunicator.MakeUriAsync(address, amount, recipientName, txDescription, paymentId, token).ConfigureAwait(false);
-            if (result?.MakeUriResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.MakeUriResponse?.Result == null, nameof(MakeUriAsync));
             return result.MakeUriResponse.Result;
         }
 
@@ -510,8 +461,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(ParseUriAsync));
             var result = await _moneroRpcWalletCommunicator.ParseUriAsync(uri, token).ConfigureAwait(false);
-            if (result.ParseUriResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.ParseUriResponse?.Result == null, nameof(ParseUriAsync));
             return result.ParseUriResponse.Result;
         }
 
@@ -519,8 +469,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetAddressBookAsync));
             var result = await _moneroRpcWalletCommunicator.GetAddressBookAsync(entries, token).ConfigureAwait(false);
-            if (result.GetAddressBookResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.GetAddressBookResponse?.Result == null, nameof(GetAddressBookAsync));
             return result.GetAddressBookResponse.Result;
         }
 
@@ -528,8 +477,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(AddAddressBookAsync));
             var result = await _moneroRpcWalletCommunicator.AddAddressBookAsync(address, description, paymentId, token).ConfigureAwait(false);
-            if (result?.AddAddressBookResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.AddAddressBookResponse?.Result == null, nameof(AddAddressBookAsync));
             return result.AddAddressBookResponse.Result;
         }
 
@@ -537,8 +485,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(DeleteAddressBookAsync));
             var result = await _moneroRpcWalletCommunicator.DeleteAddressBookAsync(index, token).ConfigureAwait(false);
-            if (result?.DeleteAddressBookResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.DeleteAddressBookResponse?.Result == null, nameof(DeleteAddressBookAsync));
             return result.DeleteAddressBookResponse.Result;
         }
 
@@ -546,8 +493,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(RefreshWalletAsync));
             var result = await _moneroRpcWalletCommunicator.RefreshWalletAsync(startHeight, token).ConfigureAwait(false);
-            if (result?.RefreshWalletResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.RefreshWalletResponse?.Result == null, nameof(RefreshWalletAsync));
             return result.RefreshWalletResponse.Result;
         }
 
@@ -555,8 +501,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(RescanSpentAsync));
             var result = await _moneroRpcWalletCommunicator.RescanSpentAsync(token).ConfigureAwait(false);
-            if (result?.RescanSpentResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.RescanSpentResponse?.Result == null, nameof(RescanSpentAsync));
             return result.RescanSpentResponse.Result;
         }
 
@@ -564,8 +509,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletOpen(_walletCurrentlyOpen, nameof(CreateWalletAsync));
             var result = await _moneroRpcWalletCommunicator.CreateWalletAsync(filename, language, password, token).ConfigureAwait(false);
-            if (result?.CreateWalletResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.CreateWalletResponse?.Result == null, nameof(CreateWalletAsync));
             _walletCurrentlyOpen = true;
             _walletCurrentlyOpenName = filename;
             return result.CreateWalletResponse.Result;
@@ -575,8 +519,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletOpen(_walletCurrentlyOpen, nameof(OpenWalletAsync));
             var result = await _moneroRpcWalletCommunicator.OpenWalletAsync(filename, password, token).ConfigureAwait(false);
-            if (result?.OpenWalletResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.OpenWalletResponse?.Result == null, nameof(OpenWalletAsync));
             _walletCurrentlyOpen = true;
             _walletCurrentlyOpenName = filename;
             return result.OpenWalletResponse.Result;
@@ -587,8 +530,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(CloseWalletAsync));
             var result = await _moneroRpcWalletCommunicator.CloseWalletAsync(token).ConfigureAwait(false);
-            if (result?.CloseWalletResponse == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.CloseWalletResponse?.Result == null, nameof(CloseWalletAsync));
             _walletCurrentlyOpen = false;
             _walletCurrentlyOpenName = string.Empty;
             return result.CloseWalletResponse.Result;
@@ -598,8 +540,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(ChangeWalletPasswordAsync));
             var result = await _moneroRpcWalletCommunicator.ChangeWalletPasswordAsync(oldPassword, newPassword, token).ConfigureAwait(false);
-            if (result == null || result.ChangeWalletPasswordResponse == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.ChangeWalletPasswordResponse?.Result == null, nameof(ChangeWalletPasswordAsync));
             return result.ChangeWalletPasswordResponse.Result;
         }
 
@@ -607,8 +548,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(GetVersionAsync));
             var result = await _moneroRpcWalletCommunicator.GetVersionAsync(token).ConfigureAwait(false);
-            if (result?.GetRpcVersionResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.GetRpcVersionResponse?.Result == null, nameof(GetVersionAsync));
             return result.GetRpcVersionResponse.Result;
         }
 
@@ -616,8 +556,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(IsMultiSigAsync));
             var result = await _moneroRpcWalletCommunicator.IsMultiSigAsync(token).ConfigureAwait(false);
-            if (result?.IsMultiSigInformationResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.IsMultiSigInformationResponse?.Result == null, nameof(IsMultiSigAsync));
             return result.IsMultiSigInformationResponse.Result;
         }
 
@@ -625,8 +564,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(PrepareMultiSigAsync));
             var result = await _moneroRpcWalletCommunicator.PrepareMultiSigAsync(token).ConfigureAwait(false);
-            if (result?.PrepareMultiSigResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.PrepareMultiSigResponse?.Result == null, nameof(PrepareMultiSigAsync));
             return result.PrepareMultiSigResponse.Result;
         }
 
@@ -634,8 +572,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(MakeMultiSigAsync));
             var result = await _moneroRpcWalletCommunicator.MakeMultiSigAsync(multiSigInfo, threshold, password, token).ConfigureAwait(false);
-            if (result?.MakeMultiSigResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.MakeMultiSigResponse?.Result == null, nameof(MakeMultiSigAsync));
             return result.MakeMultiSigResponse.Result;
         }
 
@@ -643,8 +580,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(ExportMultiSigInfoAsync));
             var result = await _moneroRpcWalletCommunicator.ExportMultiSigInfoAsync(token).ConfigureAwait(false);
-            if (result?.ExportMultiSigInfoResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.ExportMultiSigInfoResponse?.Result == null, nameof(ExportMultiSigInfoAsync));
             return result.ExportMultiSigInfoResponse.Result;
         }
 
@@ -652,8 +588,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(ImportMultiSigInfoAsync));
             var result = await _moneroRpcWalletCommunicator.ImportMultiSigInfoAsync(info, token).ConfigureAwait(false);
-            if (result?.ImportMultiSigInfoResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.ImportMultiSigInfoResponse?.Result == null, nameof(ImportMultiSigInfoAsync));
             return result.ImportMultiSigInfoResponse.Result;
         }
 
@@ -661,8 +596,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(FinalizeMultiSigAsync));
             var result = await _moneroRpcWalletCommunicator.FinalizeMultiSigAsync(multiSigInfo, password, token).ConfigureAwait(false);
-            if (result?.FinalizeMultiSigResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.FinalizeMultiSigResponse?.Result == null, nameof(FinalizeMultiSigAsync));
             return result.FinalizeMultiSigResponse.Result;
         }
 
@@ -670,8 +604,7 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(SignMultiSigAsync));
             var result = await _moneroRpcWalletCommunicator.SignMultiSigAsync(txDataHex, token).ConfigureAwait(false);
-            if (result?.SignMultiSigTransactionResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.SignMultiSigTransactionResponse?.Result == null, nameof(SignMultiSigAsync));
             return result.SignMultiSigTransactionResponse.Result;
         }
 
@@ -679,26 +612,8 @@ namespace Monero.Client.Wallet
         {
             ErrorGuard.ThrowIfWalletNotOpen(_walletCurrentlyOpen, nameof(SubmitMultiSigAsync));
             var result = await _moneroRpcWalletCommunicator.SubmitMultiSigAsync(txDataHex, token).ConfigureAwait(false);
-            if (result?.SubmitMultiSigTransactionResponse?.Result == null)
-                throw new RpcResponseException("Error experienced when making RPC call");
+            ErrorGuard.ThrowIfResultIsNull(result?.SubmitMultiSigTransactionResponse?.Result == null, nameof(SubmitMultiSigAsync));
             return result.SubmitMultiSigTransactionResponse.Result;
-        }
-
-        private class ErrorGuard
-        {
-            public static void ThrowIfWalletNotOpen(bool isWalletOpen, string functionName)
-            {
-                if (!isWalletOpen)
-                    throw new InvalidOperationException($"Wallet is not open. Cannot call {functionName}");
-                return;
-            }
-
-            public static void ThrowIfWalletOpen(bool isWalletOpen, string functionName)
-            {
-                if (isWalletOpen)
-                    throw new InvalidOperationException($"Wallet is open. Cannot call {functionName}");
-                return;
-            }
         }
     }
 }

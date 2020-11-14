@@ -460,7 +460,6 @@ namespace Monero.Client.Wallet
             var messageContent = ms.ToArray();
             httpRequestMessage.Content = new ByteArrayContent(messageContent);
             httpRequestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(FieldAndHeaderDefaults.ApplicationJson);
-            httpRequestMessage.Content.Headers.ContentType.CharSet = FieldAndHeaderDefaults.CharsetUtf16;
             return httpRequestMessage;
         }
     }
