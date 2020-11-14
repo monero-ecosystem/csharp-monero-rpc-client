@@ -19,7 +19,7 @@ namespace Monero.Client.Utilities
     internal class RpcCommunicator
     {
         private readonly HttpClient _httpClient;
-        private readonly MoneroGenericRequestAdapter _requestAdapter;
+        private readonly MoneroRequestAdapter _requestAdapter;
 
         private RpcCommunicator()
         {
@@ -38,17 +38,17 @@ namespace Monero.Client.Utilities
 
         public RpcCommunicator(Uri uri) : this()
         {
-            _requestAdapter = new MoneroGenericRequestAdapter(uri);
+            _requestAdapter = new MoneroRequestAdapter(uri);
         }
 
         public RpcCommunicator(Uri uri, HttpMessageHandler httpMessageHandler) : this(httpMessageHandler)
         {
-            _requestAdapter = new MoneroGenericRequestAdapter(uri);
+            _requestAdapter = new MoneroRequestAdapter(uri);
         }
 
         public RpcCommunicator(Uri uri, HttpMessageHandler httpMessageHandler, bool disposeHandler) : this(httpMessageHandler, disposeHandler)
         {
-            _requestAdapter = new MoneroGenericRequestAdapter(uri);
+            _requestAdapter = new MoneroRequestAdapter(uri);
         }
 
         public RpcCommunicator(MoneroNetwork networkType) : this()
@@ -68,7 +68,7 @@ namespace Monero.Client.Utilities
                 default:
                     throw new InvalidOperationException($"Unknown MoneroNetwork ({networkType})");
             }
-            _requestAdapter = new MoneroGenericRequestAdapter(uri);
+            _requestAdapter = new MoneroRequestAdapter(uri);
         }
 
         private static async Task<Stream> ByteArrayToMemoryStream(HttpResponseMessage response)
@@ -1634,15 +1634,15 @@ namespace Monero.Client.Utilities
 
         public async Task<MoneroCommunicatorResponse> GetDaemonVersionAsync(CancellationToken token)
         {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.Version, null, token).ConfigureAwait(false);
+            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.DaemonVersion, null, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
             VersionResponse responseObject = await JsonSerializer.DeserializeAsync<VersionResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token);
             return new MoneroCommunicatorResponse()
             {
-                MoneroResponseType = MoneroResponseType.Information,
-                MoneroResponseSubType = MoneroResponseSubType.Version,
+                MoneroResponseType = MoneroResponseType.Daemon,
+                MoneroResponseSubType = MoneroResponseSubType.DaemonVersion,
                 VersionResponse = responseObject,
             };
         }

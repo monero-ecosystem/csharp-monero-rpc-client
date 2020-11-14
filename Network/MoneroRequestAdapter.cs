@@ -11,11 +11,11 @@ using Monero.Client.Daemon.POD.Requests;
 
 namespace Monero.Client.Network
 {
-    internal class MoneroGenericRequestAdapter
+    internal class MoneroRequestAdapter
     {
         private readonly Uri _uri;
 
-        public MoneroGenericRequestAdapter(Uri uri)
+        public MoneroRequestAdapter(Uri uri)
         {
             _uri = uri;
         }
@@ -186,7 +186,7 @@ namespace Monero.Client.Network
                     method = "set_bans",
                     @params = requestParams,
                 },
-                MoneroResponseSubType.Version => new GenericRequest
+                MoneroResponseSubType.DaemonVersion => new GenericRequest
                 {
                     jsonrpc = FieldAndHeaderDefaults.JsonRpc,
                     id = FieldAndHeaderDefaults.Id,

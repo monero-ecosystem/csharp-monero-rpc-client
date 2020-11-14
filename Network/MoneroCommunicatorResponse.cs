@@ -23,6 +23,7 @@ namespace Monero.Client.Network
         Account,
         Address,
         Wallet,
+        Daemon,
         Miscellaneous,
     }
 
@@ -42,7 +43,7 @@ namespace Monero.Client.Network
         FlushTransactionPool,
         OutputHistogram,
         CoinbaseTransactionSum,
-        Version,
+        DaemonVersion,
         FeeEstimate,
         AlternateChain,
         RelayTransaction,
