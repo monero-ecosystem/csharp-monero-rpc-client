@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Monero.Client.Wallet.POD.Requests
+namespace Monero.Client.Network
 {
-    internal class AnonymousWalletRequest
+    internal class AnonymousRequest
     {
         public string jsonrpc { get; set; }
         public string id { get; set; }

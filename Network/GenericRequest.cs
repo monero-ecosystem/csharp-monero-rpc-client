@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Monero.Client.Daemon.POD.Requests
+namespace Monero.Client.Network
 {
-    internal class DaemonRequest
+    internal class GenericRequest
     {
         public string jsonrpc { get; set; }
         public string id { get; set; }
         public string method { get; set; }
-        public DaemonRequestParameters @params { get; set; }
+        public GenericRequestParameters @params { get; set; }
     }
 }

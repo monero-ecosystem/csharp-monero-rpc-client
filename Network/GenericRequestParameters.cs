@@ -2,10 +2,30 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Monero.Client.Wallet.POD.Requests
+using Monero.Client.Daemon.POD.Requests;
+using Monero.Client.Wallet.POD;
+using Monero.Client.Wallet.POD.Requests;
+
+namespace Monero.Client.Network
 {
-    internal class WalletRequestParameters
+    internal class GenericRequestParameters
     {
+        public uint? height { get; set; } = null;
+        public string hash { get; set; } = null;
+        public uint? start_height { get; set; } = null;
+        public uint? end_height { get; set; } = null;
+        public IEnumerable<string> txids { get; set; } = null;
+        public IEnumerable<ulong> amounts { get; set; } = null;
+        public uint? min_count { get; set; } = null;
+        public uint? max_count { get; set; } = null;
+        public bool? unlocked { get; set; } = null;
+        public uint? recent_cutoff { get; set; } = null;
+        public uint? count { get; set; } = null;
+        public uint? grace_blocks { get; set; } = null;
+        public bool? cumulative { get; set; } = null;
+        public uint? from_height { get; set; } = null;
+        public uint? to_height { get; set; } = null;
+        public List<NodeBan> bans { get; set; } = null;
         public uint? account_index { get; set; } = null;
         public IEnumerable<uint> address_indices { get; set; } = null;
         public string address { get; set; } = null;
@@ -40,7 +60,6 @@ namespace Monero.Client.Wallet.POD.Requests
         public string transfer_type { get; set; } = null;
         public bool? verbose { get; set; } = null;
         public string key_type { get; set; } = null;
-        public IEnumerable<string> txids { get; set; } = null;
         public IEnumerable<string> notes { get; set; } = null;
         public string txid { get; set; } = null;
         public bool? @in { get; set; } = null;
@@ -55,11 +74,10 @@ namespace Monero.Client.Wallet.POD.Requests
         public string signature { get; set; } = null;
         public List<SignedKeyImage> signed_key_images { get; set; } = null;
         public string uri { get; set; } = null;
-        public uint? start_height { get; set; } = null;
         public string filename { get; set; } = null;
         public string password { get; set; } = null;
         public string language { get; set; } = null;
         public string old_password { get; set; } = null;
         public string new_password { get; set; } = null;
     }
-}   
+}

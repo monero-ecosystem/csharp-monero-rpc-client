@@ -1,24 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Monero.Client.Network;
+
+using Monero.Client.Daemon.POD.Responses;
 using Monero.Client.Wallet.POD.Responses;
 
-namespace Monero.Client.Wallet
+namespace Monero.Client.Network
 {
-    public enum MoneroWalletResponseType
+    internal enum MoneroResponseType
     {
         None,
-        Account,
-        Address,
+        Block,
+        BlockCount,
+        BlockHeader,
+        BlockHeaderRange,
+        Connection,
+        Information,
+        TransactionPool,
+        Coinbase,
         Blockchain,
         Transaction,
+        Account,
+        Address,
         Wallet,
-        Miscellaneous
+        Miscellaneous,
     }
 
-    public enum MoneroWalletResponseSubType
+    internal enum MoneroResponseSubType
     {
+        // Daemon
+        Block,
+        BlockCount,
+        BlockHeaderByHash,
+        BlockHeaderByHeight,
+        BlockHeaderByRange,
+        BlockHeaderByRecency, // Last Block Header.
+        AllConnections,
+        NodeInformation,
+        HardforkInformation,
+        BanInformation,
+        FlushTransactionPool,
+        OutputHistogram,
+        CoinbaseTransactionSum,
+        Version,
+        FeeEstimate,
+        AlternateChain,
+        RelayTransaction,
+        SyncInformation,
+        SetBans,
+
+        // Wallet
         Balance,
         Address,
         AddressIndex,
@@ -77,10 +108,28 @@ namespace Monero.Client.Wallet
         SubmitMultiSigTransaction,
     }
 
-    internal class MoneroWalletCommunicatorResponse
+    internal class MoneroCommunicatorResponse
     {
-        internal MoneroWalletResponseType MoneroWalletResponseType { get; set; } = MoneroWalletResponseType.None;
-        internal MoneroWalletResponseSubType MoneroWalletResponseSubType { get; set; }
+        public MoneroResponseType MoneroResponseType { get; set; } = MoneroResponseType.None;
+        public MoneroResponseSubType MoneroResponseSubType { get; set; }
+        public BlockCountResponse BlockCountResponse { get; set; }
+        public BlockHeaderResponse BlockHeaderResponse { get; set; }
+        public BlockHeaderRangeResponse BlockHeaderRangeResponse { get; set; }
+        public ConnectionResponse ConnectionResponse { get; set; }
+        public DaemonInformationResponse DaemonInformationResponse { get; set; }
+        public HardforkInformationResponse HardforkInformationResponse { get; set; }
+        public GetBansResponse GetBansResponse { get; set; }
+        public FlushTransactionPoolResponse FlushTransactionPoolResponse { get; set; }
+        public OutputHistogramResponse OutputHistogramResponse { get; set; }
+        public CoinbaseTransactionSumResponse CoinbaseTransactionSumReponse { get; set; }
+        public VersionResponse VersionResponse { get; set; }
+        public FeeEstimateResponse FeeEstimateResponse { get; set; }
+        public AlternateChainResponse AlternateChainResponse { get; set; }
+        public RelayTransactionResponse RelayTransactionResponse { get; set; }
+        public SyncronizeInformationResponse SyncronizeInformationResponse { get; set; }
+        public TransactionPoolBacklogResponse TransactionPoolBacklogResponse { get; set; }
+        public BlockResponse BlockResponse { get; set; }
+        public SetBansResponse SetBansResponse { get; set; }
         internal BalanceResponse BalanceResponse { get; set; }
         internal AddressResponse AddressResponse { get; set; }
         internal AddressIndexResponse AddressIndexResponse { get; set; }
