@@ -111,26 +111,32 @@ namespace Monero.Client.Network
 
     internal class MoneroCommunicatorResponse
     {
-        public MoneroResponseType MoneroResponseType { get; set; } = MoneroResponseType.None;
-        public MoneroResponseSubType MoneroResponseSubType { get; set; }
-        public BlockCountResponse BlockCountResponse { get; set; }
-        public BlockHeaderResponse BlockHeaderResponse { get; set; }
-        public BlockHeaderRangeResponse BlockHeaderRangeResponse { get; set; }
-        public ConnectionResponse ConnectionResponse { get; set; }
-        public DaemonInformationResponse DaemonInformationResponse { get; set; }
-        public HardforkInformationResponse HardforkInformationResponse { get; set; }
-        public GetBansResponse GetBansResponse { get; set; }
-        public FlushTransactionPoolResponse FlushTransactionPoolResponse { get; set; }
-        public OutputHistogramResponse OutputHistogramResponse { get; set; }
-        public CoinbaseTransactionSumResponse CoinbaseTransactionSumReponse { get; set; }
-        public VersionResponse VersionResponse { get; set; }
-        public FeeEstimateResponse FeeEstimateResponse { get; set; }
-        public AlternateChainResponse AlternateChainResponse { get; set; }
-        public RelayTransactionResponse RelayTransactionResponse { get; set; }
-        public SyncronizeInformationResponse SyncronizeInformationResponse { get; set; }
-        public TransactionPoolBacklogResponse TransactionPoolBacklogResponse { get; set; }
-        public BlockResponse BlockResponse { get; set; }
-        public SetBansResponse SetBansResponse { get; set; }
+        internal MoneroResponseType MoneroResponseType { get; set; } = MoneroResponseType.None;
+        internal MoneroResponseSubType MoneroResponseSubType { get; set; }
+        /*
+         * Daemon-related responses.
+         */
+        internal BlockCountResponse BlockCountResponse { get; set; }
+        internal BlockHeaderResponse BlockHeaderResponse { get; set; }
+        internal BlockHeaderRangeResponse BlockHeaderRangeResponse { get; set; }
+        internal ConnectionResponse ConnectionResponse { get; set; }
+        internal DaemonInformationResponse DaemonInformationResponse { get; set; }
+        internal HardforkInformationResponse HardforkInformationResponse { get; set; }
+        internal GetBansResponse GetBansResponse { get; set; }
+        internal FlushTransactionPoolResponse FlushTransactionPoolResponse { get; set; }
+        internal OutputHistogramResponse OutputHistogramResponse { get; set; }
+        internal CoinbaseTransactionSumResponse CoinbaseTransactionSumReponse { get; set; }
+        internal VersionResponse VersionResponse { get; set; }
+        internal FeeEstimateResponse FeeEstimateResponse { get; set; }
+        internal AlternateChainResponse AlternateChainResponse { get; set; }
+        internal RelayTransactionResponse RelayTransactionResponse { get; set; }
+        internal SyncronizeInformationResponse SyncronizeInformationResponse { get; set; }
+        internal TransactionPoolBacklogResponse TransactionPoolBacklogResponse { get; set; }
+        internal BlockResponse BlockResponse { get; set; }
+        internal SetBansResponse SetBansResponse { get; set; }
+        /*
+         * Wallet-related responses.
+         */
         internal BalanceResponse BalanceResponse { get; set; }
         internal AddressResponse AddressResponse { get; set; }
         internal AddressIndexResponse AddressIndexResponse { get; set; }
