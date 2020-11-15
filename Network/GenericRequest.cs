@@ -4,10 +4,8 @@ using System.Text;
 
 namespace Monero.Client.Network
 {
-    internal class GenericRequest
+    internal class GenericRequest : Request
     {
-        public string jsonrpc { get; set; }
-        public string id { get; set; }
         public string method { get; set; }
         public GenericRequestParameters @params { get; set; }
     }
