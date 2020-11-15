@@ -20,6 +20,7 @@ namespace Monero.Client.Utilities
     {
         private readonly HttpClient _httpClient;
         private readonly MoneroRequestAdapter _requestAdapter;
+        private readonly JsonSerializerOptions _defaultSerializationOptions = new JsonSerializerOptions() { IgnoreNullValues = true, };
 
         private RpcCommunicator()
         {
@@ -88,7 +89,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            BalanceResponse responseObject = await JsonSerializer.DeserializeAsync<BalanceResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            BalanceResponse responseObject = await JsonSerializer.DeserializeAsync<BalanceResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Account,
@@ -105,7 +106,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            BalanceResponse responseObject = await JsonSerializer.DeserializeAsync<BalanceResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            BalanceResponse responseObject = await JsonSerializer.DeserializeAsync<BalanceResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Account,
@@ -125,7 +126,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            AddressResponse responseObject = await JsonSerializer.DeserializeAsync<AddressResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            AddressResponse responseObject = await JsonSerializer.DeserializeAsync<AddressResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Account,
@@ -140,7 +141,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            AddressResponse responseObject = await JsonSerializer.DeserializeAsync<AddressResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            AddressResponse responseObject = await JsonSerializer.DeserializeAsync<AddressResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Account,
@@ -156,7 +157,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            AddressIndexResponse responseObject = await JsonSerializer.DeserializeAsync<AddressIndexResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            AddressIndexResponse responseObject = await JsonSerializer.DeserializeAsync<AddressIndexResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Account,
@@ -171,7 +172,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            AddressCreationResponse responseObject = await JsonSerializer.DeserializeAsync<AddressCreationResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            AddressCreationResponse responseObject = await JsonSerializer.DeserializeAsync<AddressCreationResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Address,
@@ -192,7 +193,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            AddressCreationResponse responseObject = await JsonSerializer.DeserializeAsync<AddressCreationResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            AddressCreationResponse responseObject = await JsonSerializer.DeserializeAsync<AddressCreationResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Address,
@@ -216,7 +217,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            AddressLabelResponse responseObject = await JsonSerializer.DeserializeAsync<AddressLabelResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            AddressLabelResponse responseObject = await JsonSerializer.DeserializeAsync<AddressLabelResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Address,
@@ -236,7 +237,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            AccountResponse responseObject = await JsonSerializer.DeserializeAsync<AccountResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            AccountResponse responseObject = await JsonSerializer.DeserializeAsync<AccountResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Account,
@@ -251,7 +252,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            AccountResponse responseObject = await JsonSerializer.DeserializeAsync<AccountResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            AccountResponse responseObject = await JsonSerializer.DeserializeAsync<AccountResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Account,
@@ -267,7 +268,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            CreateAccountResponse responseObject = await JsonSerializer.DeserializeAsync<CreateAccountResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            CreateAccountResponse responseObject = await JsonSerializer.DeserializeAsync<CreateAccountResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Account,
@@ -282,7 +283,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            CreateAccountResponse responseObject = await JsonSerializer.DeserializeAsync<CreateAccountResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            CreateAccountResponse responseObject = await JsonSerializer.DeserializeAsync<CreateAccountResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Account,
@@ -303,7 +304,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            AccountLabelResponse responseObject = await JsonSerializer.DeserializeAsync<AccountLabelResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            AccountLabelResponse responseObject = await JsonSerializer.DeserializeAsync<AccountLabelResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Account,
@@ -318,7 +319,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            AccountTagsResponse responseObject = await JsonSerializer.DeserializeAsync<AccountTagsResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            AccountTagsResponse responseObject = await JsonSerializer.DeserializeAsync<AccountTagsResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Account,
@@ -341,7 +342,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            TagAccountsResponse responseObject = await JsonSerializer.DeserializeAsync<TagAccountsResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            TagAccountsResponse responseObject = await JsonSerializer.DeserializeAsync<TagAccountsResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Account,
@@ -362,7 +363,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            UntagAccountsResponse responseObject = await JsonSerializer.DeserializeAsync<UntagAccountsResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            UntagAccountsResponse responseObject = await JsonSerializer.DeserializeAsync<UntagAccountsResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Account,
@@ -384,7 +385,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            AccountTagAndDescriptionResponse responseObject = await JsonSerializer.DeserializeAsync<AccountTagAndDescriptionResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            AccountTagAndDescriptionResponse responseObject = await JsonSerializer.DeserializeAsync<AccountTagAndDescriptionResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Account,
@@ -399,7 +400,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            BlockchainHeightResponse responseObject = await JsonSerializer.DeserializeAsync<BlockchainHeightResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            BlockchainHeightResponse responseObject = await JsonSerializer.DeserializeAsync<BlockchainHeightResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Account,
@@ -426,7 +427,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            FundTransferResponse responseObject = await JsonSerializer.DeserializeAsync<FundTransferResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            FundTransferResponse responseObject = await JsonSerializer.DeserializeAsync<FundTransferResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Transaction,
@@ -441,7 +442,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            SplitFundTransferResponse responseObject = await JsonSerializer.DeserializeAsync<SplitFundTransferResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            SplitFundTransferResponse responseObject = await JsonSerializer.DeserializeAsync<SplitFundTransferResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Transaction,
@@ -577,7 +578,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            SignTransferResponse responseObject = await JsonSerializer.DeserializeAsync<SignTransferResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            SignTransferResponse responseObject = await JsonSerializer.DeserializeAsync<SignTransferResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Transaction,
@@ -596,7 +597,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            SubmitTransferResponse responseObject = await JsonSerializer.DeserializeAsync<SubmitTransferResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            SubmitTransferResponse responseObject = await JsonSerializer.DeserializeAsync<SubmitTransferResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Transaction,
@@ -618,7 +619,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            SweepDustResponse responseObject = await JsonSerializer.DeserializeAsync<SweepDustResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            SweepDustResponse responseObject = await JsonSerializer.DeserializeAsync<SweepDustResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -647,7 +648,7 @@ namespace Monero.Client.Utilities
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
             using Stream ms = new MemoryStream(responseBody);
-            SweepAllResponse responseObject = await JsonSerializer.DeserializeAsync<SweepAllResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            SweepAllResponse responseObject = await JsonSerializer.DeserializeAsync<SweepAllResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Transaction,
@@ -662,7 +663,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            SaveWalletResponse responseObject = await JsonSerializer.DeserializeAsync<SaveWalletResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            SaveWalletResponse responseObject = await JsonSerializer.DeserializeAsync<SaveWalletResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -710,7 +711,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            IncomingTransfersResponse responseObject = await JsonSerializer.DeserializeAsync<IncomingTransfersResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            IncomingTransfersResponse responseObject = await JsonSerializer.DeserializeAsync<IncomingTransfersResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Transaction,
@@ -739,7 +740,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            QueryKeyResponse responseObject = await JsonSerializer.DeserializeAsync<QueryKeyResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            QueryKeyResponse responseObject = await JsonSerializer.DeserializeAsync<QueryKeyResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -754,7 +755,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            StopWalletResponse responseObject = await JsonSerializer.DeserializeAsync<StopWalletResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            StopWalletResponse responseObject = await JsonSerializer.DeserializeAsync<StopWalletResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -778,7 +779,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            SetTransactionNotesResponse responseObject = await JsonSerializer.DeserializeAsync<SetTransactionNotesResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            SetTransactionNotesResponse responseObject = await JsonSerializer.DeserializeAsync<SetTransactionNotesResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Transaction,
@@ -799,7 +800,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            GetTransactionNotesResponse responseObject = await JsonSerializer.DeserializeAsync<GetTransactionNotesResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            GetTransactionNotesResponse responseObject = await JsonSerializer.DeserializeAsync<GetTransactionNotesResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Transaction,
@@ -819,7 +820,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            GetTransactionKeyResponse responseObject = await JsonSerializer.DeserializeAsync<GetTransactionKeyResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            GetTransactionKeyResponse responseObject = await JsonSerializer.DeserializeAsync<GetTransactionKeyResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Transaction,
@@ -843,7 +844,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            CheckTransactionKeyResponse responseObject = await JsonSerializer.DeserializeAsync<CheckTransactionKeyResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            CheckTransactionKeyResponse responseObject = await JsonSerializer.DeserializeAsync<CheckTransactionKeyResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Transaction,
@@ -897,7 +898,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            ShowTransfersResponse responseObject = await JsonSerializer.DeserializeAsync<ShowTransfersResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            ShowTransfersResponse responseObject = await JsonSerializer.DeserializeAsync<ShowTransfersResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -931,7 +932,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            GetTransferByTxidResponse responseObject = await JsonSerializer.DeserializeAsync<GetTransferByTxidResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            GetTransferByTxidResponse responseObject = await JsonSerializer.DeserializeAsync<GetTransferByTxidResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -950,7 +951,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            SignResponse responseObject = await JsonSerializer.DeserializeAsync<SignResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            SignResponse responseObject = await JsonSerializer.DeserializeAsync<SignResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Miscellaneous,
@@ -972,7 +973,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            VerifyResponse responseObject = await JsonSerializer.DeserializeAsync<VerifyResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            VerifyResponse responseObject = await JsonSerializer.DeserializeAsync<VerifyResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Miscellaneous,
@@ -987,7 +988,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            ExportOutputsResponse responseObject = await JsonSerializer.DeserializeAsync<ExportOutputsResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            ExportOutputsResponse responseObject = await JsonSerializer.DeserializeAsync<ExportOutputsResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1002,7 +1003,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            ImportOutputsResponse responseObject = await JsonSerializer.DeserializeAsync<ImportOutputsResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            ImportOutputsResponse responseObject = await JsonSerializer.DeserializeAsync<ImportOutputsResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1017,7 +1018,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            ExportKeyImagesResponse responseObject = await JsonSerializer.DeserializeAsync<ExportKeyImagesResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            ExportKeyImagesResponse responseObject = await JsonSerializer.DeserializeAsync<ExportKeyImagesResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1050,7 +1051,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            ImportKeyImagesResponse responseObject = await JsonSerializer.DeserializeAsync<ImportKeyImagesResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            ImportKeyImagesResponse responseObject = await JsonSerializer.DeserializeAsync<ImportKeyImagesResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1073,7 +1074,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            MakeUriResponse responseObject = await JsonSerializer.DeserializeAsync<MakeUriResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            MakeUriResponse responseObject = await JsonSerializer.DeserializeAsync<MakeUriResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Transaction,
@@ -1092,7 +1093,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            ParseUriResponse responseObject = await JsonSerializer.DeserializeAsync<ParseUriResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            ParseUriResponse responseObject = await JsonSerializer.DeserializeAsync<ParseUriResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Transaction,
@@ -1111,7 +1112,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            GetAddressBookResponse responseObject = await JsonSerializer.DeserializeAsync<GetAddressBookResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            GetAddressBookResponse responseObject = await JsonSerializer.DeserializeAsync<GetAddressBookResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1132,7 +1133,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            AddAddressBookResponse responseObject = await JsonSerializer.DeserializeAsync<AddAddressBookResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            AddAddressBookResponse responseObject = await JsonSerializer.DeserializeAsync<AddAddressBookResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1151,7 +1152,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            DeleteAddressBookResponse responseObject = await JsonSerializer.DeserializeAsync<DeleteAddressBookResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            DeleteAddressBookResponse responseObject = await JsonSerializer.DeserializeAsync<DeleteAddressBookResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1170,7 +1171,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            RefreshWalletResponse responseObject = await JsonSerializer.DeserializeAsync<RefreshWalletResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            RefreshWalletResponse responseObject = await JsonSerializer.DeserializeAsync<RefreshWalletResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1185,7 +1186,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            RescanSpentResponse responseObject = await JsonSerializer.DeserializeAsync<RescanSpentResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            RescanSpentResponse responseObject = await JsonSerializer.DeserializeAsync<RescanSpentResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1206,7 +1207,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            CreateWalletResponse responseObject = await JsonSerializer.DeserializeAsync<CreateWalletResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            CreateWalletResponse responseObject = await JsonSerializer.DeserializeAsync<CreateWalletResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1226,7 +1227,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            OpenWalletResponse responseObject = await JsonSerializer.DeserializeAsync<OpenWalletResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            OpenWalletResponse responseObject = await JsonSerializer.DeserializeAsync<OpenWalletResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1241,7 +1242,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            CloseWalletResponse responseObject = await JsonSerializer.DeserializeAsync<CloseWalletResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            CloseWalletResponse responseObject = await JsonSerializer.DeserializeAsync<CloseWalletResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1261,7 +1262,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            ChangeWalletPasswordResponse responseObject = await JsonSerializer.DeserializeAsync<ChangeWalletPasswordResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            ChangeWalletPasswordResponse responseObject = await JsonSerializer.DeserializeAsync<ChangeWalletPasswordResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1276,7 +1277,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            GetRpcVersionResponse responseObject = await JsonSerializer.DeserializeAsync<GetRpcVersionResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            GetRpcVersionResponse responseObject = await JsonSerializer.DeserializeAsync<GetRpcVersionResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1291,7 +1292,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            IsMultiSigInformationResponse responseObject = await JsonSerializer.DeserializeAsync<IsMultiSigInformationResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            IsMultiSigInformationResponse responseObject = await JsonSerializer.DeserializeAsync<IsMultiSigInformationResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1306,7 +1307,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            PrepareMultiSigResponse responseObject = await JsonSerializer.DeserializeAsync<PrepareMultiSigResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            PrepareMultiSigResponse responseObject = await JsonSerializer.DeserializeAsync<PrepareMultiSigResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1327,7 +1328,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            MakeMultiSigResponse responseObject = await JsonSerializer.DeserializeAsync<MakeMultiSigResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            MakeMultiSigResponse responseObject = await JsonSerializer.DeserializeAsync<MakeMultiSigResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1342,7 +1343,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            ExportMultiSigInfoResponse responseObject = await JsonSerializer.DeserializeAsync<ExportMultiSigInfoResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            ExportMultiSigInfoResponse responseObject = await JsonSerializer.DeserializeAsync<ExportMultiSigInfoResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1357,7 +1358,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            ImportMultiSigInfoResponse responseObject = await JsonSerializer.DeserializeAsync<ImportMultiSigInfoResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            ImportMultiSigInfoResponse responseObject = await JsonSerializer.DeserializeAsync<ImportMultiSigInfoResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1377,7 +1378,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            FinalizeMultiSigResponse responseObject = await JsonSerializer.DeserializeAsync<FinalizeMultiSigResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            FinalizeMultiSigResponse responseObject = await JsonSerializer.DeserializeAsync<FinalizeMultiSigResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1396,7 +1397,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            SignMultiSigTransactionResponse responseObject = await JsonSerializer.DeserializeAsync<SignMultiSigTransactionResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            SignMultiSigTransactionResponse responseObject = await JsonSerializer.DeserializeAsync<SignMultiSigTransactionResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1415,7 +1416,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            SubmitMultiSigTransactionResponse responseObject = await JsonSerializer.DeserializeAsync<SubmitMultiSigTransactionResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            SubmitMultiSigTransactionResponse responseObject = await JsonSerializer.DeserializeAsync<SubmitMultiSigTransactionResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
@@ -1430,7 +1431,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            BlockCountResponse responseObject = await JsonSerializer.DeserializeAsync<BlockCountResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            BlockCountResponse responseObject = await JsonSerializer.DeserializeAsync<BlockCountResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.BlockCount,
@@ -1446,7 +1447,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            BlockHeaderResponse responseObject = await JsonSerializer.DeserializeAsync<BlockHeaderResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token);
+            BlockHeaderResponse responseObject = await JsonSerializer.DeserializeAsync<BlockHeaderResponse>(ms, _defaultSerializationOptions, token);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.BlockHeader,
@@ -1461,7 +1462,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            BlockHeaderResponse responseObject = await JsonSerializer.DeserializeAsync<BlockHeaderResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token);
+            BlockHeaderResponse responseObject = await JsonSerializer.DeserializeAsync<BlockHeaderResponse>(ms, _defaultSerializationOptions, token);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.BlockHeader,
@@ -1478,7 +1479,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            BlockHeaderRangeResponse responseObject = await JsonSerializer.DeserializeAsync<BlockHeaderRangeResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token);
+            BlockHeaderRangeResponse responseObject = await JsonSerializer.DeserializeAsync<BlockHeaderRangeResponse>(ms, _defaultSerializationOptions, token);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.BlockHeader,
@@ -1493,7 +1494,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            ConnectionResponse responseObject = await JsonSerializer.DeserializeAsync<ConnectionResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token);
+            ConnectionResponse responseObject = await JsonSerializer.DeserializeAsync<ConnectionResponse>(ms, _defaultSerializationOptions, token);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Connection,
@@ -1508,7 +1509,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            DaemonInformationResponse responseObject = await JsonSerializer.DeserializeAsync<DaemonInformationResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token);
+            DaemonInformationResponse responseObject = await JsonSerializer.DeserializeAsync<DaemonInformationResponse>(ms, _defaultSerializationOptions, token);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Information,
@@ -1523,7 +1524,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            HardforkInformationResponse responseObject = await JsonSerializer.DeserializeAsync<HardforkInformationResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token);
+            HardforkInformationResponse responseObject = await JsonSerializer.DeserializeAsync<HardforkInformationResponse>(ms, _defaultSerializationOptions, token);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Information,
@@ -1538,7 +1539,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            GetBansResponse responseObject = await JsonSerializer.DeserializeAsync<GetBansResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token);
+            GetBansResponse responseObject = await JsonSerializer.DeserializeAsync<GetBansResponse>(ms, _defaultSerializationOptions, token);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Information,
@@ -1553,7 +1554,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            BlockHeaderResponse responseObject = await JsonSerializer.DeserializeAsync<BlockHeaderResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token);
+            BlockHeaderResponse responseObject = await JsonSerializer.DeserializeAsync<BlockHeaderResponse>(ms, _defaultSerializationOptions, token);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.BlockHeader,
@@ -1568,7 +1569,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            FlushTransactionPoolResponse responseObject = await JsonSerializer.DeserializeAsync<FlushTransactionPoolResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token);
+            FlushTransactionPoolResponse responseObject = await JsonSerializer.DeserializeAsync<FlushTransactionPoolResponse>(ms, _defaultSerializationOptions, token);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.TransactionPool,
@@ -1594,7 +1595,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            OutputHistogramResponse responseObject = await JsonSerializer.DeserializeAsync<OutputHistogramResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token);
+            OutputHistogramResponse responseObject = await JsonSerializer.DeserializeAsync<OutputHistogramResponse>(ms, _defaultSerializationOptions, token);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Information,
@@ -1609,7 +1610,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            CoinbaseTransactionSumResponse responseObject = await JsonSerializer.DeserializeAsync<CoinbaseTransactionSumResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token);
+            CoinbaseTransactionSumResponse responseObject = await JsonSerializer.DeserializeAsync<CoinbaseTransactionSumResponse>(ms, _defaultSerializationOptions, token);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Coinbase,
@@ -1624,7 +1625,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            VersionResponse responseObject = await JsonSerializer.DeserializeAsync<VersionResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token);
+            VersionResponse responseObject = await JsonSerializer.DeserializeAsync<VersionResponse>(ms, _defaultSerializationOptions, token);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Daemon,
@@ -1639,7 +1640,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            FeeEstimateResponse responseObject = await JsonSerializer.DeserializeAsync<FeeEstimateResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token);
+            FeeEstimateResponse responseObject = await JsonSerializer.DeserializeAsync<FeeEstimateResponse>(ms, _defaultSerializationOptions, token);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Information,
@@ -1654,7 +1655,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            AlternateChainResponse responseObject = await JsonSerializer.DeserializeAsync<AlternateChainResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token);
+            AlternateChainResponse responseObject = await JsonSerializer.DeserializeAsync<AlternateChainResponse>(ms, _defaultSerializationOptions, token);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Blockchain,
@@ -1669,7 +1670,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            RelayTransactionResponse responseObject = await JsonSerializer.DeserializeAsync<RelayTransactionResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token);
+            RelayTransactionResponse responseObject = await JsonSerializer.DeserializeAsync<RelayTransactionResponse>(ms, _defaultSerializationOptions, token);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Transaction,
@@ -1684,7 +1685,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            SyncronizeInformationResponse responseObject = await JsonSerializer.DeserializeAsync<SyncronizeInformationResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token);
+            SyncronizeInformationResponse responseObject = await JsonSerializer.DeserializeAsync<SyncronizeInformationResponse>(ms, _defaultSerializationOptions, token);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Information,
@@ -1699,7 +1700,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            BlockResponse responseObject = await JsonSerializer.DeserializeAsync<BlockResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            BlockResponse responseObject = await JsonSerializer.DeserializeAsync<BlockResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Block,
@@ -1714,7 +1715,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            BlockResponse responseObject = await JsonSerializer.DeserializeAsync<BlockResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            BlockResponse responseObject = await JsonSerializer.DeserializeAsync<BlockResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Block,
@@ -1749,7 +1750,7 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            SetBansResponse responseObject = await JsonSerializer.DeserializeAsync<SetBansResponse>(ms, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            SetBansResponse responseObject = await JsonSerializer.DeserializeAsync<SetBansResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Connection,

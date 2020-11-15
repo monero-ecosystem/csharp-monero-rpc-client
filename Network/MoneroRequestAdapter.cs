@@ -14,6 +14,7 @@ namespace Monero.Client.Network
     internal class MoneroRequestAdapter
     {
         private readonly Uri _uri;
+        private static readonly JsonSerializerOptions _defaultSerializationOptions = new JsonSerializerOptions() { IgnoreNullValues = true, };
 
         public MoneroRequestAdapter(Uri uri)
         {
@@ -578,7 +579,7 @@ namespace Monero.Client.Network
         private static async Task<HttpRequestMessage> SerializeRequest(HttpRequestMessage httpRequestMessage, GenericRequest request, CancellationToken token)
         {
             using var ms = new MemoryStream();
-            await JsonSerializer.SerializeAsync<GenericRequest>(ms, request, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            await JsonSerializer.SerializeAsync<GenericRequest>(ms, request, _defaultSerializationOptions, token).ConfigureAwait(false);
             var messageContent = ms.ToArray();
             httpRequestMessage.Content = new ByteArrayContent(messageContent);
             httpRequestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(FieldAndHeaderDefaults.ApplicationJson);
@@ -588,7 +589,7 @@ namespace Monero.Client.Network
         private static async Task<HttpRequestMessage> SerializeRequest(HttpRequestMessage httpRequestMessage, AnonymousRequest anonymousRequest, CancellationToken token)
         {
             using var ms = new MemoryStream();
-            await JsonSerializer.SerializeAsync<AnonymousRequest>(ms, anonymousRequest, new JsonSerializerOptions() { IgnoreNullValues = true, }, token).ConfigureAwait(false);
+            await JsonSerializer.SerializeAsync<AnonymousRequest>(ms, anonymousRequest, _defaultSerializationOptions, token).ConfigureAwait(false);
             var messageContent = ms.ToArray();
             httpRequestMessage.Content = new ByteArrayContent(messageContent);
             httpRequestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(FieldAndHeaderDefaults.ApplicationJson);
