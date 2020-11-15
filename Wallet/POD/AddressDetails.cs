@@ -22,8 +22,8 @@ namespace Monero.Client.Wallet.POD
         public uint BlocksToUnlock { get; set; }
         [JsonPropertyName("label")]
         public string Label { get; set; }
-        [JsonPropertyName("num_unspect_outputs")]
-        public ulong NumUnspectOutputs { get; set; }
+        [JsonPropertyName("num_unspent_outputs")]
+        public ulong NumUnspentOutputs { get; set; }
         [JsonPropertyName("time_to_unlock")]
         public ulong TimeToUnlock { get; set; }
         [JsonPropertyName("unlocked_balance")]
