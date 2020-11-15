@@ -151,8 +151,7 @@ namespace Monero.Client.Utilities
 
         public async Task<MoneroCommunicatorResponse> GetAddressIndexAsync(string address, CancellationToken token = default)
         {
-            if (string.IsNullOrWhiteSpace(address))
-                throw new InvalidOperationException("Address cannot be null of whitespace");
+            ErrorGuard.ThrowIfNullOrWhiteSpace(address, nameof(address));
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.AddressIndex, new GenericRequestParameters() { address = address, }, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
@@ -183,8 +182,7 @@ namespace Monero.Client.Utilities
 
         public async Task<MoneroCommunicatorResponse> CreateAddressAsync(uint account_index, string label, CancellationToken token = default)
         {
-            if (string.IsNullOrWhiteSpace(label))
-                throw new InvalidOperationException("Label cannot be null of whitespace");
+            ErrorGuard.ThrowIfNullOrWhiteSpace(label, nameof(label));
             var GenericRequestParameters = new GenericRequestParameters()
             {
                 account_index = account_index,
@@ -205,8 +203,7 @@ namespace Monero.Client.Utilities
 
         public async Task<MoneroCommunicatorResponse> LabelAddressAsync(uint major_index, uint minor_index, string label, CancellationToken token = default)
         {
-            if (string.IsNullOrWhiteSpace(label))
-                throw new InvalidOperationException("Label cannot be null of whitespace");
+            ErrorGuard.ThrowIfNullOrWhiteSpace(label, nameof(label));
             var GenericRequestParameters = new GenericRequestParameters()
             {
                 index = new AddressIndexParameter()
@@ -230,8 +227,7 @@ namespace Monero.Client.Utilities
 
         public async Task<MoneroCommunicatorResponse> GetAccountsAsync(string tag, CancellationToken token = default)
         {
-            if (string.IsNullOrWhiteSpace(tag))
-                throw new InvalidOperationException("Tag used to filter accounts on cannot be null of whitespace");
+            ErrorGuard.ThrowIfNullOrWhiteSpace(tag, nameof(tag));
             var GenericRequestParameters = new GenericRequestParameters()
             {
                 label = tag,
@@ -266,8 +262,7 @@ namespace Monero.Client.Utilities
 
         public async Task<MoneroCommunicatorResponse> CreateAccountAsync(string label, CancellationToken token = default)
         {
-            if (string.IsNullOrWhiteSpace(label))
-                throw new InvalidOperationException("Label cannot be null of whitespace");
+            ErrorGuard.ThrowIfNullOrWhiteSpace(label, nameof(label));
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.AccountCreation, new GenericRequestParameters() { label = label, }, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
@@ -298,8 +293,7 @@ namespace Monero.Client.Utilities
 
         public async Task<MoneroCommunicatorResponse> LabelAccountAsync(uint account_index, string label, CancellationToken token = default)
         {
-            if (string.IsNullOrWhiteSpace(label))
-                throw new InvalidOperationException("Label cannot be null of whitespace");
+            ErrorGuard.ThrowIfNullOrWhiteSpace(label, nameof(label));
             var GenericRequestParameters = new GenericRequestParameters()
             {
                 label = label,
@@ -335,8 +329,7 @@ namespace Monero.Client.Utilities
 
         public async Task<MoneroCommunicatorResponse> TagAccountsAsync(string tag, IEnumerable<uint> accounts, CancellationToken token = default)
         {
-            if (string.IsNullOrWhiteSpace(tag))
-                throw new InvalidOperationException("Tag cannot be null of whitespace");
+            ErrorGuard.ThrowIfNullOrWhiteSpace(tag, nameof(tag));
             if (accounts == null || !accounts.Any())
                 throw new InvalidOperationException("Accounts is either null or empty");
             var GenericRequestParameters = new GenericRequestParameters()
@@ -380,10 +373,8 @@ namespace Monero.Client.Utilities
 
         public async Task<MoneroCommunicatorResponse> SetAccountTagDescriptionAsync(string tag, string description, CancellationToken token = default)
         {
-            if (string.IsNullOrWhiteSpace(tag))
-                throw new InvalidOperationException("Tag cannot be null of whitespace");
-            if (string.IsNullOrWhiteSpace(description))
-                throw new InvalidOperationException("Description cannot be null of whitespace");
+            ErrorGuard.ThrowIfNullOrWhiteSpace(tag, nameof(tag));
+            ErrorGuard.ThrowIfNullOrWhiteSpace(description, nameof(description));
             var GenericRequestParameters = new GenericRequestParameters()
             {
                 tag = tag,
@@ -819,8 +810,7 @@ namespace Monero.Client.Utilities
 
         public async Task<MoneroCommunicatorResponse> GetTransactionKeyAsync(string txid, CancellationToken token = default)
         {
-            if (string.IsNullOrWhiteSpace(txid))
-                throw new InvalidOperationException("txid cannot be null or whitespace");
+            ErrorGuard.ThrowIfNullOrWhiteSpace(txid, nameof(txid));
             var GenericRequestParameters = new GenericRequestParameters()
             {
                 txid = txid,
@@ -840,12 +830,9 @@ namespace Monero.Client.Utilities
 
         public async Task<MoneroCommunicatorResponse> CheckTransactionKeyAsync(string txid, string tx_key, string address, CancellationToken token = default)
         {
-            if (string.IsNullOrWhiteSpace(txid))
-                throw new InvalidOperationException("txid cannot be null or whitespace");
-            if (string.IsNullOrWhiteSpace(tx_key))
-                throw new InvalidOperationException("tx_key cannot be null or whitespace");
-            if (string.IsNullOrWhiteSpace(address))
-                throw new InvalidOperationException("address cannot be null or whitespace");
+            ErrorGuard.ThrowIfNullOrWhiteSpace(txid, nameof(txid));
+            ErrorGuard.ThrowIfNullOrWhiteSpace(tx_key, nameof(tx_key));
+            ErrorGuard.ThrowIfNullOrWhiteSpace(address, nameof(address));
             var GenericRequestParameters = new
             {
                 txid = txid,
@@ -1454,8 +1441,7 @@ namespace Monero.Client.Utilities
 
         public async Task<MoneroCommunicatorResponse> GetBlockHeaderByHashAsync(string hash, CancellationToken token)
         {
-            if (string.IsNullOrWhiteSpace(hash))
-                throw new InvalidOperationException("Hash cannot be null or whitespace");
+            ErrorGuard.ThrowIfNullOrWhiteSpace(hash, nameof(hash));
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.BlockHeaderByHash, new GenericRequestParameters() { hash = hash,}, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();

@@ -34,5 +34,12 @@ namespace Monero.Client.Utilities
                 throw new RpcResponseException($"Error experienced when making RPC call in {functionName}");
             return;
         }
+
+        public static void ThrowIfNullOrWhiteSpace(string objectCheked, string parameterName)
+        {
+            if (string.IsNullOrWhiteSpace(objectCheked))
+                throw new InvalidOperationException($"Cannot be null or whitespace (Parameter: {parameterName})");
+            return;
+        }
     }
 }
