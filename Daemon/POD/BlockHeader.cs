@@ -33,7 +33,7 @@ namespace Monero.Client.Daemon.POD
         public string MinerTxHash { get; set; }
         [JsonPropertyName("minor_version")]
         public byte MinorVersion { get; set; }
-        [JsonPropertyName("Nonce")]
+        [JsonPropertyName("nonce")]
         public uint Nonce { get; set; }
         [JsonPropertyName("num_txes")]
         public ulong NumTxes { get; set; }
