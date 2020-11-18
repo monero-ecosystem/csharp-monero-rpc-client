@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Monero.Client.Utilities;
-using Monero.Client.Daemon.POD;
+﻿using Monero.Client.Daemon.POD;
 using Monero.Client.Daemon.POD.Responses;
 using Monero.Client.Network;
+using Monero.Client.Utilities;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Monero.Client.Daemon
 {

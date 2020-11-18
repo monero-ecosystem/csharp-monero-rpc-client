@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Monero.Client.Wallet.POD;
+using Monero.Client.Wallet.POD.Responses;
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Monero.Client.Wallet.POD;
-using Monero.Client.Wallet.POD.Responses;
 
 namespace Monero.Client.Wallet
 {

@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-using Monero.Client.Network;
+﻿using Monero.Client.Network;
 using Monero.Client.Utilities;
 using Monero.Client.Wallet.POD;
 using Monero.Client.Wallet.POD.Responses;
+using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Monero.Client.Wallet
 {

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using Monero.Client.Daemon.POD.Requests;
+﻿using Monero.Client.Daemon.POD.Requests;
 using Monero.Client.Wallet.POD;
 using Monero.Client.Wallet.POD.Requests;
+using System.Collections.Generic;
 
 namespace Monero.Client.Network
 {

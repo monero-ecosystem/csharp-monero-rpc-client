@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Monero.Client.Network;
 using System.Text.Json.Serialization;
-using Monero.Client.Network;
 
 namespace Monero.Client.Wallet.POD.Responses
 {

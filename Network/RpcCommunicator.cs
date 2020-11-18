@@ -1,18 +1,17 @@
-﻿using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using System.IO;
-using System.Collections.Generic;
-using System.Text.Json;
-using System.Linq;
-
+﻿using Monero.Client.Daemon.POD.Requests;
 using Monero.Client.Daemon.POD.Responses;
-using Monero.Client.Daemon.POD.Requests;
 using Monero.Client.Network;
-using Monero.Client.Wallet.POD.Responses;
 using Monero.Client.Wallet.POD;
 using Monero.Client.Wallet.POD.Requests;
+using Monero.Client.Wallet.POD.Responses;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Monero.Client.Utilities
 {
@@ -1443,7 +1442,7 @@ namespace Monero.Client.Utilities
         public async Task<MoneroCommunicatorResponse> GetBlockHeaderByHashAsync(string hash, CancellationToken token)
         {
             ErrorGuard.ThrowIfNullOrWhiteSpace(hash, nameof(hash));
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.BlockHeaderByHash, new GenericRequestParameters() { hash = hash,}, token).ConfigureAwait(false);
+            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.BlockHeaderByHash, new GenericRequestParameters() { hash = hash, }, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
@@ -1565,7 +1564,7 @@ namespace Monero.Client.Utilities
 
         public async Task<MoneroCommunicatorResponse> FlushTransactionPoolAsync(IEnumerable<string> txids, CancellationToken token)
         {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.FlushTransactionPool, new GenericRequestParameters() { txids = txids,}, token).ConfigureAwait(false);
+            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.FlushTransactionPool, new GenericRequestParameters() { txids = txids, }, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
@@ -1582,12 +1581,12 @@ namespace Monero.Client.Utilities
         {
             if (min_count > max_count)
                 throw new InvalidOperationException($"min_count ({min_count}) cannot be greater than max_count ({max_count})");
-            var requestParameters = new GenericRequestParameters() 
-            { 
-                amounts = amounts, 
-                min_count = min_count, 
-                max_count = max_count, 
-                unlocked = unlocked, 
+            var requestParameters = new GenericRequestParameters()
+            {
+                amounts = amounts,
+                min_count = min_count,
+                max_count = max_count,
+                unlocked = unlocked,
                 recent_cutoff = recent_cutoff,
             };
 
@@ -1711,7 +1710,7 @@ namespace Monero.Client.Utilities
 
         public async Task<MoneroCommunicatorResponse> GetBlockAsync(string hash, CancellationToken token = default)
         {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.Block, new GenericRequestParameters() { hash = hash}, token).ConfigureAwait(false);
+            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.Block, new GenericRequestParameters() { hash = hash }, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);

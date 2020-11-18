@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Monero.Client.Daemon.POD
@@ -52,8 +50,8 @@ namespace Monero.Client.Daemon.POD
         [JsonPropertyName("wide_difficulty")]
         public string WideDifficulty { get; set; }
         [JsonIgnore()]
-        public DateTime DateTime 
-        { 
+        public DateTime DateTime
+        {
             get
             {
                 return new DateTime(1970, 1, 1).AddSeconds(this.Timestamp);

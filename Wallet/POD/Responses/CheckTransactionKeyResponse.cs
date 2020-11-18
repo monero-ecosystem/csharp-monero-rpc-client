@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Monero.Client.Network;
 using System.Text.Json.Serialization;
-
-using Monero.Client.Network;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
@@ -23,8 +19,8 @@ namespace Monero.Client.Wallet.POD.Responses
         public ulong Received { get; set; }
 
         [JsonIgnore()]
-        public bool IsInBlockchain 
-        { 
+        public bool IsInBlockchain
+        {
             get
             {
                 return Confirmations > 0ul;

@@ -1,9 +1,6 @@
-﻿using System;
+﻿using Monero.Client.Network;
 using System.Collections.Generic;
-using System.Text;
 using System.Text.Json.Serialization;
-
-using Monero.Client.Network;
 
 namespace Monero.Client.Daemon.POD.Responses
 {
@@ -22,7 +19,7 @@ namespace Monero.Client.Daemon.POD.Responses
         [JsonPropertyName("untrusted")]
         public bool IsUntrusted { get; set; }
     }
-    
+
     public class Ban
     {
         [JsonPropertyName("host")]

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿
 using Monero.Client.Daemon.POD.Responses;
 using Monero.Client.Wallet.POD.Responses;
 
