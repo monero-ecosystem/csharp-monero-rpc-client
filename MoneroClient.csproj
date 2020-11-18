@@ -5,12 +5,15 @@
     <LangVersion>8</LangVersion>
     <RootNamespace>Monero.Client</RootNamespace>
     <AssemblyName>Monero.Client</AssemblyName>
-    <Version>1.0.1.1</Version>
+    <Version>1.0.1.2</Version>
     <RepositoryUrl>https://github.com/Agorist-Action/charp-monero-rpc-client</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>1.0.1.1 Release Notes:
-- Prefix all Boolean Properties with Is
-- Consider transaction InBlockchain exclusively based on confirmations being &gt; 0. Previously, whether the transaction was absent from the transaction pool was also a consideration. Transactions can fail, so this false-positive creating condition was removed.</PackageReleaseNotes>
+    <PackageReleaseNotes>
+        Release Notes v1.0.1.2
+        - Simplify internal representation of several non-user facing types.
+        - Fix exception message typo.
+        - Correct num_unspent_outputs spelling for proper serialization in AddressDetails.
+    </PackageReleaseNotes>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageIcon>monero-xmr-logo.png</PackageIcon>
     <PackageIconUrl />
