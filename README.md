@@ -68,7 +68,7 @@ All contributions are welcome. Please make sure your pull request include:
 
  # Contact Me
  I only reply to PGP encrypted emails.
- 
+ ```
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 Comment: User-ID:	Agorist Action <agorist-action@protonmail.com>
 Comment: Expires:	11/20/2022 12:00 PM
@@ -114,3 +114,4 @@ xajJVguGv0FdaXwhBpB4S4GozZfs4hA6C4ks7hlayzmZJGYmjM7rEP2uMS6534/b
 VMkDCDHIRUlPJKxOmeujauOYdIMpfdUKxa5cIGxiBWJApWBBX2Y=
 =4ihe
 -----END PGP PUBLIC KEY BLOCK-----
+```
