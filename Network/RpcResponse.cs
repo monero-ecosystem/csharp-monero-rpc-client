@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace Monero.Client.Network
 {
@@ -33,28 +34,25 @@ namespace Monero.Client.Network
             {
                 if (Code <= -32000 && Code >= -32099)
                     return JsonRpcErrorCode.ServerError;
-                else if (Code == -32700)
-                    return JsonRpcErrorCode.ParseError;
-                else if (Code == -32600)
-                    return JsonRpcErrorCode.InvalidRequest;
-                else if (Code == -32601)
-                    return JsonRpcErrorCode.MethodNotFound;
-                else if (Code == -32602)
-                    return JsonRpcErrorCode.InvalidParameters;
-                else if (Code == -32603)
-                    return JsonRpcErrorCode.InternalJsonError;
                 else
-                    return JsonRpcErrorCode.UnknownError;
+                {
+                    if (Enum.IsDefined(typeof(JsonRpcErrorCode), Code))
+                    {
+                        return (JsonRpcErrorCode)Code;
+                    }
+                    else
+                        return JsonRpcErrorCode.UnknownError;
+                }
             }
         }
     }
 
     public enum JsonRpcErrorCode
     {
-        /// <summary>
-        /// Catch-all.
-        /// </summary>
-        UnknownError = 0,
+        //////////////////////////////
+        /// JsonRpc-Related Errors ///
+        //////////////////////////////
+
         /// <summary>
         /// Invalid JSON was received by the server.
         /// An error occurred on the server while parsing the JSON text.
@@ -80,5 +78,57 @@ namespace Monero.Client.Network
         /// Reserved for implementation-defined server-errors.
         /// </summary>
         ServerError = -32000,
+
+        /////////////////////////////
+        /// Monero-Related Errors ///
+        /////////////////////////////
+
+        // Source: https://github.com/monero-project/monero/blob/8286f07b265d16a87b3fe3bb53e8d7bf37b5265a/src/wallet/wallet_rpc_server_error_codes.h
+        UnknownError = -1,
+        WrongAddress = -2,
+        DaemonIsBusy = -3,
+        GenericTransferError = -4,
+        WrongPaymentID = -5,
+        TransferType = -6,
+        Denied = -7,
+        WrongTxid = -8,
+        WrongSignature = -9,
+        WrongKeyImage = -10,
+        WrongUri = -11,
+        WrongIndex = -12,
+        NotOpen = -13,
+        AccountIndexOutOfBounds = -14,
+        AddressIndexOutOfBounds = -15,
+        TxNotPossible = -16,
+        NotEnoughMoney = -17,
+        TxTooLarge = -18,
+        NoutEnoughOutsToMix = -19,
+        ZeroDestination = -20,
+        WalletAlreadyExists = -21,
+        InvalidPassword = -22,
+        NoWalletDirectory = -23,
+        NoTxKey = -24,
+        WrongKey = -25,
+        BadHex = -26,
+        BadTxMetadata = -27,
+        AlreadyMultiSig = -28,
+        WatchOnly = -29,
+        BadMultiSigInfo = -30,
+        NotMultiSig = -31,
+        WrongLR = -32,  // MultiSig curve points that get "merged" from all signers.
+        ThresholdNotReached = -33,
+        BadMultiSigTxData = -34,
+        MultiSigSignature = -35,
+        MultiSigSubmission = -36,
+        NotEnoughUnlockedMoney = -37,
+        NoDaemonConnection = -38,
+        BadUnsignedTxData = -39,
+        BadSignedTxData = -40,
+        SignedSubmission = -41,
+        SignUnsigned = -42,
+        NonDeterministic = -43,
+        InvalidLogLevel = -44,
+        AttributeNotFound = -45,
+        InvalidSignatureType = -47, // Yes, -46 appears to be missing. Maybe -46 is bad luck.
     }
 }
