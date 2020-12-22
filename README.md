@@ -26,10 +26,15 @@ using Monero.Client.Network;
 using Monero.Client.Wallet;
 using Monero.Client.Wallet.POD;
 
-var moneroWalletClient = new MoneroWalletClient(MoneroNetwork.Testnet);
+// Synchronously Initialize Client
+var moneroWalletClient = new MoneroWalletClient(new Uri("http://127.0.0.1:18082/json_rpc"));
+
+// Asynchronously Initialize Client (and Open Wallet) - This is the preferred method of initialization.
+var walletClient = await MoneroWalletClient.CreateAsync(MoneroNetwork.Mainnet, "TestMainnet", "123").ConfigureAwait(false);
 ```
 **Open Wallet**
 ```csharp
+// Will throw if wallet is already open.
 await moneroWalletClient.OpenWalletAsync("new_wallet3", "banana").ConfigureAwait(false);
 ```
 **Transfer Funds**
@@ -42,7 +47,7 @@ var dA = new List<(string address, ulong amount)>()
 };
 var response = await moneroWalletClient.TransferAsync(dA, TransferPriority.Normal, cts.token).ConfigureAwait(false);
 ```
-For the entire MoneroWalletClient interface, please click [here](https://github.com/Agorist-Action/csharp-monero-rpc-client/blob/master/Wallet/IMoneroWalletClient.cs).
+For the entire MoneroWalletClient interface, please click [here](https://github.com/monero-ecosystem/csharp-monero-rpc-client/blob/master/Wallet/IMoneroWalletClient.cs).
 **Note:** Unlike the Daemon Client, to perform any action with the Wallet Client, one must first either create a new wallet, or open an existing one (as shown above).
 # Latest Stable Release
 Available on Nuget [here](https://www.nuget.org/packages/Monero.Client/).
@@ -51,7 +56,7 @@ Install-Package Monero.Client -Version 1.0.1.3
 ```
 # Latest Development Changes
 ```
-git clone https://github.com/Agorist-Action/csharp-monero-rpc-client
+git clone https://github.com/monero-ecosystem/csharp-monero-rpc-client.git
 ```
 # Contributing
 All contributions are welcome. Please make sure your pull request include:
