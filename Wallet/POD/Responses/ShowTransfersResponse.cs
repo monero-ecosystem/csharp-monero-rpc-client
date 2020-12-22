@@ -25,6 +25,14 @@ namespace Monero.Client.Wallet.POD.Responses
         public List<Transfer> PooledTransfers { get; set; } = new List<Transfer>();
     }
 
+    public class TransferDestination
+    {
+        [JsonPropertyName("address")]
+        public string Address { get; set; }
+        [JsonPropertyName("amount")]
+        public ulong Amount { get; set; }
+    }
+
     public class Transfer
     {
         [JsonPropertyName("address")]
@@ -33,6 +41,8 @@ namespace Monero.Client.Wallet.POD.Responses
         public ulong Amount { get; set; }
         [JsonPropertyName("amounts")]
         public List<ulong> Amounts { get; set; } = new List<ulong>();
+        [JsonPropertyName("destinations")]
+        public List<TransferDestination> Destinations { get; set; } = new List<TransferDestination>();
         [JsonPropertyName("confirmations")]
         public ulong Confirmations { get; set; }
         [JsonPropertyName("fee")]
