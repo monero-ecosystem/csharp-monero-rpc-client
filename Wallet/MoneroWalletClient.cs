@@ -34,7 +34,7 @@ namespace Monero.Client.Wallet
         /// </summary>
         public MoneroWalletClient(MoneroNetwork networkType)
         {
-            _moneroRpcCommunicator = new RpcCommunicator(networkType);
+            _moneroRpcCommunicator = new RpcCommunicator(networkType, ConnectionType.Wallet);
         }
 
         public void Dispose()

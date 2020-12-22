@@ -34,7 +34,7 @@ namespace Monero.Client.Daemon
         /// </summary>
         public MoneroDaemonClient(MoneroNetwork networkType)
         {
-            _moneroRpcCommunicator = new RpcCommunicator(networkType);
+            _moneroRpcCommunicator = new RpcCommunicator(networkType, ConnectionType.Daemon);
         }
 
         public void Dispose()

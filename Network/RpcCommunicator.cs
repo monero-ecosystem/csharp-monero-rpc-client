@@ -15,6 +15,12 @@ using System.Threading.Tasks;
 
 namespace Monero.Client.Utilities
 {
+    internal enum ConnectionType
+    {
+        Wallet,
+        Daemon,
+    }
+
     internal class RpcCommunicator
     {
         private readonly HttpClient _httpClient;
@@ -51,23 +57,45 @@ namespace Monero.Client.Utilities
             _requestAdapter = new MoneroRequestAdapter(uri);
         }
 
-        public RpcCommunicator(MoneroNetwork networkType) : this()
+        public RpcCommunicator(MoneroNetwork networkType, ConnectionType connectionType) : this()
         {
             Uri uri;
-            switch (networkType)
+            if (connectionType == ConnectionType.Daemon)
             {
-                case MoneroNetwork.Mainnet:
-                    uri = new Uri(MoneroNetworkDefaults.DaemonMainnetUri);
-                    break;
-                case MoneroNetwork.Stagenet:
-                    uri = new Uri(MoneroNetworkDefaults.DaemonStagenetUri);
-                    break;
-                case MoneroNetwork.Testnet:
-                    uri = new Uri(MoneroNetworkDefaults.DaemonTestnetUri);
-                    break;
-                default:
-                    throw new InvalidOperationException($"Unknown MoneroNetwork ({networkType})");
+                switch (networkType)
+                {
+                    case MoneroNetwork.Mainnet:
+                        uri = new Uri(MoneroNetworkDefaults.DaemonMainnetUri);
+                        break;
+                    case MoneroNetwork.Stagenet:
+                        uri = new Uri(MoneroNetworkDefaults.DaemonStagenetUri);
+                        break;
+                    case MoneroNetwork.Testnet:
+                        uri = new Uri(MoneroNetworkDefaults.DaemonTestnetUri);
+                        break;
+                    default:
+                        throw new InvalidOperationException($"Unknown MoneroNetwork ({networkType})");
+                }
             }
+            else if (connectionType == ConnectionType.Wallet)
+            {
+                switch (networkType)
+                {
+                    case MoneroNetwork.Mainnet:
+                        uri = new Uri(MoneroNetworkDefaults.WalletMainnetUri);
+                        break;
+                    case MoneroNetwork.Stagenet:
+                        uri = new Uri(MoneroNetworkDefaults.WalletStagenetUri);
+                        break;
+                    case MoneroNetwork.Testnet:
+                        uri = new Uri(MoneroNetworkDefaults.WalletTestnetUri);
+                        break;
+                    default:
+                        throw new InvalidOperationException($"Unknown MoneroNetwork ({networkType})");
+                }
+            }
+            else
+                throw new InvalidOperationException($"Unknown ConnectionType ({connectionType})");
             _requestAdapter = new MoneroRequestAdapter(uri);
         }
 
