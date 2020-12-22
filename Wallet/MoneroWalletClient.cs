@@ -37,6 +37,27 @@ namespace Monero.Client.Wallet
             _moneroRpcCommunicator = new RpcCommunicator(networkType, ConnectionType.Wallet);
         }
 
+        /// <summary>
+        /// Initialize a Monero Wallet Client using default network settings (<localhost>:<defaultport>), opening the wallet while doing so.
+        /// </summary>
+        public static Task<MoneroWalletClient> CreateAsync(Uri uri, string filename, string password, CancellationToken cancellationToken = default)
+        {
+            var moneroWalletClient = new MoneroWalletClient(uri);
+            return moneroWalletClient.InitializeAsync(filename, password, cancellationToken);
+        }
+
+        public static Task<MoneroWalletClient> CreateAsync(MoneroNetwork networkType, string filename, string password, CancellationToken cancellationToken = default)
+        {
+            var moneroWalletClient = new MoneroWalletClient(networkType);
+            return moneroWalletClient.InitializeAsync(filename, password, cancellationToken);
+        }
+
+        private async Task<MoneroWalletClient> InitializeAsync(string filename, string password, CancellationToken cancellationToken)
+        {
+            await OpenWalletAsync(filename, password, cancellationToken).ConfigureAwait(false);
+            return this;
+        }
+
         public void Dispose()
         {
             this.CloseWalletAsync().GetAwaiter().GetResult();

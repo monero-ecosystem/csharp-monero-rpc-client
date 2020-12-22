@@ -37,6 +37,24 @@ namespace Monero.Client.Daemon
             _moneroRpcCommunicator = new RpcCommunicator(networkType, ConnectionType.Daemon);
         }
 
+        public static Task<MoneroDaemonClient> CreateAsync(Uri uri, CancellationToken cancellationToken = default)
+        {
+            var moneroDaemonClient = new MoneroDaemonClient(uri);
+            return moneroDaemonClient.InitializeAsync(cancellationToken);
+        }
+
+        public static Task<MoneroDaemonClient> CreateAsync(MoneroNetwork moneroNetwork, CancellationToken cancellationToken = default)
+        {
+            var moneroDaemonClient = new MoneroDaemonClient(moneroNetwork);
+            return moneroDaemonClient.InitializeAsync(cancellationToken);
+        }
+
+        private Task<MoneroDaemonClient> InitializeAsync(CancellationToken cancellationToken)
+        {
+            // Nothing to do yet.
+            return Task.FromResult(this);
+        }
+
         public void Dispose()
         {
             _moneroRpcCommunicator.Dispose();
