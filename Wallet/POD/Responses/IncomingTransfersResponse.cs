@@ -1,4 +1,6 @@
 ﻿using Monero.Client.Network;
+using Monero.Client.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -14,6 +16,10 @@ namespace Monero.Client.Wallet.POD.Responses
     {
         [JsonPropertyName("transfers")]
         public List<IncomingTransfer> Transfers { get; set; } = new List<IncomingTransfer>();
+        public override string ToString()
+        {
+            return string.Join(Environment.NewLine, Transfers);
+        }
     }
 
     public class IncomingTransfer
@@ -36,5 +42,9 @@ namespace Monero.Client.Wallet.POD.Responses
         public string TransactionHash { get; set; }
         [JsonPropertyName("unlocked")]
         public bool IsUnlocked { get; set; }
+        public override string ToString()
+        {
+            return $"[{BlockHeight}] - {TransactionHash} - {PriceUtilities.PiconeroToMonero(Amount):N12} - {(IsSpent ? "Spent" : "Unspent")} - {(IsUnlocked ? "Unlocked" : "Locked")}";
+        }
     }
 }

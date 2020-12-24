@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Monero.Client.Utilities;
+using System.Text.Json.Serialization;
 
 namespace Monero.Client.Wallet.POD
 {
@@ -16,5 +17,9 @@ namespace Monero.Client.Wallet.POD
         public string Tag { get; set; }
         [JsonPropertyName("unlocked_balance")]
         public ulong UnlockedBalance { get; set; }
+        public override string ToString()
+        {
+            return $"[{AccountIndex}] ({Tag}) {BaseAddress} - Unlocked {PriceUtilities.PiconeroToMonero(UnlockedBalance)} / Total {PriceUtilities.PiconeroToMonero(Balance)}";
+        }
     }
 }

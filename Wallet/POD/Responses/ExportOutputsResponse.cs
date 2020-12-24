@@ -13,5 +13,9 @@ namespace Monero.Client.Wallet.POD.Responses
     {
         [JsonPropertyName("outputs_data_hex")]
         public string OutputsDataHex { get; set; }
+        public override string ToString()
+        {
+            return OutputsDataHex;
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Monero.Client.Network;
+using Monero.Client.Utilities;
 using System.Text.Json.Serialization;
 
 namespace Monero.Client.Wallet.POD.Responses
@@ -17,5 +18,9 @@ namespace Monero.Client.Wallet.POD.Responses
         public ulong Spent { get; set; }
         [JsonPropertyName("unspent")]
         public ulong Unspent { get; set; }
+        public override string ToString()
+        {
+            return $"[{Height}] Unspent {PriceUtilities.PiconeroToMonero(Unspent)} / Spend {PriceUtilities.PiconeroToMonero(Spent)}";
+        }
     }
 }

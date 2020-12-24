@@ -13,5 +13,9 @@ namespace Monero.Client.Wallet.POD.Responses
     {
         [JsonPropertyName("good")]
         public bool IsGood { get; set; }
+        public override string ToString()
+        {
+            return $"{(IsGood ? "Good" : "Bad")}";
+        }
     }
 }

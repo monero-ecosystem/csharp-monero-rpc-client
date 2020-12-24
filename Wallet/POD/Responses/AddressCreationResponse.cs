@@ -20,5 +20,9 @@ namespace Monero.Client.Wallet.POD.Responses
         public List<uint> AddressIndices { get; set; } = new List<uint>();
         [JsonPropertyName("addresses")]
         public List<string> Addresses { get; set; } = new List<string>();
+        public override string ToString()
+        {
+            return $"[{AddressIndex}] {Address}";
+        }
     }
 }

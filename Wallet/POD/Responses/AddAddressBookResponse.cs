@@ -13,5 +13,9 @@ namespace Monero.Client.Wallet.POD.Responses
     {
         [JsonPropertyName("index")]
         public uint Index { get; set; }
+        public override string ToString()
+        {
+            return $"Index {Index}";
+        }
     }
 }

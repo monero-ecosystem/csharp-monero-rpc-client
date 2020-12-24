@@ -1,6 +1,8 @@
 ﻿using Monero.Client.Network;
+using Monero.Client.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Monero.Client.Wallet.POD.Responses
@@ -23,6 +25,43 @@ namespace Monero.Client.Wallet.POD.Responses
         public List<Transfer> FailedTransfers { get; set; } = new List<Transfer>();
         [JsonPropertyName("pool")]
         public List<Transfer> PooledTransfers { get; set; } = new List<Transfer>();
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            bool hasIncomingTransfers = IncomingTransfers.Count > 0, hasOutgoingTransfers = OutgoingTransfers.Count > 0, hasPendingTransfers = PendingTransfers.Count > 0,
+                hasFailedTransfers = FailedTransfers.Count > 0, hasPooledTransfers = PooledTransfers.Count > 0;
+            if (hasIncomingTransfers)
+            {
+                sb.AppendLine("Incoming Transfers:");
+                sb.AppendLine(string.Join(Environment.NewLine, IncomingTransfers));
+                sb.AppendLine();
+            }
+            if (hasOutgoingTransfers)
+            {
+                sb.AppendLine("Outgoing Transfers:");
+                sb.AppendLine(string.Join(Environment.NewLine, OutgoingTransfers));
+                sb.AppendLine();
+            }
+            if (hasPendingTransfers)
+            {
+                sb.AppendLine("Pending Transfers:");
+                sb.AppendLine(string.Join(Environment.NewLine, PendingTransfers));
+                sb.AppendLine();
+            }
+            if (hasFailedTransfers)
+            {
+                sb.AppendLine("Failed Transfers:");
+                sb.AppendLine(string.Join(Environment.NewLine, FailedTransfers));
+                sb.AppendLine();
+            }
+            if (hasPooledTransfers)
+            {
+                sb.AppendLine("Pooled Transfers:");
+                sb.AppendLine(string.Join(Environment.NewLine, PooledTransfers));
+                sb.AppendLine();
+            }
+            return sb.ToString();
+        }
     }
 
     public class Transfer
@@ -76,6 +115,11 @@ namespace Monero.Client.Wallet.POD.Responses
             {
                 return new DateTime(1970, 1, 1).AddSeconds(this.Timestamp);
             }
+        }
+
+        public override string ToString()
+        {
+            return $"[{Height}] [{TransactionID}] ({DateTime.ToString(DateFormat.DateTimeFormat)}) - {Address} - {PriceUtilities.PiconeroToMonero(Amount):N12} - {PriceUtilities.PiconeroToMonero(Fee)} - Confirmations: {Confirmations}";
         }
     }
 }
