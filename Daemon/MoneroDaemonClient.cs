@@ -158,6 +158,13 @@ namespace Monero.Client.Daemon
             return result.FeeEstimateResponse.Result.Fee;
         }
 
+        public async Task<FeeEstimate> GetFeeEstimateParametersAsync(uint graceBlocks, CancellationToken token = default)
+        {
+            var result = await _moneroRpcCommunicator.GetFeeEstimateAsync(graceBlocks, token).ConfigureAwait(false);
+            ErrorGuard.ThrowIfResultIsNull(result?.FeeEstimateResponse, nameof(GetFeeEstimateAsync));
+            return result.FeeEstimateResponse.Result;
+        }
+
         public async Task<List<Chain>> GetAlternateChainsAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetAlternateChainsAsync(token).ConfigureAwait(false);
