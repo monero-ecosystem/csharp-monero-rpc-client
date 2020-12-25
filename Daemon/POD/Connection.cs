@@ -61,7 +61,7 @@ namespace Monero.Client.Daemon.POD
         }
         public override string ToString()
         {
-            return $"{Host} / {Port} ({State})";
+            return $"{Host} : {Port} ({State})";
         }
     }
 }
