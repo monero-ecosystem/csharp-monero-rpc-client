@@ -36,14 +36,4 @@ namespace Monero.Client.Utilities
             return decimalPlaces;
         }
     }
-
-    internal class PriceFormat
-    {
-        public readonly static string TwelveDecimalPlaces = "N12";  
-    }
-
-    internal class DateFormat
-    {
-        public readonly static string DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fffffff";
-    }
 }
