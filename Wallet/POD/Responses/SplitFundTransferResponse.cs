@@ -38,7 +38,7 @@ namespace Monero.Client.Wallet.POD.Responses
             if (equalAmounts)
             {
                 for (int transferNumber = 0; transferNumber < TransactionHashes.Count; ++transferNumber)
-                    sb.AppendLine($"Sent {PriceUtilities.PiconeroToMonero(Amounts[transferNumber]):N12} with a fee of {PriceUtilities.PiconeroToMonero(Fees[transferNumber]):N12} [{TransactionHashes[transferNumber]}]");
+                    sb.AppendLine($"Sent {PriceUtilities.PiconeroToMonero(Amounts[transferNumber]).ToString(PriceFormat.MoneroPrecision)} with a fee of {PriceUtilities.PiconeroToMonero(Fees[transferNumber]).ToString(PriceFormat.MoneroPrecision)} [{TransactionHashes[transferNumber]}]");
             }
             return sb.ToString();
         }

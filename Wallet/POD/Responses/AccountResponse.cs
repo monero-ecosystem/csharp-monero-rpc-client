@@ -21,7 +21,7 @@ namespace Monero.Client.Wallet.POD.Responses
         public ulong TotalUnlockedBalance { get; set; }
         public override string ToString()
         {
-            return $"Unlocked {PriceUtilities.PiconeroToMonero(TotalUnlockedBalance):N12} / Balance {PriceUtilities.PiconeroToMonero(TotalBalance):N12}";
+            return $"Unlocked {PriceUtilities.PiconeroToMonero(TotalUnlockedBalance).ToString(PriceFormat.MoneroPrecision)} / Balance {PriceUtilities.PiconeroToMonero(TotalBalance).ToString(PriceFormat.MoneroPrecision)}";
         }
     }
 }

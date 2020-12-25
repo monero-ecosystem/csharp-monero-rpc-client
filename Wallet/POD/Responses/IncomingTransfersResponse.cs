@@ -44,7 +44,7 @@ namespace Monero.Client.Wallet.POD.Responses
         public bool IsUnlocked { get; set; }
         public override string ToString()
         {
-            return $"[{BlockHeight}] - {TransactionHash} - {PriceUtilities.PiconeroToMonero(Amount):N12} - {(IsSpent ? "Spent" : "Unspent")} - {(IsUnlocked ? "Unlocked" : "Locked")}";
+            return $"[{BlockHeight}] - {TransactionHash} - {PriceUtilities.PiconeroToMonero(Amount).ToString(PriceFormat.MoneroPrecision)} - {(IsSpent ? "Spent" : "Unspent")} - {(IsUnlocked ? "Unlocked" : "Locked")}";
         }
     }
 }

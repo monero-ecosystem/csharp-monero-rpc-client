@@ -32,7 +32,7 @@ namespace Monero.Client.Wallet.POD.Responses
         public ulong Weight { get; set; }
         public override string ToString()
         {
-            return $"Sent {PriceUtilities.PiconeroToMonero(Amount):N12} with a fee of {PriceUtilities.PiconeroToMonero(Fee):N12} [{TransactionHash}]";
+            return $"Sent {PriceUtilities.PiconeroToMonero(Amount).ToString(PriceFormat.MoneroPrecision)} with a fee of {PriceUtilities.PiconeroToMonero(Fee).ToString(PriceFormat.MoneroPrecision)} [{TransactionHash}]";
         }
     }
 }

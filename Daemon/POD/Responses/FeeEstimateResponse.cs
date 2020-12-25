@@ -26,7 +26,7 @@ namespace Monero.Client.Daemon.POD.Responses
         public bool IsUntrusted { get; set; }
         public override string ToString()
         {
-            return $"{PriceUtilities.PiconeroToMonero(Fee):N12}";
+            return $"{PriceUtilities.PiconeroToMonero(Fee).ToString(PriceFormat.MoneroPrecision)}";
         }
     }
 }

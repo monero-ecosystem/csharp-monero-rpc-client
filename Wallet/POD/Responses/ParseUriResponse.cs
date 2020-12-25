@@ -34,7 +34,7 @@ namespace Monero.Client.Wallet.POD.Responses
         public string TransactionDescription { get; set; }
         public override string ToString()
         {
-            return $"Address: {Address} Amount: {PriceUtilities.PiconeroToMonero(Amount):N12} PaymentID: {PaymentID} RecipientName: {RecipientName} Description: {TransactionDescription}";
+            return $"Address: {Address} Amount: {PriceUtilities.PiconeroToMonero(Amount).ToString(PriceFormat.MoneroPrecision)} PaymentID: {PaymentID} RecipientName: {RecipientName} Description: {TransactionDescription}";
         }
     }
 }

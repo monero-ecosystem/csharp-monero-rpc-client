@@ -41,7 +41,7 @@ namespace Monero.Client.Daemon.POD.Responses
         public ulong UnlockedInstances { get; set; }
         public override string ToString()
         {
-            return $"Amount: {PriceUtilities.PiconeroToMonero(Amount):N12} RecentInstances: {RecentInstances} UnlockedInstances: {UnlockedInstances} TotalInstances: {TotalInstances}";
+            return $"Amount: {PriceUtilities.PiconeroToMonero(Amount).ToString(PriceFormat.MoneroPrecision)} RecentInstances: {RecentInstances} UnlockedInstances: {UnlockedInstances} TotalInstances: {TotalInstances}";
         }
     }
 }

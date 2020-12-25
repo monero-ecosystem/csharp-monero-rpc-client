@@ -23,7 +23,7 @@ namespace Monero.Client.Daemon.POD
         public Target Target { get; set; }
         public override string ToString()
         {
-            return $"{PriceUtilities.PiconeroToMonero(Amount):N12} - {Target}";
+            return $"{PriceUtilities.PiconeroToMonero(Amount).ToString(PriceFormat.MoneroPrecision)} - {Target}";
         }
     }
     public class Target

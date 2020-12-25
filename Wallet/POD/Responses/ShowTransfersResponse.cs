@@ -119,7 +119,7 @@ namespace Monero.Client.Wallet.POD.Responses
 
         public override string ToString()
         {
-            return $"[{Height}] [{TransactionID}] ({DateTime.ToString(DateFormat.DateTimeFormat)}) - {Address} - {PriceUtilities.PiconeroToMonero(Amount):N12} - {PriceUtilities.PiconeroToMonero(Fee)} - Confirmations: {Confirmations}";
+            return $"[{Height}] [{TransactionID}] ({DateTime.ToString(DateFormat.DateTimeFormat)}) - {Address} - {PriceUtilities.PiconeroToMonero(Amount).ToString(PriceFormat.MoneroPrecision)} - {PriceUtilities.PiconeroToMonero(Fee)} - Confirmations: {Confirmations}";
         }
     }
 }

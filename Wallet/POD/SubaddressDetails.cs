@@ -19,7 +19,7 @@ namespace Monero.Client.Wallet.POD
         public ulong UnlockedBalance { get; set; }
         public override string ToString()
         {
-            return $"[{AccountIndex}] ({Tag}) {BaseAddress} - Unlocked {PriceUtilities.PiconeroToMonero(UnlockedBalance):N12} / Total {PriceUtilities.PiconeroToMonero(Balance):N12}";
+            return $"[{AccountIndex}] ({Tag}) {BaseAddress} - Unlocked {PriceUtilities.PiconeroToMonero(UnlockedBalance).ToString(PriceFormat.MoneroPrecision)} / Total {PriceUtilities.PiconeroToMonero(Balance).ToString(PriceFormat.MoneroPrecision)}";
         }
     }
 }

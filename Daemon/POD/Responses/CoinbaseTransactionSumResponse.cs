@@ -34,7 +34,7 @@ namespace Monero.Client.Daemon.POD.Responses
         public string WideFeeAmount { get; set; }
         public override string ToString()
         {
-            return $"{TopHash} - Emission: {PriceUtilities.PiconeroToMonero(EmissionAmount):N12} - Fee: {PriceUtilities.PiconeroToMonero(FeeAmount):N12}";
+            return $"{TopHash} - Emission: {PriceUtilities.PiconeroToMonero(EmissionAmount).ToString(PriceFormat.MoneroPrecision)} - Fee: {PriceUtilities.PiconeroToMonero(FeeAmount).ToString(PriceFormat.MoneroPrecision)}";
         }
     }
 }
