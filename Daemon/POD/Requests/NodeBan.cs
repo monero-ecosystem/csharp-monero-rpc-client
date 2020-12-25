@@ -14,7 +14,7 @@ namespace Monero.Client.Daemon.POD.Requests
         public uint Seconds { get; set; }
         public override string ToString()
         {
-            return $"{Host} : {IP} - {(IsBanned ? "Banned" : "Not Banned")} ({Seconds})";
+            return $"{Host}:{IP} - {(IsBanned ? "Banned" : "Not Banned")} ({Seconds})";
         }
     }
 }

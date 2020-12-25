@@ -34,7 +34,7 @@ namespace Monero.Client.Daemon.POD.Responses
         public uint Seconds { get; set; }
         public override string ToString()
         {
-            return $"{Host} : {IP} ({Seconds})";
+            return $"{Host}:{IP} ({Seconds})";
         }
     }
 }
