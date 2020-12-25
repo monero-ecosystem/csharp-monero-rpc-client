@@ -11,6 +11,6 @@ namespace Monero.Client.Utilities
 
     internal class DateFormat
     {
-        public readonly static string DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fffffff";
+        public readonly static string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
     }
 }
