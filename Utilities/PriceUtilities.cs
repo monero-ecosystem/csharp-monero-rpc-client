@@ -9,7 +9,7 @@ namespace Monero.Client.Utilities
         public static decimal PiconeroToMonero(ulong amount)
         {
             decimal piconero = amount;
-            const decimal conversion = 1_000_000_000;
+            const decimal conversion = 1_000_000_000_000;
             return piconero / conversion;
         }
 
