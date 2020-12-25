@@ -12,5 +12,9 @@ namespace Monero.Client.Daemon.POD
         public ulong Height { get; set; }
         [JsonPropertyName("length")]
         public uint Length { get; set; }
+        public override string ToString()
+        {
+            return $"[{Height}] {BlockHash} - Difficulty: {Difficulty} - Length: {Length}";
+        }
     }
 }

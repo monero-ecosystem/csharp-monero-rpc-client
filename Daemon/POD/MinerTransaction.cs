@@ -1,6 +1,7 @@
 ﻿using Monero.Client.Network;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Monero.Client.Daemon.POD
@@ -26,6 +27,16 @@ namespace Monero.Client.Daemon.POD
             {
                 return BlockchainNetworkDefaults.AverageBlockTime * (BlockchainNetworkDefaults.BaseBlockUnlockThreshold + this.UnlockTime);
             }
+        }
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"Version: {Version} UnlockTime: {UnlockTime}");
+            sb.AppendLine($"Vin: {string.Join(Environment.NewLine, Vin)}");
+            sb.AppendLine($"Vout: {string.Join(Environment.NewLine, Vout)}");
+            sb.AppendLine($"Extra: {string.Join(", ", Extra)}");
+            sb.AppendLine($"Signatures: {string.Join(", ", Signatures)}");
+            return base.ToString();
         }
     }
 }

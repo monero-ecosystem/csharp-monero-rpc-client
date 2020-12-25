@@ -1,4 +1,5 @@
 ﻿using Monero.Client.Network;
+using Monero.Client.Utilities;
 using System.Text.Json.Serialization;
 
 namespace Monero.Client.Daemon.POD.Responses
@@ -23,5 +24,9 @@ namespace Monero.Client.Daemon.POD.Responses
         public string TopHash { get; set; }
         [JsonPropertyName("untrusted")]
         public bool IsUntrusted { get; set; }
+        public override string ToString()
+        {
+            return $"{PriceUtilities.PiconeroToMonero(Fee):N12}";
+        }
     }
 }

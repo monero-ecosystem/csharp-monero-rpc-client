@@ -18,6 +18,10 @@ namespace Monero.Client.Daemon.POD.Responses
         public string Status { get; set; }
         [JsonPropertyName("untrusted")]
         public bool IsUntrusted { get; set; }
+        public override string ToString()
+        {
+            return string.Join(", ", Bans);
+        }
     }
 
     public class Ban
@@ -28,5 +32,9 @@ namespace Monero.Client.Daemon.POD.Responses
         public ulong IP { get; set; }
         [JsonPropertyName("seconds")]
         public uint Seconds { get; set; }
+        public override string ToString()
+        {
+            return $"{Host} / {IP} ({Seconds})";
+        }
     }
 }

@@ -17,5 +17,9 @@ namespace Monero.Client.Daemon.POD.Responses
         public bool IsUntrusted { get; set; }
         [JsonPropertyName("version")]
         public uint Version { get; set; }
+        public override string ToString()
+        {
+            return $"{Status} - {Version} - {(IsUntrusted ? "Untrusted" : "Trusted")}";
+        }
     }
 }

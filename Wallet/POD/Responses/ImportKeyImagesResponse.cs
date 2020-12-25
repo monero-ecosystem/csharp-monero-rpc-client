@@ -20,7 +20,7 @@ namespace Monero.Client.Wallet.POD.Responses
         public ulong Unspent { get; set; }
         public override string ToString()
         {
-            return $"[{Height}] Unspent {PriceUtilities.PiconeroToMonero(Unspent)} / Spend {PriceUtilities.PiconeroToMonero(Spent)}";
+            return $"[{Height}] Unspent {PriceUtilities.PiconeroToMonero(Unspent):N12} / Spend {PriceUtilities.PiconeroToMonero(Spent):N12}";
         }
     }
 }

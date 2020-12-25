@@ -1,4 +1,5 @@
 ﻿using Monero.Client.Network;
+using Monero.Client.Utilities;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -22,6 +23,10 @@ namespace Monero.Client.Daemon.POD.Responses
         public bool IsUntrusted { get; set; }
         [JsonPropertyName("top_hash")]
         public string TopHash { get; set; }
+        public override string ToString()
+        {
+            return string.Join(", ", Histograms);
+        }
     }
 
     public class Histogram
@@ -34,5 +39,9 @@ namespace Monero.Client.Daemon.POD.Responses
         public ulong TotalInstances { get; set; }
         [JsonPropertyName("unlocked_instances")]
         public ulong UnlockedInstances { get; set; }
+        public override string ToString()
+        {
+            return $"Amount: {PriceUtilities.PiconeroToMonero(Amount):N12} RecentInstances: {RecentInstances} UnlockedInstances: {UnlockedInstances} TotalInstances: {TotalInstances}";
+        }
     }
 }
