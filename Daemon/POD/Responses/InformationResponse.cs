@@ -114,7 +114,7 @@ namespace Monero.Client.Daemon.POD.Responses
             var typeInfo = typeof(DaemonInformation);
             var nonNullPropertyList = typeInfo.GetProperties()
                                               .Where(p => p.GetValue(this) != default)
-                                              .Select(p => $"{p.Name}: {p.GetValue(this)}");
+                                              .Select(p => $"{p.Name}: {p.GetValue(this)} ");
             return string.Join(Environment.NewLine, nonNullPropertyList);
         }
     }
