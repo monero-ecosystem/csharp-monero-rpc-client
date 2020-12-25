@@ -60,7 +60,7 @@ namespace Monero.Client.Daemon.POD
         }
         public override string ToString()
         {
-            return $"[{Height}] ({DateTime}) {Hash} - Size: {BlockSize} Weight: {BlockWeight} TxCount: {NumTxes} Reward: {PriceUtilities.PiconeroToMonero(Reward):N12}";
+            return $"[{Height}] ({DateTime.ToString(DateFormat.DateTimeFormat)}) {Hash} - Size: {BlockSize}, Weight: {BlockWeight}, TxCount: {NumTxes}, Reward: {PriceUtilities.PiconeroToMonero(Reward):N12}";
         }
     }
 }
