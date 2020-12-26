@@ -1,4 +1,5 @@
 ﻿using Monero.Client.Network;
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -14,6 +15,10 @@ namespace Monero.Client.Wallet.POD.Responses
     {
         [JsonPropertyName("entries")]
         public List<AddressBookEntry> Entries { get; set; } = new List<AddressBookEntry>();
+        public override string ToString()
+        {
+            return string.Join(Environment.NewLine, Entries);
+        }
     }
 
     public class AddressBookEntry
@@ -26,5 +31,9 @@ namespace Monero.Client.Wallet.POD.Responses
         public ulong Index { get; set; }
         [JsonPropertyName("payment_id")]
         public string PaymentID { get; set; }
+        public override string ToString()
+        {
+            return $"[{Index}] {Address} - {Description} - {PaymentID}";
+        }
     }
 }

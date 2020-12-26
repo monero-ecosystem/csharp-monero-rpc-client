@@ -1,4 +1,6 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace Monero.Client.Daemon.POD
 {
@@ -20,5 +22,9 @@ namespace Monero.Client.Daemon.POD
         public string TopHash { get; set; }
         [JsonPropertyName("untrusted")]
         public bool IsUntrusted { get; set; }
+        public override string ToString()
+        {
+            return string.Join(Environment.NewLine, TopHash, BlockHeader);
+        }
     }
 }

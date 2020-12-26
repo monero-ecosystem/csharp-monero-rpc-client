@@ -13,5 +13,9 @@ namespace Monero.Client.Wallet.POD.Responses
     {
         [JsonPropertyName("uri")]
         public string Uri { get; set; }
+        public override string ToString()
+        {
+            return Uri;
+        }
     }
 }

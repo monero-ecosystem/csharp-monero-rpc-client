@@ -1,4 +1,5 @@
 ﻿using Monero.Client.Network;
+using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
@@ -22,5 +23,9 @@ namespace Monero.Client.Daemon.POD.Responses
         public bool IsUntrusted { get; set; }
         [JsonPropertyName("top_hash")]
         public string TopHash { get; set; }
+        public override string ToString()
+        {
+            return string.Join(Environment.NewLine, Headers);
+        }
     }
 }

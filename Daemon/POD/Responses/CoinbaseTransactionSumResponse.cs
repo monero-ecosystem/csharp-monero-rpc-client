@@ -1,4 +1,5 @@
 ﻿using Monero.Client.Network;
+using Monero.Client.Utilities;
 using System.Text.Json.Serialization;
 
 namespace Monero.Client.Daemon.POD.Responses
@@ -31,5 +32,9 @@ namespace Monero.Client.Daemon.POD.Responses
         public string WideEmissionAmount { get; set; }
         [JsonPropertyName("wide_fee_amount")]
         public string WideFeeAmount { get; set; }
+        public override string ToString()
+        {
+            return $"{TopHash} - Emission: {PriceUtilities.PiconeroToMonero(EmissionAmount).ToString(PriceFormat.MoneroPrecision)} - Fee: {PriceUtilities.PiconeroToMonero(FeeAmount).ToString(PriceFormat.MoneroPrecision)}";
+        }
     }
 }

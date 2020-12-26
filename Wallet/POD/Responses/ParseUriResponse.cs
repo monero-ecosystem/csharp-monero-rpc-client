@@ -1,4 +1,5 @@
 ﻿using Monero.Client.Network;
+using Monero.Client.Utilities;
 using System.Text.Json.Serialization;
 
 namespace Monero.Client.Wallet.POD.Responses
@@ -13,6 +14,10 @@ namespace Monero.Client.Wallet.POD.Responses
     {
         [JsonPropertyName("uri")]
         public MoneroUri Uri { get; set; }
+        public override string ToString()
+        {
+            return $"{Uri}";
+        }
     }
 
     public class MoneroUri
@@ -27,5 +32,9 @@ namespace Monero.Client.Wallet.POD.Responses
         public string RecipientName { get; set; }
         [JsonPropertyName("tx_description")]
         public string TransactionDescription { get; set; }
+        public override string ToString()
+        {
+            return $"Address: {Address} Amount: {PriceUtilities.PiconeroToMonero(Amount).ToString(PriceFormat.MoneroPrecision)} PaymentID: {PaymentID} RecipientName: {RecipientName} Description: {TransactionDescription}";
+        }
     }
 }

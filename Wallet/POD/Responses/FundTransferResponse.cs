@@ -1,4 +1,5 @@
 ﻿using Monero.Client.Network;
+using Monero.Client.Utilities;
 using System.Text.Json.Serialization;
 
 namespace Monero.Client.Wallet.POD.Responses
@@ -29,5 +30,9 @@ namespace Monero.Client.Wallet.POD.Responses
         public string UnsignedTxSet { get; set; }
         [JsonPropertyName("weight")]
         public ulong Weight { get; set; }
+        public override string ToString()
+        {
+            return $"Sent {PriceUtilities.PiconeroToMonero(Amount).ToString(PriceFormat.MoneroPrecision)} with a fee of {PriceUtilities.PiconeroToMonero(Fee).ToString(PriceFormat.MoneroPrecision)} [{TransactionHash}]";
+        }
     }
 }

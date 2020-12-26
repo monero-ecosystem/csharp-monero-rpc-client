@@ -13,5 +13,9 @@ namespace Monero.Client.Wallet.POD.Responses
     {
         [JsonPropertyName("version")]
         public uint Version { get; set; }
+        public override string ToString()
+        {
+            return $"{Version}";
+        }
     }
 }

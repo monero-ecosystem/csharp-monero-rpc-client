@@ -1,5 +1,7 @@
 ﻿using Monero.Client.Network;
+using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Monero.Client.Daemon.POD.Responses
@@ -30,11 +32,21 @@ namespace Monero.Client.Daemon.POD.Responses
         public bool IsUntrusted { get; set; }
         [JsonPropertyName("next_needed_pruning_seed")]
         public uint NextNeededPruningSeed { get; set; }
+        public override string ToString()
+        {
+            var sb = new StringBuilder($"[{Height}] - TargetHeight: {TargetHeight} - TopHash: {TopHash}");
+            sb.AppendLine(string.Join(Environment.NewLine, Peers));
+            return sb.ToString();
+        }
     }
 
     public class GeneralSyncronizationInformation
     {
         [JsonPropertyName("info")]
         public Connection Connection { get; set; }
+        public override string ToString()
+        {
+            return $"{Connection}";
+        }
     }
 }

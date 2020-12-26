@@ -6,5 +6,9 @@ namespace Monero.Client.Wallet.POD
     {
         [JsonPropertyName("signature")]
         public string Signature { get; set; }
+        public override string ToString()
+        {
+            return Signature;
+        }
     }
 }

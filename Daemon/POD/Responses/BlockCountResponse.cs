@@ -17,5 +17,9 @@ namespace Monero.Client.Daemon.POD.Responses
         public string Status { get; set; }
         [JsonPropertyName("untrusted")]
         public bool IsUntrusted { get; set; }
+        public override string ToString()
+        {
+            return $"{Count}";
+        }
     }
 }

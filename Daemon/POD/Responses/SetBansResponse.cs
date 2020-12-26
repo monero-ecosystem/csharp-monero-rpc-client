@@ -13,6 +13,10 @@ namespace Monero.Client.Daemon.POD.Responses
     {
         [JsonPropertyName("status")]
         public string Status { get; set; }
+        public override string ToString()
+        {
+            return Status;
+        }
     }
 
 }

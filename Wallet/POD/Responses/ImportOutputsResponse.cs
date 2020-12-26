@@ -13,5 +13,9 @@ namespace Monero.Client.Wallet.POD.Responses
     {
         [JsonPropertyName("num_imported")]
         public ulong NumImported { get; set; }
+        public override string ToString()
+        {
+            return $"{NumImported} imported";
+        }
     }
 }

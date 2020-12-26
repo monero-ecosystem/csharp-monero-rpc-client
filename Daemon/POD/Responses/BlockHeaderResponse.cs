@@ -21,5 +21,9 @@ namespace Monero.Client.Daemon.POD.Responses
         public string TopHash { get; set; }
         [JsonPropertyName("credits")]
         public ulong Credits { get; set; }
+        public override string ToString()
+        {
+            return $"{BlockHeader}";
+        }
     }
 }

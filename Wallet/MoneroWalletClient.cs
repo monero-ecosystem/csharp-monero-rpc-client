@@ -58,6 +58,9 @@ namespace Monero.Client.Wallet
             return this;
         }
 
+        /// <summary>
+        /// Disposes the object (also calls <see cref="CloseWalletAsync(CancellationToken)"/>)
+        /// </summary>
         public void Dispose()
         {
             this.CloseWalletAsync().GetAwaiter().GetResult();

@@ -1,4 +1,5 @@
 ﻿using Monero.Client.Network;
+using Monero.Client.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
@@ -33,6 +34,10 @@ namespace Monero.Client.Wallet.POD.Responses
             {
                 return BlockchainNetworkDefaults.AverageBlockTime * this.BlocksToUnlock;
             }
+        }
+        public override string ToString()
+        {
+            return $"Unlocked {PriceUtilities.PiconeroToMonero(UnlockedBalance).ToString(PriceFormat.MoneroPrecision)} / Total {PriceUtilities.PiconeroToMonero(TotalBalance).ToString(PriceFormat.MoneroPrecision)}";
         }
     }
 }
