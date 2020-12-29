@@ -104,6 +104,7 @@ namespace Monero.Client.Network
         FinalizeMultiSig,
         SignMultiSigTransaction,
         SubmitMultiSigTransaction,
+        DescribeTransfer,
     }
 
     internal class MoneroCommunicatorResponse
@@ -190,5 +191,6 @@ namespace Monero.Client.Network
         internal FinalizeMultiSigResponse FinalizeMultiSigResponse { get; set; }
         internal SignMultiSigTransactionResponse SignMultiSigTransactionResponse { get; set; }
         internal SubmitMultiSigTransactionResponse SubmitMultiSigTransactionResponse { get; set; }
+        internal DescribeTransferResponse DescribeTransferResponse { get; set; }
     }
 }

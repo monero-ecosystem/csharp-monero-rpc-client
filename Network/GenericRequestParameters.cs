@@ -78,5 +78,7 @@ namespace Monero.Client.Network
         public string new_password { get; set; } = null;
         public bool? all_accounts { get; set; } = null;
         public bool? strict { get; set; } = null;
+        public string multisig_txset { get; set; } = null;
+
     }
 }

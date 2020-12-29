@@ -122,6 +122,14 @@ namespace Monero.Client.Wallet
         /// </summary>
         Task<SubmitTransfer> SubmitTransferAsync(string txDataHex, CancellationToken token = default);
         /// <summary>
+        /// Parse a transfer that is either multi-signature, or unsigned from a cold-wallet.
+        /// </summary>
+        Task<List<TransferDescription>> DescribeUnsignedTransferAsync(string unsignedTxSet, CancellationToken token = default);
+        /// <summary>
+        /// Parse a transfer that is either multi-signature, or unsigned from a cold-wallet.
+        /// </summary>
+        Task<List<TransferDescription>> DescribeMultiSigTransferAsync(string multiSigTxSet, CancellationToken token = default);
+        /// <summary>
         /// Send all dust outputs back to the wallet's, to make them easier to spend (and mix).
         /// </summary>
         Task<SweepDust> SweepDustAsync(bool getTxKey, bool getTxHex, bool getTxMetadata, bool doNotRelay = false, CancellationToken token = default);

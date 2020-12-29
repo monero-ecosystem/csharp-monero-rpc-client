@@ -557,5 +557,19 @@ namespace Monero.Client.Wallet
             ErrorGuard.ThrowIfResultIsNull(result?.SubmitMultiSigTransactionResponse, nameof(SubmitMultiSigAsync));
             return result.SubmitMultiSigTransactionResponse.Result;
         }
+
+        public async Task<List<TransferDescription>> DescribeUnsignedTransferAsync(string unsignedTxSet, CancellationToken token = default)
+        {
+            var result = await _moneroRpcCommunicator.DescribeTransferAsync(unsignedTxSet, false, token).ConfigureAwait(false);
+            ErrorGuard.ThrowIfResultIsNull(result?.DescribeTransferResponse, nameof(DescribeUnsignedTransferAsync));
+            return result.DescribeTransferResponse.Result.TransferDescriptions;
+        }
+
+        public async Task<List<TransferDescription>> DescribeMultiSigTransferAsync(string multiSigTxSet, CancellationToken token = default)
+        {
+            var result = await _moneroRpcCommunicator.DescribeTransferAsync(multiSigTxSet, true, token).ConfigureAwait(false);
+            ErrorGuard.ThrowIfResultIsNull(result?.DescribeTransferResponse, nameof(DescribeMultiSigTransferAsync));
+            return result.DescribeTransferResponse.Result.TransferDescriptions;
+        }
     }
 }

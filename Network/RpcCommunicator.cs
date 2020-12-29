@@ -1769,6 +1769,27 @@ namespace Monero.Client.Utilities
             };
         }
 
+        public async Task<MoneroCommunicatorResponse> DescribeTransferAsync(string txSet, bool isMultiSig, CancellationToken token = default)
+        {
+            var walletRequestParameters = new GenericRequestParameters();
+            if (isMultiSig)
+                walletRequestParameters.multisig_txset = txSet;
+            else
+                walletRequestParameters.unsigned_txset = txSet;
+
+            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.DescribeTransfer, walletRequestParameters, token).ConfigureAwait(false);
+            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
+            DescribeTransferResponse responseObject = await JsonSerializer.DeserializeAsync<DescribeTransferResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
+            return new MoneroCommunicatorResponse()
+            {
+                MoneroResponseType = MoneroResponseType.Transaction,
+                MoneroResponseSubType = MoneroResponseSubType.DescribeTransfer,
+                DescribeTransferResponse = responseObject,
+            };
+        }
+
         public void Dispose()
         {
             _httpClient.Dispose();

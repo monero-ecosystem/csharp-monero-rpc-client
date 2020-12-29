@@ -211,8 +211,6 @@ namespace Monero.Client.Network
                 },
                 MoneroResponseSubType.Height => new GenericRequest
                 {
-                    jsonrpc = FieldAndHeaderDefaults.ApplicationJson,
-                    id = FieldAndHeaderDefaults.Id,
                     method = "get_height",
                     @params = requestParams,
                 },
@@ -419,6 +417,11 @@ namespace Monero.Client.Network
                 MoneroResponseSubType.SubmitMultiSigTransaction => new GenericRequest
                 {
                     method = "submit_multisig",
+                    @params = requestParams,
+                },
+                MoneroResponseSubType.DescribeTransfer => new GenericRequest
+                {
+                    method = "describe_transfer",
                     @params = requestParams,
                 },
                 _ => throw new InvalidOperationException($"Unknown MoneroDaemonResponseSubType ({subType})"),
