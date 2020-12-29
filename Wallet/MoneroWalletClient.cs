@@ -67,9 +67,9 @@ namespace Monero.Client.Wallet
             _moneroRpcCommunicator.Dispose();
         }
 
-        public async Task<Balance> GetBalanceAsync(uint accountIndex, IEnumerable<uint> addressIndices, CancellationToken token = default)
+        public async Task<Balance> GetBalanceAsync(uint accountIndex, IEnumerable<uint> addressIndices, bool allAccounts = false, bool strict = false, CancellationToken token = default)
         {
-            var result = await _moneroRpcCommunicator.GetBalanceAsync(accountIndex, addressIndices, token).ConfigureAwait(false);
+            var result = await _moneroRpcCommunicator.GetBalanceAsync(accountIndex, addressIndices, allAccounts, strict, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.BalanceResponse, nameof(GetBalanceAsync));
             return result.BalanceResponse.Result;
         }

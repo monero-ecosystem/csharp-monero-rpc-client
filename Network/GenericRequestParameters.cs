@@ -76,5 +76,7 @@ namespace Monero.Client.Network
         public string language { get; set; } = null;
         public string old_password { get; set; } = null;
         public string new_password { get; set; } = null;
+        public bool? all_accounts { get; set; } = null;
+        public bool? strict { get; set; } = null;
     }
 }

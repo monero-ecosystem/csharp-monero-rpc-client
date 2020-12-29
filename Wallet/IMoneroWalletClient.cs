@@ -12,7 +12,7 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Returns wallet's balance.
         /// </summary>
-        Task<Balance> GetBalanceAsync(uint accountIndex, IEnumerable<uint> addressIndices, CancellationToken token = default);
+        Task<Balance> GetBalanceAsync(uint accountIndex, IEnumerable<uint> addressIndices, bool allAccounts = false, bool strict = false, CancellationToken token = default);
         /// <summary>
         /// Returns wallet's balance.
         /// </summary>

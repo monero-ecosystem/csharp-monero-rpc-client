@@ -78,14 +78,9 @@ namespace Monero.Client.Utilities
             return new MemoryStream(responseBody);
         }
 
-        public async Task<MoneroCommunicatorResponse> GetBalanceAsync(uint account_index, IEnumerable<uint> address_indices, CancellationToken token = default)
+        private async Task<MoneroCommunicatorResponse> GetBalanceAsync(GenericRequestParameters genericRequestParameters, CancellationToken token)
         {
-            var GenericRequestParameters = new GenericRequestParameters()
-            {
-                account_index = account_index,
-                address_indices = address_indices,
-            };
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.Balance, GenericRequestParameters, token).ConfigureAwait(false);
+            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.Balance, genericRequestParameters, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
@@ -98,21 +93,36 @@ namespace Monero.Client.Utilities
             };
         }
 
-
-
-        public async Task<MoneroCommunicatorResponse> GetBalanceAsync(uint account_index, CancellationToken token = default)
+        public Task<MoneroCommunicatorResponse> GetBalanceAsync(uint account_index, IEnumerable<uint> address_indices, bool all_accounts, bool strict, CancellationToken token = default)
         {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.Balance, new GenericRequestParameters() { account_index = account_index, }, token).ConfigureAwait(false);
-            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
-            response.EnsureSuccessStatusCode();
-            using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            BalanceResponse responseObject = await JsonSerializer.DeserializeAsync<BalanceResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
-            return new MoneroCommunicatorResponse()
+            var GenericRequestParameters = new GenericRequestParameters()
             {
-                MoneroResponseType = MoneroResponseType.Account,
-                MoneroResponseSubType = MoneroResponseSubType.Balance,
-                BalanceResponse = responseObject,
+                account_index = account_index,
+                address_indices = address_indices,
+                all_accounts = all_accounts,
+                strict = strict,
             };
+            return GetBalanceAsync(GenericRequestParameters, token);
+        }
+
+        public Task<MoneroCommunicatorResponse> GetBalanceAsync(uint account_index, IEnumerable<uint> address_indices, CancellationToken token = default)
+        {
+            var GenericRequestParameters = new GenericRequestParameters()
+            {
+                account_index = account_index,
+                address_indices = address_indices,
+            };
+            return GetBalanceAsync(GenericRequestParameters, token);
+        }
+
+
+        public Task<MoneroCommunicatorResponse> GetBalanceAsync(uint account_index, CancellationToken token = default)
+        {
+            var GenericRequestParameters = new GenericRequestParameters()
+            {
+                account_index = account_index,
+            };
+            return GetBalanceAsync(GenericRequestParameters, token);
         }
 
         public async Task<MoneroCommunicatorResponse> GetAddressAsync(uint account_index, IEnumerable<uint> address_indices, CancellationToken token = default)
