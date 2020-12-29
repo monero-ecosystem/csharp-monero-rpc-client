@@ -1,6 +1,7 @@
 ﻿using Monero.Client.Network;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -42,6 +43,14 @@ namespace Monero.Client.Wallet.POD.Responses
         public uint DummyOutputs { get; set; }
         [JsonPropertyName("extra")]
         public string Extra { get; set; }
+        public override string ToString()
+        {
+            var typeInfo = typeof(TransferDescription);
+            var nonNullPropertyList = typeInfo.GetProperties()
+                                              .Where(p => p.GetValue(this) != default)
+                                              .Select(p => $"{p.Name}: {p.GetValue(this)} ");
+            return string.Join(Environment.NewLine, nonNullPropertyList);
+        }
     }
 
 
