@@ -424,6 +424,11 @@ namespace Monero.Client.Network
                     method = "describe_transfer",
                     @params = requestParams,
                 },
+                MoneroResponseSubType.SweepSingle => new GenericRequest
+                {
+                    method = "sweep_single",
+                    @params = requestParams,
+                },
                 _ => throw new InvalidOperationException($"Unknown MoneroDaemonResponseSubType ({subType})"),
             };
         }

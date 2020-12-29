@@ -138,6 +138,10 @@ namespace Monero.Client.Wallet
         /// </summary>
         Task<SplitFundTransfer> SweepAllAsync(string address, uint accountIndex, TransferPriority transactionPriority, uint ringSize, ulong unlockTime = 0, ulong belowAmount = ulong.MaxValue, bool getTxKeys = true, bool getTxHex = true, bool getTxMetadata = true, CancellationToken token = default);
         /// <summary>
+        /// Send all dust outputs back to the wallet's, to make them easier to spend (and mix).
+        /// </summary>
+        Task<SweepSingle> SweepSingleAsync(string address, uint account_index, TransferPriority transaction_priority, uint ring_size, ulong unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, bool get_tx_metadata = true, CancellationToken cancellationToken = default);
+        /// <summary>
         /// Save the wallet.
         /// </summary>
         Task<SaveWallet> SaveWalletAsync(CancellationToken token = default);

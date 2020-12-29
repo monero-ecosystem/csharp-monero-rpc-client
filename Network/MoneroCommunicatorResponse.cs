@@ -105,6 +105,7 @@ namespace Monero.Client.Network
         SignMultiSigTransaction,
         SubmitMultiSigTransaction,
         DescribeTransfer,
+        SweepSingle,
     }
 
     internal class MoneroCommunicatorResponse
@@ -192,5 +193,6 @@ namespace Monero.Client.Network
         internal SignMultiSigTransactionResponse SignMultiSigTransactionResponse { get; set; }
         internal SubmitMultiSigTransactionResponse SubmitMultiSigTransactionResponse { get; set; }
         internal DescribeTransferResponse DescribeTransferResponse { get; set; }
+        internal SweepSingleResponse SweepSingleResponse { get; set; }
     }
 }

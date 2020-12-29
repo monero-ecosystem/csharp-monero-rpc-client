@@ -571,5 +571,12 @@ namespace Monero.Client.Wallet
             ErrorGuard.ThrowIfResultIsNull(result?.DescribeTransferResponse, nameof(DescribeMultiSigTransferAsync));
             return result.DescribeTransferResponse.Result.TransferDescriptions;
         }
+
+        public async Task<SweepSingle> SweepSingleAsync(string address, uint account_index, TransferPriority transaction_priority, uint ring_size, ulong unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, bool get_tx_metadata = true, CancellationToken token = default)
+        {
+            var result = await _moneroRpcCommunicator.SweepSingleAsync(address, account_index, transaction_priority, ring_size, unlock_time, get_tx_key, get_tx_hex, get_tx_metadata, token).ConfigureAwait(false);
+            ErrorGuard.ThrowIfResultIsNull(result?.SweepSingleResponse, nameof(SweepSingleAsync));
+            return result.SweepSingleResponse.Result;
+        }
     }
 }

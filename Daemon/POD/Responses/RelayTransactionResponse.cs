@@ -11,11 +11,11 @@ namespace Monero.Client.Daemon.POD.Responses
 
     public class RelayTransactionResult
     {
-        [JsonPropertyName("status")]
-        public string Status { get; set; }
+        [JsonPropertyName("tx_hash")]
+        public string TxHash { get; set; }
         public override string ToString()
         {
-            return Status;
+            return TxHash;
         }
     }
 }

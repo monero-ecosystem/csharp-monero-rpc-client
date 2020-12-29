@@ -1674,9 +1674,13 @@ namespace Monero.Client.Utilities
             };
         }
 
-        public async Task<MoneroCommunicatorResponse> RelayTransactionsAsync(IEnumerable<string> txids, CancellationToken token = default)
+        public async Task<MoneroCommunicatorResponse> RelayTransactionAsync(string hex, CancellationToken token = default)
         {
-            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.AlternateChain, null, token).ConfigureAwait(false);
+            var genericRequestParameters = new GenericRequestParameters()
+            {
+                hex = hex,
+            };
+            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.AlternateChain, genericRequestParameters, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
@@ -1766,6 +1770,33 @@ namespace Monero.Client.Utilities
                 MoneroResponseType = MoneroResponseType.Connection,
                 MoneroResponseSubType = MoneroResponseSubType.SetBans,
                 SetBansResponse = responseObject,
+            };
+        }
+
+        public async Task<MoneroCommunicatorResponse> SweepSingleAsync(string address, uint account_index, TransferPriority transaction_priority, uint ring_size, ulong unlock_time, bool get_tx_key, bool get_tx_hex, bool get_tx_metadata, CancellationToken token = default)
+        {
+            var walletRequestParameters = new GenericRequestParameters()
+            {
+                address = address,
+                account_index = account_index,
+                priority = (uint)transaction_priority,
+                ring_size = ring_size,
+                unlock_time = unlock_time,
+                get_tx_key = get_tx_key,
+                get_tx_hex = get_tx_hex,
+                get_tx_metadata = get_tx_metadata,
+            };
+
+            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.SweepSingle, walletRequestParameters, token).ConfigureAwait(false);
+            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
+            SweepSingleResponse responseObject = await JsonSerializer.DeserializeAsync<SweepSingleResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
+            return new MoneroCommunicatorResponse()
+            {
+                MoneroResponseType = MoneroResponseType.Transaction,
+                MoneroResponseSubType = MoneroResponseSubType.SweepSingle,
+                SweepSingleResponse = responseObject,
             };
         }
 

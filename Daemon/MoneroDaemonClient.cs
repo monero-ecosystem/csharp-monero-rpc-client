@@ -172,11 +172,11 @@ namespace Monero.Client.Daemon
             return result.AlternateChainResponse.Result.Chains;
         }
 
-        public async Task<string> RelayTransactionsAsync(IEnumerable<string> txids, CancellationToken token = default)
+        public async Task<string> RelayTransactionAsync(string hex, CancellationToken token = default)
         {
-            var result = await _moneroRpcCommunicator.RelayTransactionsAsync(txids, token).ConfigureAwait(false);
-            ErrorGuard.ThrowIfResultIsNull(result?.RelayTransactionResponse, nameof(RelayTransactionsAsync));
-            return result.RelayTransactionResponse.Result.Status;
+            var result = await _moneroRpcCommunicator.RelayTransactionAsync(hex, token).ConfigureAwait(false);
+            ErrorGuard.ThrowIfResultIsNull(result?.RelayTransactionResponse, nameof(RelayTransactionAsync));
+            return result.RelayTransactionResponse.Result.TxHash;
         }
 
         public async Task<SyncronizationInformation> SyncInformationAsync(CancellationToken token = default)

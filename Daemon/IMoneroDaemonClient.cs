@@ -81,9 +81,9 @@ namespace Monero.Client.Daemon
         /// </summary>
         Task<List<Chain>> GetAlternateChainsAsync(CancellationToken token = default);
         /// <summary>
-        /// Relay a list of transaction IDs.
+        /// Relay a transaction.
         /// </summary>
-        Task<string> RelayTransactionsAsync(IEnumerable<string> txids, CancellationToken token = default);
+        Task<string> RelayTransactionAsync(string hex, CancellationToken token = default);
         /// <summary>
         /// Get synchronisation informations.
         /// </summary>
