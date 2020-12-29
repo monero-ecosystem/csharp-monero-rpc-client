@@ -578,5 +578,12 @@ namespace Monero.Client.Wallet
             ErrorGuard.ThrowIfResultIsNull(result?.SweepSingleResponse, nameof(SweepSingleAsync));
             return result.SweepSingleResponse.Result;
         }
+
+        public async Task<List<PaymentDetail>> GetPaymentDetailAsync(string payment_id, CancellationToken token = default)
+        {
+            var result = await _moneroRpcCommunicator.GetPaymentDetailAsync(payment_id, token).ConfigureAwait(false);
+            ErrorGuard.ThrowIfResultIsNull(result?.PaymentDetailResponse, nameof(GetPaymentDetailAsync));
+            return result.PaymentDetailResponse.Result.Payments;
+        }
     }
 }

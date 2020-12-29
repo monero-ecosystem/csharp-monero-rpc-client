@@ -106,15 +106,16 @@ namespace Monero.Client.Network
         SubmitMultiSigTransaction,
         DescribeTransfer,
         SweepSingle,
+        GetPaymentDetail,
     }
 
     internal class MoneroCommunicatorResponse
     {
         internal MoneroResponseType MoneroResponseType { get; set; } = MoneroResponseType.None;
         internal MoneroResponseSubType MoneroResponseSubType { get; set; }
-        /*
-         * Daemon-related responses.
-         */
+        ///
+        /// Daemon-related responses.
+        ///
         internal BlockCountResponse BlockCountResponse { get; set; }
         internal BlockHeaderResponse BlockHeaderResponse { get; set; }
         internal BlockHeaderRangeResponse BlockHeaderRangeResponse { get; set; }
@@ -133,9 +134,9 @@ namespace Monero.Client.Network
         internal TransactionPoolBacklogResponse TransactionPoolBacklogResponse { get; set; }
         internal BlockResponse BlockResponse { get; set; }
         internal SetBansResponse SetBansResponse { get; set; }
-        /*
-         * Wallet-related responses.
-         */
+        ///
+        /// Wallet-related responses.
+        ///
         internal BalanceResponse BalanceResponse { get; set; }
         internal AddressResponse AddressResponse { get; set; }
         internal AddressIndexResponse AddressIndexResponse { get; set; }
@@ -194,5 +195,6 @@ namespace Monero.Client.Network
         internal SubmitMultiSigTransactionResponse SubmitMultiSigTransactionResponse { get; set; }
         internal DescribeTransferResponse DescribeTransferResponse { get; set; }
         internal SweepSingleResponse SweepSingleResponse { get; set; }
+        internal PaymentDetailResponse PaymentDetailResponse { get; set; }
     }
 }
