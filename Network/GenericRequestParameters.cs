@@ -80,6 +80,7 @@ namespace Monero.Client.Network
         public bool? strict { get; set; } = null;
         public string multisig_txset { get; set; } = null;
         public string hex { get; set; } = null;
-
+        public string tx_as_hex { get; set; } = null;
+        public bool? do_sanity_checks { get; set; } = null;
     }
 }

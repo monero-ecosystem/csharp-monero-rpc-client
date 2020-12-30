@@ -1800,13 +1800,13 @@ namespace Monero.Client.Utilities
             };
         }
 
-        public async Task<MoneroCommunicatorResponse> DescribeTransferAsync(string txSet, bool isMultiSig, CancellationToken token = default)
+        public async Task<MoneroCommunicatorResponse> DescribeTransferAsync(string tx_set, bool is_multisig, CancellationToken token = default)
         {
             var walletRequestParameters = new GenericRequestParameters();
-            if (isMultiSig)
-                walletRequestParameters.multisig_txset = txSet;
+            if (is_multisig)
+                walletRequestParameters.multisig_txset = tx_set;
             else
-                walletRequestParameters.unsigned_txset = txSet;
+                walletRequestParameters.unsigned_txset = tx_set;
 
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.DescribeTransfer, walletRequestParameters, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -1837,6 +1837,27 @@ namespace Monero.Client.Utilities
                 MoneroResponseType = MoneroResponseType.Transaction,
                 MoneroResponseSubType = MoneroResponseSubType.GetPaymentDetail,
                 PaymentDetailResponse = responseObject,
+            };
+        }
+
+        public async Task<MoneroCommunicatorResponse> SendRawTransactionAsync(string tx_as_hex, bool do_not_relay, bool do_sanity_checks, CancellationToken token = default)
+        {
+            var walletRequestParameters = new GenericRequestParameters()
+            {
+                do_not_relay = do_not_relay,
+                do_sanity_checks = do_sanity_checks,
+                tx_as_hex = tx_as_hex,
+            };
+            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.SendRawTransaction, walletRequestParameters, token).ConfigureAwait(false);
+            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
+            SendRawTransactionResponse responseObject = await JsonSerializer.DeserializeAsync<SendRawTransactionResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
+            return new MoneroCommunicatorResponse()
+            {
+                MoneroResponseType = MoneroResponseType.Transaction,
+                MoneroResponseSubType = MoneroResponseSubType.SendRawTransaction,
+                SendRawTransactionResponse = responseObject,
             };
         }
 
