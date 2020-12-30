@@ -206,5 +206,12 @@ namespace Monero.Client.Daemon
             ErrorGuard.ThrowIfResultIsNull(result?.SetBansResponse, nameof(SetBansAsync));
             return result.SetBansResponse.Result.Status;
         }
+
+        public async Task<bool> SubmitBlocksAsync(IEnumerable<string> blockBlobs, CancellationToken token = default)
+        {
+            var result = await _moneroRpcCommunicator.SubmitBlocksAsync(blockBlobs, token).ConfigureAwait(false);
+            ErrorGuard.ThrowIfResultIsNull(result?.SubmitBlockResponse, nameof(SubmitBlocksAsync));
+            return result.SubmitBlockResponse.Result != null;
+        }
     }
 }

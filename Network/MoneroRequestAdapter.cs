@@ -46,6 +46,11 @@ namespace Monero.Client.Network
                     method = "check_tx_key",
                     @params = requestParams,
                 },
+                MoneroResponseSubType.SubmitBlock => new AnonymousRequest
+                {
+                    method = "submit_block",
+                    @params = requestParams,
+                },
                 _ => throw new InvalidOperationException($"Unknown MoneroWalletResponseSubType ({subType})"),
             };
         }

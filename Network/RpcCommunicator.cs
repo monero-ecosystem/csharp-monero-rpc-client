@@ -1840,6 +1840,25 @@ namespace Monero.Client.Utilities
             };
         }
 
+        public async Task<MoneroCommunicatorResponse> SubmitBlocksAsync(IEnumerable<string> blockBlobs, CancellationToken token = default)
+        {
+            var daemonRequestParameters = new
+            {
+                request = blockBlobs,
+            };
+            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.SubmitBlock, daemonRequestParameters, token).ConfigureAwait(false);
+            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
+            SubmitBlockResponse responseObject = await JsonSerializer.DeserializeAsync<SubmitBlockResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
+            return new MoneroCommunicatorResponse()
+            {
+                MoneroResponseType = MoneroResponseType.Block,
+                MoneroResponseSubType = MoneroResponseSubType.SubmitBlock,
+                SubmitBlockResponse = responseObject,
+            };
+        }
+
         public void Dispose()
         {
             _httpClient.Dispose();

@@ -101,5 +101,10 @@ namespace Monero.Client.Daemon
         /// Ban another node by IP.
         /// </summary>
         Task<string> SetBansAsync(IEnumerable<(string host, ulong ip, bool ban, uint seconds)> bans, CancellationToken token = default);
+        /// <summary>
+        /// Submit a mined block to the network.
+        /// </summary>
+        /// <returns>Success of block submission.</returns>
+        Task<bool> SubmitBlocksAsync(IEnumerable<string> blockBlob, CancellationToken token = default);
     }
 }
