@@ -213,5 +213,14 @@ namespace Monero.Client.Daemon
             ErrorGuard.ThrowIfResultIsNull(result?.SubmitBlockResponse, nameof(SubmitBlocksAsync));
             return result.SubmitBlockResponse.Result != null;
         }
+
+        public async Task<BlockTemplate> GetBlockTemplateAsync(ulong reserveSize, string walletAddress, string prevBlock = null, string extraNonce = null, CancellationToken token = default)
+        {
+            if (reserveSize > 255ul)
+                throw new InvalidOperationException($"Maximum {nameof(reserveSize)} cannot be greater than 255.");
+            var result = await _moneroRpcCommunicator.GetBlockTemplateAsync(reserveSize, walletAddress, prevBlock, extraNonce, token).ConfigureAwait(false);
+            ErrorGuard.ThrowIfResultIsNull(result?.GetBlockTemplateResponse, nameof(GetBlockTemplateAsync));
+            return result.GetBlockTemplateResponse.Result;
+        }
     }
 }

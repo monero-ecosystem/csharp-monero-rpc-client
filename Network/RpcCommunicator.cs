@@ -1859,6 +1859,28 @@ namespace Monero.Client.Utilities
             };
         }
 
+        public async Task<MoneroCommunicatorResponse> GetBlockTemplateAsync(ulong reserve_size, string wallet_address, string prev_block, string extra_nonce, CancellationToken token = default)
+        {
+            var daemonRequestParameters = new GenericRequestParameters()
+            {
+                reserve_size = reserve_size,
+                wallet_address = wallet_address,
+                prev_block = prev_block,
+                extra_nonce = extra_nonce,
+            };
+            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.GetBlockTemplate, daemonRequestParameters, token).ConfigureAwait(false);
+            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
+            GetBlockTemplateResponse responseObject = await JsonSerializer.DeserializeAsync<GetBlockTemplateResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
+            return new MoneroCommunicatorResponse()
+            {
+                MoneroResponseType = MoneroResponseType.Block,
+                MoneroResponseSubType = MoneroResponseSubType.GetBlockTemplate,
+                GetBlockTemplateResponse = responseObject,
+            };
+        }
+
         public void Dispose()
         {
             _httpClient.Dispose();

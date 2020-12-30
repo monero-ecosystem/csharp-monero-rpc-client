@@ -106,5 +106,9 @@ namespace Monero.Client.Daemon
         /// </summary>
         /// <returns>Success of block submission.</returns>
         Task<bool> SubmitBlocksAsync(IEnumerable<string> blockBlob, CancellationToken token = default);
+        /// <summary>
+        /// Get a block template on which mining a new block.
+        /// </summary>
+        Task<BlockTemplate> GetBlockTemplateAsync(ulong reserveSize, string walletAddress, string prevBlock = null, string extraNonce = null, CancellationToken token = default);
     }
 }

@@ -47,6 +47,7 @@ namespace Monero.Client.Network
         SyncInformation,
         SetBans,
         SubmitBlock,
+        GetBlockTemplate,
 
         // Wallet
         Balance,
@@ -136,6 +137,7 @@ namespace Monero.Client.Network
         internal BlockResponse BlockResponse { get; set; }
         internal SetBansResponse SetBansResponse { get; set; }
         internal SubmitBlockResponse SubmitBlockResponse { get; set; }
+        internal GetBlockTemplateResponse GetBlockTemplateResponse { get; set; }
         ///
         /// Wallet-related responses.
         ///

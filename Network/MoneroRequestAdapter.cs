@@ -434,6 +434,11 @@ namespace Monero.Client.Network
                     method = "sweep_single",
                     @params = requestParams,
                 },
+                MoneroResponseSubType.GetBlockTemplate => new GenericRequest
+                {
+                    method = "get_block_template",
+                    @params = requestParams,
+                },
                 _ => throw new InvalidOperationException($"Unknown MoneroDaemonResponseSubType ({subType})"),
             };
         }
