@@ -30,13 +30,13 @@ namespace Monero.Client.Utilities
         public static void ThrowIfResultIsNull(RpcResponse rpcResponse, string functionName)
         {
             StringBuilder errorMessageBuilder = new StringBuilder($"Error experienced when making RPC call in {functionName}.");
-            if (rpcResponse.ContainsError)
+            if (rpcResponse == null)
+                throw new JsonRpcException(errorMessageBuilder.ToString());
+            else if (rpcResponse.ContainsError)
             {
                 errorMessageBuilder.Append($" JsonRpcError: {rpcResponse.Error.Message}");
                 throw new JsonRpcException(errorMessageBuilder.ToString(), rpcResponse.Error.JsonRpcErrorCode);
             }
-            else if (rpcResponse == null)
-                throw new JsonRpcException(errorMessageBuilder.ToString());
         }
 
         public static void ThrowIfNullOrWhiteSpace(string objectCheked, string parameterName)
