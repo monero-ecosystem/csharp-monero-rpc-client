@@ -585,12 +585,5 @@ namespace Monero.Client.Wallet
             ErrorGuard.ThrowIfResultIsNull(result?.PaymentDetailResponse, nameof(GetPaymentDetailAsync));
             return result.PaymentDetailResponse.Result.Payments;
         }
-
-        public async Task<SendRawTransaction> SendRawTransactionAsync(string txAsHex, bool doNotRelay = false, bool doSanityChecks = true, CancellationToken token = default)
-        {
-            var result = await _moneroRpcCommunicator.SendRawTransactionAsync(txAsHex, doNotRelay, doSanityChecks, token).ConfigureAwait(false);
-            ErrorGuard.ThrowIfResultIsNull(result?.SendRawTransactionResponse, nameof(SendRawTransactionAsync));
-            return result.SendRawTransactionResponse.Result;
-        }
     }
 }
