@@ -64,7 +64,7 @@ namespace Monero.Client.Daemon
         /// <summary>
         /// Get a histogram of output amounts. For all amounts (possibly filtered by parameters), gives the number of outputs on the chain for that amount. RingCT outputs counts as 0 amount.
         /// </summary>
-        Task<List<Histogram>> GetOutputHistogramAsync(IEnumerable<ulong> amounts, uint min_count, uint max_count, bool unlocked, uint recent_cutoff, CancellationToken token = default);
+        Task<List<Distribution>> GetOutputHistogramAsync(IEnumerable<ulong> amounts, ulong fromHeight, ulong toHeight, bool cumulative = false, bool binary = true, bool compress = false, CancellationToken token = default);
         /// <summary>
         /// Get the coinbase amount and the fees amount for n last blocks starting at particular height.
         /// </summary>

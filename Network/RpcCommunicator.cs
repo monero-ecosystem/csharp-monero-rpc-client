@@ -1588,17 +1588,18 @@ namespace Monero.Client.Utilities
             };
         }
 
-        public async Task<MoneroCommunicatorResponse> GetOutputHistogramAsync(IEnumerable<ulong> amounts, uint min_count, uint max_count, bool unlocked, uint recent_cutoff, CancellationToken token)
+        public async Task<MoneroCommunicatorResponse> GetOutputHistogramAsync(IEnumerable<ulong> amounts, ulong from_height, ulong to_height, bool cumulative, bool binary, bool compress, CancellationToken token)
         {
-            if (min_count > max_count)
-                throw new InvalidOperationException($"min_count ({min_count}) cannot be greater than max_count ({max_count})");
+            if (from_height > to_height)
+                throw new InvalidOperationException($"from_height ({from_height}) cannot be greater than to_height ({to_height})");
             var requestParameters = new GenericRequestParameters()
             {
                 amounts = amounts,
-                min_count = min_count,
-                max_count = max_count,
-                unlocked = unlocked,
-                recent_cutoff = recent_cutoff,
+                from_height = from_height,
+                to_height = to_height,
+                cumulative = cumulative,
+                binary = binary,
+                compress = compress,
             };
 
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.OutputHistogram, requestParameters, token).ConfigureAwait(false);

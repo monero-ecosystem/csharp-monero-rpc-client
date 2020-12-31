@@ -20,8 +20,8 @@ namespace Monero.Client.Network
         public uint? count { get; set; } = null;
         public uint? grace_blocks { get; set; } = null;
         public bool? cumulative { get; set; } = null;
-        public uint? from_height { get; set; } = null;
-        public uint? to_height { get; set; } = null;
+        public ulong? from_height { get; set; } = null;
+        public ulong? to_height { get; set; } = null;
         public List<NodeBan> bans { get; set; } = null;
         public uint? account_index { get; set; } = null;
         public IEnumerable<uint> address_indices { get; set; } = null;
@@ -84,6 +84,7 @@ namespace Monero.Client.Network
         public string wallet_address { get; set; } = null;
         public string prev_block { get; set; } = null;
         public string extra_nonce { get; set; } = null;
-
+        public bool? binary { get; set; } = null;
+        public bool? compress { get; set; } = null;
     }
 }

@@ -8,40 +8,45 @@ namespace Monero.Client.Daemon.POD.Responses
     internal class OutputHistogramResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public OutputHistogramResult Result { get; set; }
+        public OutputHistogram Result { get; set; }
     }
 
-    public class OutputHistogramResult
+    public class OutputHistogram
     {
-        [JsonPropertyName("credits")]
-        public ulong Credits { get; set; }
-        [JsonPropertyName("histogram")]
-        public List<Histogram> Histograms { get; set; } = new List<Histogram>();
-        [JsonPropertyName("status")]
-        public string Status { get; set; }
-        [JsonPropertyName("untrusted")]
-        public bool IsUntrusted { get; set; }
-        [JsonPropertyName("top_hash")]
-        public string TopHash { get; set; }
+        [JsonPropertyName("distributions")]
+        public List<Distribution> Distributions { get; set; } = new List<Distribution>();
         public override string ToString()
         {
-            return string.Join(", ", Histograms);
+            return string.Join(", ", Distributions);
         }
     }
 
-    public class Histogram
+    public class Distribution
     {
+        [JsonPropertyName("data")]
+        public OutputDistributionData Data { get; set; }
         [JsonPropertyName("amount")]
         public ulong Amount { get; set; }
-        [JsonPropertyName("recent_instances")]
-        public ulong RecentInstances { get; set; }
-        [JsonPropertyName("total_instances")]
-        public ulong TotalInstances { get; set; }
-        [JsonPropertyName("unlocked_instances")]
-        public ulong UnlockedInstances { get; set; }
+        [JsonPropertyName("compressed_data")]
+        public string CompressedData { get; set; }
+        [JsonPropertyName("binary")]
+        public bool IsBinary { get; set; }
+        [JsonPropertyName("compress")]
+        public bool IsCompressed { get; set; }
+
         public override string ToString()
         {
-            return $"Amount: {PriceUtilities.PiconeroToMonero(Amount).ToString(PriceFormat.MoneroPrecision)} RecentInstances: {RecentInstances} UnlockedInstances: {UnlockedInstances} TotalInstances: {TotalInstances}";
+            return $"Amount: {PriceUtilities.PiconeroToMonero(Amount).ToString(PriceFormat.MoneroPrecision)} - IsCompressed: {IsCompressed} - CompressedData: {CompressedData} - IsBinary: {IsBinary}";
         }
+    }
+
+    public class OutputDistributionData
+    {
+        [JsonPropertyName("distribution")]
+        public List<ulong> Distributions { get; set; } = new List<ulong>();
+        [JsonPropertyName("start_height")]
+        public ulong StartHeight { get; set; }
+        [JsonPropertyName("base")]
+        public ulong Base { get; set; }
     }
 }

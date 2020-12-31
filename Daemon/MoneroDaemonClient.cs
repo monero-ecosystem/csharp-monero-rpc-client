@@ -130,11 +130,11 @@ namespace Monero.Client.Daemon
             return result.FlushTransactionPoolResponse.Result.Status;
         }
 
-        public async Task<List<Histogram>> GetOutputHistogramAsync(IEnumerable<ulong> amounts, uint minCount, uint maxCount, bool unlocked, uint recentCutoff, CancellationToken token = default)
+        public async Task<List<Distribution>> GetOutputHistogramAsync(IEnumerable<ulong> amounts, ulong fromHeight, ulong toHeight, bool cumulative = false, bool binary = true, bool compress = false, CancellationToken token = default)
         {
-            var result = await _moneroRpcCommunicator.GetOutputHistogramAsync(amounts, minCount, maxCount, unlocked, recentCutoff, token).ConfigureAwait(false);
+            var result = await _moneroRpcCommunicator.GetOutputHistogramAsync(amounts, fromHeight, toHeight, cumulative, binary, compress, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.OutputHistogramResponse, nameof(GetOutputHistogramAsync));
-            return result.OutputHistogramResponse.Result.Histograms;
+            return result.OutputHistogramResponse.Result.Distributions;
         }
 
         public async Task<CoinbaseTransactionSumResult> GetCoinbaseTransactionSumAsync(uint height, uint count, CancellationToken token = default)
