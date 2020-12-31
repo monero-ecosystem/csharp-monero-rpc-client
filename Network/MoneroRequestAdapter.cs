@@ -439,6 +439,11 @@ namespace Monero.Client.Network
                     method = "get_block_template",
                     @params = requestParams,
                 },
+                MoneroResponseSubType.GetBanStatus => new GenericRequest
+                {
+                    method = "banned",
+                    @params = requestParams,
+                },
                 _ => throw new InvalidOperationException($"Unknown MoneroDaemonResponseSubType ({subType})"),
             };
         }

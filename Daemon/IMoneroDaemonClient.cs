@@ -52,6 +52,11 @@ namespace Monero.Client.Daemon
         /// </summary>
         Task<List<Ban>> GetBanInformationAsync(CancellationToken token = default);
         /// <summary>
+        /// Get the status of an address that may or may not be banned.
+        /// </summary>
+        /// <param name="address"></param>
+        Task<BanStatus> GetBanStatusAsync(string address, CancellationToken token = default);
+        /// <summary>
         /// Flush tx ids from transaction pool
         /// </summary>
         /// <param name="txids">List of transactions IDs to flush from pool (all tx ids flushed if empty).</param>

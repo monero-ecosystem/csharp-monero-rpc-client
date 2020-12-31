@@ -48,6 +48,7 @@ namespace Monero.Client.Network
         SetBans,
         SubmitBlock,
         GetBlockTemplate,
+        GetBanStatus, // Status on the ban of an address.
 
         // Wallet
         Balance,
@@ -138,6 +139,7 @@ namespace Monero.Client.Network
         internal SetBansResponse SetBansResponse { get; set; }
         internal SubmitBlockResponse SubmitBlockResponse { get; set; }
         internal GetBlockTemplateResponse GetBlockTemplateResponse { get; set; }
+        internal GetBanStatusResponse GetBanStatusResponse { get; set; }
         ///
         /// Wallet-related responses.
         ///

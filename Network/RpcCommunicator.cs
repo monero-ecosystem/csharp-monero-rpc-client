@@ -1881,6 +1881,25 @@ namespace Monero.Client.Utilities
             };
         }
 
+        public async Task<MoneroCommunicatorResponse> GetBanStatusAsync(string address, CancellationToken token = default)
+        {
+            var daemonRequestParameters = new GenericRequestParameters()
+            {
+                address = address,
+            };
+            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.GetBanStatus, daemonRequestParameters, token).ConfigureAwait(false);
+            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
+            GetBanStatusResponse responseObject = await JsonSerializer.DeserializeAsync<GetBanStatusResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
+            return new MoneroCommunicatorResponse()
+            {
+                MoneroResponseType = MoneroResponseType.Connection,
+                MoneroResponseSubType = MoneroResponseSubType.GetBanStatus,
+                GetBanStatusResponse = responseObject,
+            };
+        }
+
         public void Dispose()
         {
             _httpClient.Dispose();

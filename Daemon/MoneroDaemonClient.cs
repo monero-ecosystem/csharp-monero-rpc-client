@@ -222,5 +222,12 @@ namespace Monero.Client.Daemon
             ErrorGuard.ThrowIfResultIsNull(result?.GetBlockTemplateResponse, nameof(GetBlockTemplateAsync));
             return result.GetBlockTemplateResponse.Result;
         }
+
+        public async Task<BanStatus> GetBanStatusAsync(string address, CancellationToken token = default)
+        {
+            var result = await _moneroRpcCommunicator.GetBanStatusAsync(address, token).ConfigureAwait(false);
+            ErrorGuard.ThrowIfResultIsNull(result?.GetBanStatusResponse, nameof(GetBlockTemplateAsync));
+            return result.GetBanStatusResponse.Result;
+        }
     }
 }
