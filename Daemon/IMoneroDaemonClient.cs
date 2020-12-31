@@ -54,7 +54,7 @@ namespace Monero.Client.Daemon
         /// <summary>
         /// Get the status of an address that may or may not be banned.
         /// </summary>
-        /// <param name="address"></param>
+        /// <param name="address">IP address of the node whose ban status is to be checked (e.g. 95.216.217.238)</param>
         Task<BanStatus> GetBanStatusAsync(string address, CancellationToken token = default);
         /// <summary>
         /// Flush tx ids from transaction pool
