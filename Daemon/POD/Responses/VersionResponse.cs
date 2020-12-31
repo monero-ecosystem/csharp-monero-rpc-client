@@ -6,10 +6,10 @@ namespace Monero.Client.Daemon.POD.Responses
     internal class VersionResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public DaemonVersion Result { get; set; }
+        public DaemonVersionResult Result { get; set; }
     }
 
-    public class DaemonVersion
+    internal class DaemonVersionResult
     {
         [JsonPropertyName("status")]
         public string Status { get; set; }

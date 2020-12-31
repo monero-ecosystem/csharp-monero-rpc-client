@@ -7,13 +7,13 @@ namespace Monero.Client.Wallet.POD.Responses
     internal class LanguagesResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public LanguagesResult Result { get; set; }
+        public Languages Result { get; set; }
     }
 
-    public class LanguagesResult
+    public class Languages
     {
         [JsonPropertyName("languages")]
-        public List<string> Languages { get; set; } = new List<string>();
+        public List<string> AllLanguages { get; set; } = new List<string>();
         [JsonPropertyName("languages_local")]
         public List<string> LocalLanguages { get; set; } = new List<string>();
     }

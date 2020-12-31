@@ -6,10 +6,10 @@ namespace Monero.Client.Wallet.POD.Responses
     internal class GetRpcVersionResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public GetVersion Result { get; set; }
+        public GetVersionResult Result { get; set; }
     }
 
-    public class GetVersion
+    internal class GetVersionResult
     {
         [JsonPropertyName("version")]
         public uint Version { get; set; }

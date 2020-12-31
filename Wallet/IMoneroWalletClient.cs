@@ -20,11 +20,11 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Return the wallet's addresses for an account.
         /// </summary>
-        Task<AddressResult> GetAddressAsync(uint accountIndex, CancellationToken token = default);
+        Task<Addresses> GetAddressAsync(uint accountIndex, CancellationToken token = default);
         /// <summary>
         /// <seealso cref="GetAddressAsync(uint, CancellationToken)"/> Also filter for specific set of subaddresses.
         /// </summary>
-        Task<AddressResult> GetAddressAsync(uint accountIndex, IEnumerable<uint> addressIndices, CancellationToken token = default);
+        Task<Addresses> GetAddressAsync(uint accountIndex, IEnumerable<uint> addressIndices, CancellationToken token = default);
         /// <summary>
         /// Get account and address indexes from a specific (sub)address
         /// </summary>
@@ -44,11 +44,11 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Get all accounts for a wallet.
         /// </summary>
-        Task<AccountResult> GetAccountsAsync(CancellationToken token = default);
+        Task<Account> GetAccountsAsync(CancellationToken token = default);
         /// <summary>
         /// <seealso cref="GetAccountsAsync(CancellationToken)"/> Also filter accounts by tag.
         /// </summary>
-        Task<AccountResult> GetAccountsAsync(string tag, CancellationToken token = default);
+        Task<Account> GetAccountsAsync(string tag, CancellationToken token = default);
         /// <summary>
         /// Create a new account.
         /// </summary>
@@ -80,7 +80,7 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Returns the wallet's current block height.
         /// </summary>
-        Task<BlockchainHeight> GetHeightAsync(CancellationToken token = default);
+        Task<ulong> GetHeightAsync(CancellationToken token = default);
         /// <summary>
         /// Send monero to a number of recipients.
         /// </summary>
@@ -120,7 +120,8 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Submit a previously signed transaction on a read-only wallet (in cold-signing process).
         /// </summary>
-        Task<SubmitTransfer> SubmitTransferAsync(string txDataHex, CancellationToken token = default);
+        /// <returns>A list of transaction hashes.</returns>
+        Task<List<string>> SubmitTransferAsync(string txDataHex, CancellationToken token = default);
         /// <summary>
         /// Parse a transfer that is either multi-signature, or unsigned from a cold-wallet.
         /// </summary>
@@ -148,19 +149,19 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Return a list of incoming transfers to the wallet.
         /// </summary>
-        Task<IncomingTransfers> GetIncomingTransfersAsync(TransferType transferType, bool returnKeyImage = false, CancellationToken token = default);
+        Task<List<IncomingTransfer>> GetIncomingTransfersAsync(TransferType transferType, bool returnKeyImage = false, CancellationToken token = default);
         /// <summary>
         /// <seealso cref="GetIncomingTransfersAsync(TransferType, bool, CancellationToken)"/>
         /// </summary>
-        Task<IncomingTransfers> GetIncomingTransfersAsync(TransferType transferType, uint accountIndex, bool returnKeyImage = false, CancellationToken token = default);
+        Task<List<IncomingTransfer>> GetIncomingTransfersAsync(TransferType transferType, uint accountIndex, bool returnKeyImage = false, CancellationToken token = default);
         /// <summary>
         /// <seealso cref="GetIncomingTransfersAsync(TransferType, bool, CancellationToken)"/>
         /// </summary>
-        Task<IncomingTransfers> GetIncomingTransfersAsync(TransferType transferType, uint accountIndex, IEnumerable<uint> subaddrIndices, bool returnKeyImage = false, CancellationToken token = default);
+        Task<List<IncomingTransfer>> GetIncomingTransfersAsync(TransferType transferType, uint accountIndex, IEnumerable<uint> subaddrIndices, bool returnKeyImage = false, CancellationToken token = default);
         /// <summary>
         /// Return the spend or view private key.
         /// </summary>
-        Task<QueryKey> GetPrivateKey(KeyType keyType, CancellationToken token = default);
+        Task<string> GetPrivateKey(KeyType keyType, CancellationToken token = default);
         /// <summary>
         /// Stops the wallet, storing the current state.
         /// </summary>
@@ -172,11 +173,11 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Get string notes for transactions of interest.
         /// </summary>
-        Task<GetTransactionNotes> GetTransactionNotesAsync(IEnumerable<string> txids, CancellationToken token = default);
+        Task<List<string>> GetTransactionNotesAsync(IEnumerable<string> txids, CancellationToken token = default);
         /// <summary>
         /// Get transaction secret key from transaction id.
         /// </summary>
-        Task<GetTransactionKey> GetTransactionKeyAsync(string txid, CancellationToken token = default);
+        Task<string> GetTransactionKeyAsync(string txid, CancellationToken token = default);
         /// <summary>
         /// Check a transaction in the blockchain with its secret key.
         /// </summary>
@@ -199,31 +200,32 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Show information about a transfer to/from this address.
         /// </summary>
-        Task<ShowTransferByTxid> GetTransferByTxidAsync(string txid, CancellationToken token = default);
+        Task<Transfer> GetTransferByTxidAsync(string txid, CancellationToken token = default);
         /// <summary>
         /// <seealso cref="GetTransferByTxidAsync(string, CancellationToken)"/>
         /// </summary>
-        Task<ShowTransferByTxid> GetTransferByTxidAsync(string txid, uint accountIndex, CancellationToken token = default);
+        Task<Transfer> GetTransferByTxidAsync(string txid, uint accountIndex, CancellationToken token = default);
         /// <summary>
         /// Sign a string.
         /// </summary>
-        Task<Signature> SignAsync(string data, CancellationToken token = default);
+        Task<string> SignAsync(string data, CancellationToken token = default);
         /// <summary>
         /// Verify a signature on a string.
         /// </summary>
-        Task<VerifyResult> VerifyAsync(string data, string address, string signature, CancellationToken token = default);
+        Task<bool> VerifyAsync(string data, string address, string signature, CancellationToken token = default);
         /// <summary>
         /// Export outputs in hex format.
         /// </summary>
-        Task<ExportOutputs> ExportOutputsAsync(CancellationToken token = default);
+        Task<string> ExportOutputsAsync(CancellationToken token = default);
         /// <summary>
         /// Import outputs in hex format.
         /// </summary>
-        Task<ImportOutputsResult> ImportOutputsAsync(CancellationToken token = default);
+        /// <returns>The number of outputs imported.</returns>
+        Task<ulong> ImportOutputsAsync(CancellationToken token = default);
         /// <summary>
         /// Export a signed set of key images.
         /// </summary>
-        Task<ExportKeyImages> ExportKeyImagesAsync(CancellationToken token = default);
+        Task<List<SignedKeyImage>> ExportKeyImagesAsync(CancellationToken token = default);
         /// <summary>
         /// Import signed key images list and verify their spent status.
         /// </summary>
@@ -236,16 +238,16 @@ namespace Monero.Client.Wallet
         /// <param name="recipientName">Name of the payment recipient.</param>
         /// <param name="txDescription">Description of the reason for the tx.</param>
         /// <param name="paymentId">16 or 64 character hexadecimal payment id.</param>
-        Task<MakeUri> MakeUriAsync(string address, ulong amount, string recipientName, string txDescription = null, string paymentId = null, CancellationToken token = default);
+        Task<string> MakeUriAsync(string address, ulong amount, string recipientName, string txDescription = null, string paymentId = null, CancellationToken token = default);
         /// <summary>
         /// Parse a payment URI to get payment information.
         /// </summary>
-        Task<ParseUri> ParseUriAsync(string uri, CancellationToken token = default);
+        Task<MoneroUri> ParseUriAsync(string uri, CancellationToken token = default);
         /// <summary>
         /// Retrieves entries from the address book.
         /// </summary>
         /// <param name="entires">Indices of the requested address book entries.</param>
-        Task<GetAddressBook> GetAddressBookAsync(IEnumerable<uint> entires, CancellationToken token = default);
+        Task<List<AddressBookEntry>> GetAddressBookAsync(IEnumerable<uint> entires, CancellationToken token = default);
         /// <summary>
         /// Add an entry to the address book.
         /// </summary>
@@ -284,7 +286,7 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Get RPC version Major & Minor integer-format, where Major is the first 16 bits and Minor the last 16 bits.
         /// </summary>
-        Task<GetVersion> GetVersionAsync(CancellationToken token = default);
+        Task<uint> GetVersionAsync(CancellationToken token = default);
         /// <summary>
         /// Check if a wallet is a multi-signature (multisig) one.
         /// </summary>
@@ -292,7 +294,7 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Prepare a wallet for multisig by generating a multisig string to share with peers.
         /// </summary>
-        Task<PrepareMultiSig> PrepareMultiSigAsync(CancellationToken token = default);
+        Task<string> PrepareMultiSigAsync(CancellationToken token = default);
         /// <summary>
         /// Make a wallet multisig by importing peers multisig string.
         /// </summary>
@@ -303,7 +305,7 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Export multisig info for other participants.
         /// </summary>
-        Task<ExportMultiSigInformation> ExportMultiSigInfoAsync(CancellationToken token = default);
+        Task<string> ExportMultiSigInfoAsync(CancellationToken token = default);
         /// <summary>
         /// Import multisig info from other participants.
         /// </summary>
@@ -314,17 +316,18 @@ namespace Monero.Client.Wallet
         /// </summary>
         /// <param name="multisigInfo">List of multisig string from peers.</param>
         /// <param name="password">Wallet password.</param>
-        Task<FinalizeMultiSig> FinalizeMultiSigAsync(IEnumerable<string> multisigInfo, string password, CancellationToken token = default);
+        Task<string> FinalizeMultiSigAsync(IEnumerable<string> multisigInfo, string password, CancellationToken token = default);
         /// <summary>
         /// Sign a transaction in multisig.
         /// </summary>
         /// <param name="txDataHex">Multisig transaction in hex format, as returned by transfer under multisig_txset.</param>
-        Task<SignMultiSigTransactionResult> SignMultiSigAsync(string txDataHex, CancellationToken token = default);
+        Task<SignMultiSigTransaction> SignMultiSigAsync(string txDataHex, CancellationToken token = default);
         /// <summary>
         /// Submit a signed multisig transaction.
         /// </summary>
         /// <param name="txDataHex">Multisig transaction in hex format, as returned by sign_multisig under tx_data_hex.</param>
-        Task<SubmitMultiSig> SubmitMultiSigAsync(string txDataHex, CancellationToken token = default);
+        /// <returns>List of transaction hashes.</returns>
+        Task<List<string>> SubmitMultiSigAsync(string txDataHex, CancellationToken token = default);
         /// <summary>
         /// Retrieve the payment details associated with a given payment id.
         /// </summary>

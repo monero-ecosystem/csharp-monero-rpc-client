@@ -9,7 +9,7 @@ namespace Monero.Client.Wallet.POD.Responses
         public ImportOutputsResult Result { get; set; }
     }
 
-    public class ImportOutputsResult
+    internal class ImportOutputsResult
     {
         [JsonPropertyName("num_imported")]
         public ulong NumImported { get; set; }

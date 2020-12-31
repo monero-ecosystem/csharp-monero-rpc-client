@@ -81,14 +81,14 @@ namespace Monero.Client.Wallet
             return result.BalanceResponse.Result;
         }
 
-        public async Task<AddressResult> GetAddressAsync(uint accountIndex, CancellationToken token = default)
+        public async Task<Addresses> GetAddressAsync(uint accountIndex, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetAddressAsync(accountIndex, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.AddressResponse, nameof(GetAddressAsync));
             return result.AddressResponse.Result;
         }
 
-        public async Task<AddressResult> GetAddressAsync(uint accountIndex, IEnumerable<uint> addressIndices, CancellationToken token = default)
+        public async Task<Addresses> GetAddressAsync(uint accountIndex, IEnumerable<uint> addressIndices, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetAddressAsync(accountIndex, addressIndices, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.AddressResponse, nameof(GetAddressAsync));
@@ -123,14 +123,14 @@ namespace Monero.Client.Wallet
             return result.AddressLabelResponse.Result;
         }
 
-        public async Task<AccountResult> GetAccountsAsync(CancellationToken token = default)
+        public async Task<Account> GetAccountsAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetAccountsAsync(token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.AccountResponse, nameof(GetAccountsAsync));
             return result.AccountResponse.Result;
         }
 
-        public async Task<AccountResult> GetAccountsAsync(string tag, CancellationToken token = default)
+        public async Task<Account> GetAccountsAsync(string tag, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetAccountsAsync(tag, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.AccountResponse, nameof(GetAccountsAsync));
@@ -186,11 +186,11 @@ namespace Monero.Client.Wallet
             return result.SetAccountTagAndDescriptionResponse.Result;
         }
 
-        public async Task<BlockchainHeight> GetHeightAsync(CancellationToken token = default)
+        public async Task<ulong> GetHeightAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetHeightAsync(token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.BlockchainHeightResponse, nameof(GetHeightAsync));
-            return result.BlockchainHeightResponse.Result;
+            return result.BlockchainHeightResponse.Result.Height;
         }
 
         public async Task<FundTransfer> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, CancellationToken token = default)
@@ -256,11 +256,11 @@ namespace Monero.Client.Wallet
             return result.SignTransferResponse.Result;
         }
 
-        public async Task<SubmitTransfer> SubmitTransferAsync(string txDataHex, CancellationToken token = default)
+        public async Task<List<string>> SubmitTransferAsync(string txDataHex, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.SubmitTransferAsync(txDataHex, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.SubmitTransferResponse, nameof(SubmitTransferAsync));
-            return result.SubmitTransferResponse.Result;
+            return result.SubmitTransferResponse.Result.TransactionHashes;
         }
 
         public async Task<SweepDust> SweepDustAsync(bool getTxKey, bool getTxHex, bool getTxMetadata, bool doNotRelay = false, CancellationToken token = default)
@@ -284,32 +284,32 @@ namespace Monero.Client.Wallet
             return result.SaveWalletResponse.Result;
         }
 
-        public async Task<IncomingTransfers> GetIncomingTransfersAsync(TransferType transferType, bool returnKeyImage = false, CancellationToken token = default)
+        public async Task<List<IncomingTransfer>> GetIncomingTransfersAsync(TransferType transferType, bool returnKeyImage = false, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetIncomingTransfersAsync(transferType, returnKeyImage, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.IncomingTransfersResponse, nameof(GetIncomingTransfersAsync));
-            return result.IncomingTransfersResponse.Result;
+            return result.IncomingTransfersResponse.Result.Transfers;
         }
 
-        public async Task<IncomingTransfers> GetIncomingTransfersAsync(TransferType transferType, uint accountIndex, bool returnKeyImage = false, CancellationToken token = default)
+        public async Task<List<IncomingTransfer>> GetIncomingTransfersAsync(TransferType transferType, uint accountIndex, bool returnKeyImage = false, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetIncomingTransfersAsync(transferType, accountIndex, returnKeyImage, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.IncomingTransfersResponse, nameof(GetIncomingTransfersAsync));
-            return result.IncomingTransfersResponse.Result;
+            return result.IncomingTransfersResponse.Result.Transfers;
         }
 
-        public async Task<IncomingTransfers> GetIncomingTransfersAsync(TransferType transferType, uint accountIndex, IEnumerable<uint> subaddrIndices, bool returnKeyImage = false, CancellationToken token = default)
+        public async Task<List<IncomingTransfer>> GetIncomingTransfersAsync(TransferType transferType, uint accountIndex, IEnumerable<uint> subaddrIndices, bool returnKeyImage = false, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetIncomingTransfersAsync(transferType, accountIndex, subaddrIndices, returnKeyImage, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.IncomingTransfersResponse, nameof(GetIncomingTransfersAsync));
-            return result.IncomingTransfersResponse.Result;
+            return result.IncomingTransfersResponse.Result.Transfers;
         }
 
-        public async Task<QueryKey> GetPrivateKey(KeyType keyType, CancellationToken token = default)
+        public async Task<string> GetPrivateKey(KeyType keyType, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetPrivateKey(keyType, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.QueryKeyResponse, nameof(GetPrivateKey));
-            return result.QueryKeyResponse.Result;
+            return result.QueryKeyResponse.Result.Key;
         }
 
         public async Task<StopWalletResult> StopWalletAsync(CancellationToken token = default)
@@ -326,18 +326,18 @@ namespace Monero.Client.Wallet
             return result.SetTransactionNotesResponse.Result;
         }
 
-        public async Task<GetTransactionNotes> GetTransactionNotesAsync(IEnumerable<string> txids, CancellationToken token = default)
+        public async Task<List<string>> GetTransactionNotesAsync(IEnumerable<string> txids, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetTransactionNotesAsync(txids, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.GetTransactionNotesResponse, nameof(GetTransactionNotesAsync));
-            return result.GetTransactionNotesResponse.Result;
+            return result.GetTransactionNotesResponse.Result.Notes;
         }
 
-        public async Task<GetTransactionKey> GetTransactionKeyAsync(string txid, CancellationToken token = default)
+        public async Task<string> GetTransactionKeyAsync(string txid, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetTransactionKeyAsync(txid, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.GetTransactionKeyResponse, nameof(GetTransactionKeyAsync));
-            return result.GetTransactionKeyResponse.Result;
+            return result.GetTransactionKeyResponse.Result.TransactionKey;
         }
 
         public async Task<CheckTransactionKey> CheckTransactionKeyAsync(string txid, string txKey, string address, CancellationToken token = default)
@@ -361,53 +361,53 @@ namespace Monero.Client.Wallet
             return result.ShowTransfersResponse.Result;
         }
 
-        public async Task<ShowTransferByTxid> GetTransferByTxidAsync(string txid, CancellationToken token = default)
+        public async Task<Transfer> GetTransferByTxidAsync(string txid, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetTransferByTxidAsync(txid, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.TransferByTxidResponse, nameof(GetTransferByTxidAsync));
-            return result.TransferByTxidResponse.Result;
+            return result.TransferByTxidResponse.Result.Transfer;
         }
 
-        public async Task<ShowTransferByTxid> GetTransferByTxidAsync(string txid, uint accountIndex, CancellationToken token = default)
+        public async Task<Transfer> GetTransferByTxidAsync(string txid, uint accountIndex, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetTransferByTxidAsync(txid, accountIndex, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.TransferByTxidResponse, nameof(GetTransferByTxidAsync));
-            return result.TransferByTxidResponse.Result;
+            return result.TransferByTxidResponse.Result.Transfer;
         }
 
-        public async Task<Signature> SignAsync(string data, CancellationToken token = default)
+        public async Task<string> SignAsync(string data, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.SignAsync(data, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.SignResponse, nameof(SignAsync));
-            return result.SignResponse.Result;
+            return result.SignResponse.Result.Sig;
         }
 
-        public async Task<VerifyResult> VerifyAsync(string data, string address, string signature, CancellationToken token = default)
+        public async Task<bool> VerifyAsync(string data, string address, string signature, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.VerifyAsync(data, address, signature, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.VerifyResponse, nameof(VerifyAsync));
-            return result.VerifyResponse.Result;
+            return result.VerifyResponse.Result.IsGood;
         }
 
-        public async Task<ExportOutputs> ExportOutputsAsync(CancellationToken token = default)
+        public async Task<string> ExportOutputsAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.ExportOutputsAsync(token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.ExportOutputsResponse, nameof(ExportOutputsAsync));
-            return result.ExportOutputsResponse.Result;
+            return result.ExportOutputsResponse.Result.OutputsDataHex;
         }
 
-        public async Task<ImportOutputsResult> ImportOutputsAsync(CancellationToken token = default)
+        public async Task<ulong> ImportOutputsAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.ImportOutputsAsync(token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.ImportOutputsResponse, nameof(ImportOutputsAsync));
-            return result.ImportOutputsResponse.Result;
+            return result.ImportOutputsResponse.Result.NumImported;
         }
 
-        public async Task<ExportKeyImages> ExportKeyImagesAsync(CancellationToken token = default)
+        public async Task<List<SignedKeyImage>> ExportKeyImagesAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.ExportKeyImagesAsync(token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.ExportKeyImagesResponse, nameof(ExportKeyImagesAsync));
-            return result.ExportKeyImagesResponse.Result;
+            return result.ExportKeyImagesResponse.Result.SignedKeyImages;
         }
 
         public async Task<ImportKeyImages> ImportKeyImagesAsync(IEnumerable<(string keyImage, string signature)> signedKeyImages, CancellationToken token = default)
@@ -417,25 +417,25 @@ namespace Monero.Client.Wallet
             return result.ImportKeyImagesResponse.Result;
         }
 
-        public async Task<MakeUri> MakeUriAsync(string address, ulong amount, string recipientName, string txDescription = null, string paymentId = null, CancellationToken token = default)
+        public async Task<string> MakeUriAsync(string address, ulong amount, string recipientName, string txDescription = null, string paymentId = null, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.MakeUriAsync(address, amount, recipientName, txDescription, paymentId, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.MakeUriResponse, nameof(MakeUriAsync));
-            return result.MakeUriResponse.Result;
+            return result.MakeUriResponse.Result.Uri;
         }
 
-        public async Task<ParseUri> ParseUriAsync(string uri, CancellationToken token = default)
+        public async Task<MoneroUri> ParseUriAsync(string uri, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.ParseUriAsync(uri, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.ParseUriResponse, nameof(ParseUriAsync));
-            return result.ParseUriResponse.Result;
+            return result.ParseUriResponse.Result.Uri;
         }
 
-        public async Task<GetAddressBook> GetAddressBookAsync(IEnumerable<uint> entries, CancellationToken token = default)
+        public async Task<List<AddressBookEntry>> GetAddressBookAsync(IEnumerable<uint> entries, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetAddressBookAsync(entries, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.GetAddressBookResponse, nameof(GetAddressBookAsync));
-            return result.GetAddressBookResponse.Result;
+            return result.GetAddressBookResponse.Result.Entries;
         }
 
         public async Task<AddAddressBook> AddAddressBookAsync(string address, string description = null, string paymentId = null, CancellationToken token = default)
@@ -495,11 +495,11 @@ namespace Monero.Client.Wallet
             return result.ChangeWalletPasswordResponse.Result;
         }
 
-        public async Task<GetVersion> GetVersionAsync(CancellationToken token = default)
+        public async Task<uint> GetVersionAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetRpcVersionAsync(token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.GetRpcVersionResponse, nameof(GetVersionAsync));
-            return result.GetRpcVersionResponse.Result;
+            return result.GetRpcVersionResponse.Result.Version;
         }
 
         public async Task<IsMultiSigInformation> IsMultiSigAsync(CancellationToken token = default)
@@ -509,11 +509,11 @@ namespace Monero.Client.Wallet
             return result.IsMultiSigInformationResponse.Result;
         }
 
-        public async Task<PrepareMultiSig> PrepareMultiSigAsync(CancellationToken token = default)
+        public async Task<string> PrepareMultiSigAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.PrepareMultiSigAsync(token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.PrepareMultiSigResponse, nameof(PrepareMultiSigAsync));
-            return result.PrepareMultiSigResponse.Result;
+            return result.PrepareMultiSigResponse.Result.MultiSigInformation;
         }
 
         public async Task<MakeMultiSig> MakeMultiSigAsync(IEnumerable<string> multiSigInfo, uint threshold, string password, CancellationToken token = default)
@@ -523,11 +523,11 @@ namespace Monero.Client.Wallet
             return result.MakeMultiSigResponse.Result;
         }
 
-        public async Task<ExportMultiSigInformation> ExportMultiSigInfoAsync(CancellationToken token = default)
+        public async Task<string> ExportMultiSigInfoAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.ExportMultiSigInfoAsync(token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.ExportMultiSigInfoResponse, nameof(ExportMultiSigInfoAsync));
-            return result.ExportMultiSigInfoResponse.Result;
+            return result.ExportMultiSigInfoResponse.Result.Information;
         }
 
         public async Task<ImportMultiSigInformation> ImportMultiSigInfoAsync(IEnumerable<string> info, CancellationToken token = default)
@@ -537,25 +537,25 @@ namespace Monero.Client.Wallet
             return result.ImportMultiSigInfoResponse.Result;
         }
 
-        public async Task<FinalizeMultiSig> FinalizeMultiSigAsync(IEnumerable<string> multiSigInfo, string password, CancellationToken token = default)
+        public async Task<string> FinalizeMultiSigAsync(IEnumerable<string> multiSigInfo, string password, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.FinalizeMultiSigAsync(multiSigInfo, password, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.FinalizeMultiSigResponse, nameof(FinalizeMultiSigAsync));
-            return result.FinalizeMultiSigResponse.Result;
+            return result.FinalizeMultiSigResponse.Result.Address;
         }
 
-        public async Task<SignMultiSigTransactionResult> SignMultiSigAsync(string txDataHex, CancellationToken token = default)
+        public async Task<SignMultiSigTransaction> SignMultiSigAsync(string txDataHex, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.SignMultiSigAsync(txDataHex, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.SignMultiSigTransactionResponse, nameof(SignMultiSigAsync));
             return result.SignMultiSigTransactionResponse.Result;
         }
 
-        public async Task<SubmitMultiSig> SubmitMultiSigAsync(string txDataHex, CancellationToken token = default)
+        public async Task<List<string>> SubmitMultiSigAsync(string txDataHex, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.SubmitMultiSigAsync(txDataHex, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.SubmitMultiSigTransactionResponse, nameof(SubmitMultiSigAsync));
-            return result.SubmitMultiSigTransactionResponse.Result;
+            return result.SubmitMultiSigTransactionResponse.Result.TransactionHashes;
         }
 
         public async Task<List<TransferDescription>> DescribeUnsignedTransferAsync(string unsignedTxSet, CancellationToken token = default)

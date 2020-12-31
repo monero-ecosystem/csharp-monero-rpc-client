@@ -8,10 +8,10 @@ namespace Monero.Client.Daemon.POD.Responses
     internal class OutputHistogramResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public OutputHistogram Result { get; set; }
+        public OutputHistogramResult Result { get; set; }
     }
 
-    public class OutputHistogram
+    internal class OutputHistogramResult
     {
         [JsonPropertyName("distributions")]
         public List<Distribution> Distributions { get; set; } = new List<Distribution>();

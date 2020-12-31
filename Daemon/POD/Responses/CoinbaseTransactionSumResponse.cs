@@ -7,10 +7,10 @@ namespace Monero.Client.Daemon.POD.Responses
     internal class CoinbaseTransactionSumResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public CoinbaseTransactionSumResult Result { get; set; }
+        public CoinbaseTransactionSum Result { get; set; }
     }
 
-    public class CoinbaseTransactionSumResult
+    public class CoinbaseTransactionSum
     {
         [JsonPropertyName("credits")]
         public ulong Credits { get; set; }

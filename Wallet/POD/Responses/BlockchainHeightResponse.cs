@@ -6,10 +6,10 @@ namespace Monero.Client.Wallet.POD.Responses
     internal class BlockchainHeightResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public BlockchainHeight Result { get; set; }
+        public BlockchainHeightResult Result { get; set; }
     }
 
-    public class BlockchainHeight
+    internal class BlockchainHeightResult
     {
         [JsonPropertyName("height")]
         public ulong Height { get; set; }

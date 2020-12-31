@@ -9,7 +9,7 @@ namespace Monero.Client.Daemon.POD.Responses
         public RelayTransactionResult Result { get; set; }
     }
 
-    public class RelayTransactionResult
+    internal class RelayTransactionResult
     {
         [JsonPropertyName("tx_hash")]
         public string TxHash { get; set; }

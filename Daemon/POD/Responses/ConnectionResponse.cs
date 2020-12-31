@@ -11,7 +11,7 @@ namespace Monero.Client.Daemon.POD.Responses
         public ConnectionResult Result { get; set; }
     }
 
-    public class ConnectionResult
+    internal class ConnectionResult
     {
         [JsonPropertyName("connections")]
         public List<Connection> Connections { get; set; } = new List<Connection>();

@@ -9,7 +9,7 @@ namespace Monero.Client.Daemon.POD.Responses
         public BlockHeaderResult Result { get; set; }
     }
 
-    public class BlockHeaderResult
+    internal class BlockHeaderResult
     {
         [JsonPropertyName("block_header")]
         public BlockHeader BlockHeader { get; set; }

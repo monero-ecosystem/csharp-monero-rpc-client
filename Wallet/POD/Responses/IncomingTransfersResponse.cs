@@ -9,10 +9,10 @@ namespace Monero.Client.Wallet.POD.Responses
     internal class IncomingTransfersResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public IncomingTransfers Result { get; set; }
+        public IncomingTransfersResult Result { get; set; }
     }
 
-    public class IncomingTransfers
+    internal class IncomingTransfersResult
     {
         [JsonPropertyName("transfers")]
         public List<IncomingTransfer> Transfers { get; set; } = new List<IncomingTransfer>();

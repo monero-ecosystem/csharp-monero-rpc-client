@@ -6,10 +6,10 @@ namespace Monero.Client.Wallet.POD.Responses
     internal class ExportOutputsResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public ExportOutputs Result { get; set; }
+        public ExportOutputsResult Result { get; set; }
     }
 
-    public class ExportOutputs
+    internal class ExportOutputsResult
     {
         [JsonPropertyName("outputs_data_hex")]
         public string OutputsDataHex { get; set; }
