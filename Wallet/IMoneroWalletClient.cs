@@ -209,10 +209,11 @@ namespace Monero.Client.Wallet
         /// Sign a string.
         /// </summary>
         Task<string> SignAsync(string data, CancellationToken token = default);
-        /// <summary>
-        /// Verify a signature on a string.
-        /// </summary>
-        Task<bool> VerifyAsync(string data, string address, string signature, CancellationToken token = default);
+        ///// <summary>
+        ///// Verify a signature on a string.
+        ///// </summary>
+        ///// <returns>Whether the signature is valid.</returns>
+        //Task<bool> VerifyAsync(string data, string address, string signature, CancellationToken token = default);
         /// <summary>
         /// Export outputs in hex format.
         /// </summary>

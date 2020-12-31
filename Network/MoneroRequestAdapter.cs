@@ -449,6 +449,7 @@ namespace Monero.Client.Network
                     method = "prune_blockchain",
                     @params = requestParams,
                 },
+                MoneroResponseSubType.Verify => throw new NotImplementedException("The Verify RPC Command is not implemented"),
                 _ => throw new InvalidOperationException($"Unknown MoneroDaemonResponseSubType ({subType})"),
             };
         }

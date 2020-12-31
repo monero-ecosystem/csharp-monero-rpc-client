@@ -382,12 +382,12 @@ namespace Monero.Client.Wallet
             return result.SignResponse.Result.Sig;
         }
 
-        public async Task<bool> VerifyAsync(string data, string address, string signature, CancellationToken token = default)
-        {
-            var result = await _moneroRpcCommunicator.VerifyAsync(data, address, signature, token).ConfigureAwait(false);
-            ErrorGuard.ThrowIfResultIsNull(result?.VerifyResponse, nameof(VerifyAsync));
-            return result.VerifyResponse.Result.IsGood;
-        }
+        //public async Task<bool> VerifyAsync(string data, string address, string signature, CancellationToken token = default)
+        //{
+        //    var result = await _moneroRpcCommunicator.VerifyAsync(data, address, signature, token).ConfigureAwait(false);
+        //    ErrorGuard.ThrowIfResultIsNull(result?.VerifyResponse, nameof(VerifyAsync));
+        //    return result.VerifyResponse.Result.IsGood;
+        //}
 
         public async Task<string> ExportOutputsAsync(CancellationToken token = default)
         {
