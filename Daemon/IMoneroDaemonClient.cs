@@ -68,7 +68,7 @@ namespace Monero.Client.Daemon
         /// <summary>
         /// Get the coinbase amount and the fees amount for n last blocks starting at particular height.
         /// </summary>
-        Task<CoinbaseTransactionSumResult> GetCoinbaseTransactionSumAsync(uint height, uint count, CancellationToken token = default);
+        Task<CoinbaseTransactionSum> GetCoinbaseTransactionSumAsync(uint height, uint count, CancellationToken token = default);
         /// <summary>
         /// Give the node current version.
         /// </summary>
@@ -120,5 +120,7 @@ namespace Monero.Client.Daemon
         /// Pruned nodes remove much of this less relevant information to have a lighter footprint.
         /// </summary>
         //Task<PruneBlockchain> PruneBlockchainAsync(bool check = false, CancellationToken token = default);
+
+        Task<TransactionPoolBacklog> GetTransactionPoolBacklogAsync(CancellationToken token = default);
     }
 }

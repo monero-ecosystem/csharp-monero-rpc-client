@@ -137,7 +137,7 @@ namespace Monero.Client.Daemon
             return result.OutputHistogramResponse.Result.Distributions;
         }
 
-        public async Task<CoinbaseTransactionSumResult> GetCoinbaseTransactionSumAsync(uint height, uint count, CancellationToken token = default)
+        public async Task<CoinbaseTransactionSum> GetCoinbaseTransactionSumAsync(uint height, uint count, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetCoinbaseTransactionSumAsync(height, count, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.CoinbaseTransactionSumReponse, nameof(GetCoinbaseTransactionSumAsync));
@@ -228,6 +228,13 @@ namespace Monero.Client.Daemon
             var result = await _moneroRpcCommunicator.GetBanStatusAsync(address, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.GetBanStatusResponse, nameof(GetBanStatusAsync));
             return result.GetBanStatusResponse.Result;
+        }
+
+        public async Task<TransactionPoolBacklog> GetTransactionPoolBacklogAsync(CancellationToken token = default)
+        {
+            var result = await _moneroRpcCommunicator.GetTransactionPoolBacklogAsync(token).ConfigureAwait(false);
+            ErrorGuard.ThrowIfResultIsNull(result?.TransactionPoolBacklogResponse, nameof(GetTransactionPoolBacklogAsync));
+            return result.TransactionPoolBacklogResponse.Result;
         }
 
         //// Not supporting this currently, because it doesn't sound useful.

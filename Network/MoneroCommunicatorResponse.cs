@@ -50,6 +50,7 @@ namespace Monero.Client.Network
         GetBlockTemplate,
         GetBanStatus, // Status on the ban of an address.
         PruneBlockchain,
+        TransactionPoolBacklog,
 
         // Wallet
         Balance,

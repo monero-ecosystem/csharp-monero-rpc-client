@@ -1920,6 +1920,21 @@ namespace Monero.Client.Utilities
             };
         }
 
+        public async Task<MoneroCommunicatorResponse> GetTransactionPoolBacklogAsync(CancellationToken token = default)
+        {
+            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.TransactionPoolBacklog, null, token).ConfigureAwait(false);
+            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
+            TransactionPoolBacklogResponse responseObject = await JsonSerializer.DeserializeAsync<TransactionPoolBacklogResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
+            return new MoneroCommunicatorResponse()
+            {
+                MoneroResponseType = MoneroResponseType.TransactionPool,
+                MoneroResponseSubType = MoneroResponseSubType.TransactionPoolBacklog,
+                TransactionPoolBacklogResponse = responseObject,
+            };
+        }
+
         public void Dispose()
         {
             _httpClient.Dispose();
