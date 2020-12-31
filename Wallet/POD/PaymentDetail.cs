@@ -16,7 +16,7 @@ namespace Monero.Client.Wallet.POD
         [JsonPropertyName("amount")]
         public ulong Amount { get; set; }
         [JsonPropertyName("block_height")]
-        public ulong BlockHeight { get; set; }
+        public ulong Height { get; set; }
         [JsonPropertyName("unlock_time")]
         public ulong UnlockTime { get; set; }
         [JsonPropertyName("locked")]

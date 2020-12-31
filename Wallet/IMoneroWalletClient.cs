@@ -325,6 +325,9 @@ namespace Monero.Client.Wallet
         /// </summary>
         /// <param name="txDataHex">Multisig transaction in hex format, as returned by sign_multisig under tx_data_hex.</param>
         Task<SubmitMultiSig> SubmitMultiSigAsync(string txDataHex, CancellationToken token = default);
+        /// <summary>
+        /// Retrieve the payment details associated with a given payment id.
+        /// </summary>
         Task<List<PaymentDetail>> GetPaymentDetailAsync(string paymentId, CancellationToken token = default);
     }
 }
