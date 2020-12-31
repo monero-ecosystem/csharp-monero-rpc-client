@@ -115,6 +115,10 @@ namespace Monero.Client.Daemon
         /// Get a block template on which mining a new block.
         /// </summary>
         Task<BlockTemplate> GetBlockTemplateAsync(ulong reserveSize, string walletAddress, string prevBlock = null, string extraNonce = null, CancellationToken token = default);
-        Task<PruneBlockchain> PruneBlockchainAsync(bool check = false, CancellationToken token = default);
+        /// <summary>
+        /// Commands the daemon to prune the blockchain. 
+        /// Pruned nodes remove much of this less relevant information to have a lighter footprint.
+        /// </summary>
+        //Task<PruneBlockchain> PruneBlockchainAsync(bool check = false, CancellationToken token = default);
     }
 }

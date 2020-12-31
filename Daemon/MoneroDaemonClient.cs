@@ -230,11 +230,13 @@ namespace Monero.Client.Daemon
             return result.GetBanStatusResponse.Result;
         }
 
-        public async Task<PruneBlockchain> PruneBlockchainAsync(bool check = false, CancellationToken token = default)
-        {
-            var result = await _moneroRpcCommunicator.PruneBlockchainAsync(check, token).ConfigureAwait(false);
-            ErrorGuard.ThrowIfResultIsNull(result?.PruneBlockchainResponse, nameof(PruneBlockchainAsync));
-            return result.PruneBlockchainResponse.Result;
-        }
+        //// Not supporting this currently, because it doesn't sound useful.
+        //// Pruning a synced chain is a bad idea. Resyncing in pruned-mode would be faster.
+        //public async Task<PruneBlockchain> PruneBlockchainAsync(bool check = false, CancellationToken token = default)
+        //{
+        //    var result = await _moneroRpcCommunicator.PruneBlockchainAsync(check, token).ConfigureAwait(false);
+        //    ErrorGuard.ThrowIfResultIsNull(result?.PruneBlockchainResponse, nameof(PruneBlockchainAsync));
+        //    return result.PruneBlockchainResponse.Result;
+        //}
     }
 }
