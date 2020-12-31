@@ -226,8 +226,15 @@ namespace Monero.Client.Daemon
         public async Task<BanStatus> GetBanStatusAsync(string address, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetBanStatusAsync(address, token).ConfigureAwait(false);
-            ErrorGuard.ThrowIfResultIsNull(result?.GetBanStatusResponse, nameof(GetBlockTemplateAsync));
+            ErrorGuard.ThrowIfResultIsNull(result?.GetBanStatusResponse, nameof(GetBanStatusAsync));
             return result.GetBanStatusResponse.Result;
+        }
+
+        public async Task<PruneBlockchain> PruneBlockchainAsync(bool check = false, CancellationToken token = default)
+        {
+            var result = await _moneroRpcCommunicator.PruneBlockchainAsync(check, token).ConfigureAwait(false);
+            ErrorGuard.ThrowIfResultIsNull(result?.PruneBlockchainResponse, nameof(PruneBlockchainAsync));
+            return result.PruneBlockchainResponse.Result;
         }
     }
 }

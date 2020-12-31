@@ -444,6 +444,11 @@ namespace Monero.Client.Network
                     method = "banned",
                     @params = requestParams,
                 },
+                MoneroResponseSubType.PruneBlockchain => new GenericRequest
+                {
+                    method = "prune_blockchain",
+                    @params = requestParams,
+                },
                 _ => throw new InvalidOperationException($"Unknown MoneroDaemonResponseSubType ({subType})"),
             };
         }

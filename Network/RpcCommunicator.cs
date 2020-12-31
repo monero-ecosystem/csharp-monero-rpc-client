@@ -1901,6 +1901,25 @@ namespace Monero.Client.Utilities
             };
         }
 
+        public async Task<MoneroCommunicatorResponse> PruneBlockchainAsync(bool check, CancellationToken token = default)
+        {
+            var daemonRequestParameters = new GenericRequestParameters()
+            {
+                check = check,
+            };
+            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.PruneBlockchain, daemonRequestParameters, token).ConfigureAwait(false);
+            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
+            PruneBlockchainResponse responseObject = await JsonSerializer.DeserializeAsync<PruneBlockchainResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
+            return new MoneroCommunicatorResponse()
+            {
+                MoneroResponseType = MoneroResponseType.Blockchain,
+                MoneroResponseSubType = MoneroResponseSubType.PruneBlockchain,
+                PruneBlockchainResponse = responseObject,
+            };
+        }
+
         public void Dispose()
         {
             _httpClient.Dispose();

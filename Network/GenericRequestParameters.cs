@@ -86,5 +86,6 @@ namespace Monero.Client.Network
         public string extra_nonce { get; set; } = null;
         public bool? binary { get; set; } = null;
         public bool? compress { get; set; } = null;
+        public bool? check { get; set; } = null;
     }
 }
