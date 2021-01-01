@@ -1,6 +1,6 @@
 ![](gif/resized.gif)
 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://camo.githubusercontent.com/83d3746e5881c1867665223424263d8e604df233d0a11aae0813e0414d433943/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6c6963656e73652d4d49542d626c75652e737667" alt="License" data-canonical-src="https://img.shields.io/badge/license-MIT-blue.svg" style="max-width:100%;"> [![Build Status](https://travis-ci.com/Agorist-Action/csharp-monero-rpc-client.svg?branch=master)](https://travis-ci.com/Agorist-Action/csharp-monero-rpc-client) <img src="https://camo.githubusercontent.com/7e7bdf5c529c8bc594e26038dbb1a3d360e9ede891fbdcef50b403ab5f88fc14/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f636f6e747269627574696f6e732d77656c636f6d652d6f72616e67652e737667" alt="Contributions welcome" data-canonical-src="https://img.shields.io/badge/contributions-welcome-orange.svg" style="max-width:100%;"> [![NuGet Badge](https://buildstats.info/nuget/Monero.Client)](https://www.nuget.org/packages/Monero.Client/)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://camo.githubusercontent.com/83d3746e5881c1867665223424263d8e604df233d0a11aae0813e0414d433943/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6c6963656e73652d4d49542d626c75652e737667" alt="License" data-canonical-src="https://img.shields.io/badge/license-MIT-blue.svg" style="max-width:100%;"><img src="https://camo.githubusercontent.com/7e7bdf5c529c8bc594e26038dbb1a3d360e9ede891fbdcef50b403ab5f88fc14/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f636f6e747269627574696f6e732d77656c636f6d652d6f72616e67652e737667" alt="Contributions welcome" data-canonical-src="https://img.shields.io/badge/contributions-welcome-orange.svg" style="max-width:100%;"> [![NuGet Badge](https://buildstats.info/nuget/Monero.Client)](https://www.nuget.org/packages/Monero.Client/)
 
 This is the source code of a Monero JSON-RPC client (for both daemon and wallet) built on .netstandard2.1.
 
@@ -51,7 +51,7 @@ For the entire MoneroWalletClient interface, please click [here](https://github.
 # Latest Stable Release
 Available on Nuget [here](https://www.nuget.org/packages/Monero.Client/).
 ```
-Install-Package Monero.Client -Version 1.0.1.3
+Install-Package Monero.Client -Version 1.0.1.4
 ```
 # Latest Development Changes
 ```
