@@ -19,5 +19,9 @@ namespace Monero.Client.Wallet.POD.Responses
         public uint Threshold { get; set; }
         [JsonPropertyName("total")]
         public uint Total { get; set; }
+        public override string ToString()
+        {
+            return $"MultiSig? {IsMultiSig}, Ready? {IsReady}, Threshold: {Threshold}, Total: {Total}";
+        }
     }
 }

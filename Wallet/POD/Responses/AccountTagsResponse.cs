@@ -24,5 +24,9 @@ namespace Monero.Client.Wallet.POD.Responses
         public string Tag { get; set; }
         [JsonPropertyName("label")]
         public string Label { get; set; }
+        public override string ToString()
+        {
+            return $"({Tag}) {Label}";
+        }
     }
 }

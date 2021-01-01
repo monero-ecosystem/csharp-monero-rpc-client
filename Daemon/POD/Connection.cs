@@ -59,5 +59,9 @@ namespace Monero.Client.Daemon.POD
                 return TimeSpan.FromSeconds(this.LiveTime);
             }
         }
+        public override string ToString()
+        {
+            return $"{Address} ({State})";
+        }
     }
 }

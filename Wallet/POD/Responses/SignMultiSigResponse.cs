@@ -16,5 +16,9 @@ namespace Monero.Client.Wallet.POD.Responses
         public string TransactionDataHex { get; set; }
         [JsonPropertyName("tx_hash_list")]
         public List<string> TransactionHashes { get; set; } = new List<string>();
+        public override string ToString()
+        {
+            return $"DataHex: {TransactionDataHex} - TxHashes: {string.Join(" ", TransactionHashes)}";
+        }
     }
 }

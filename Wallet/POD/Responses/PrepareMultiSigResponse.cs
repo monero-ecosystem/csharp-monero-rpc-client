@@ -13,5 +13,9 @@ namespace Monero.Client.Wallet.POD.Responses
     {
         [JsonPropertyName("multisig_info")]
         public string MultiSigInformation { get; set; }
+        public override string ToString()
+        {
+            return MultiSigInformation;
+        }
     }
 }

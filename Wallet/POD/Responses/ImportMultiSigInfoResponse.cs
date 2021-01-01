@@ -13,5 +13,9 @@ namespace Monero.Client.Wallet.POD.Responses
     {
         [JsonPropertyName("n_outputs")]
         public uint N_Outputs { get; set; }
+        public override string ToString()
+        {
+            return $"{N_Outputs}";
+        }
     }
 }

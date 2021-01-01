@@ -15,5 +15,9 @@ namespace Monero.Client.Wallet.POD.Responses
         public ulong BlocksFetched { get; set; }
         [JsonPropertyName("received_money")]
         public bool ReceivedMoney { get; set; }
+        public override string ToString()
+        {
+            return $"{(ReceivedMoney ? "Money Received" : "No Money Received")} (Blocks Fetched: {BlocksFetched})";
+        }
     }
 }

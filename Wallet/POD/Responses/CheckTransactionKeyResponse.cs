@@ -26,5 +26,9 @@ namespace Monero.Client.Wallet.POD.Responses
                 return Confirmations > 0ul;
             }
         }
+        public override string ToString()
+        {
+            return $"Confirmations: {Confirmations}";
+        }
     }
 }

@@ -13,5 +13,9 @@ namespace Monero.Client.Wallet.POD.Responses
     {
         [JsonPropertyName("height")]
         public ulong Height { get; set; }
+        public override string ToString()
+        {
+            return $"{Height}";
+        }
     }
 }

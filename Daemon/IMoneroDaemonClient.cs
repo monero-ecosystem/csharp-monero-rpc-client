@@ -69,9 +69,13 @@ namespace Monero.Client.Daemon
         /// </summary>
         Task<uint> GetVersionAsync(CancellationToken token = default);
         /// <summary>
-        /// Gives an estimation on fees per byte.
+        /// Gives an estimation on fees (piconero) per byte.
         /// </summary>
         Task<ulong> GetFeeEstimateAsync(uint grace_blocks, CancellationToken token = default);
+        /// <summary>
+        /// Gets all fee estimate parameters, including fees (piconero) per byte.
+        /// </summary>
+        Task<FeeEstimate> GetFeeEstimateParametersAsync(uint grace_blocks, CancellationToken token = default);
         /// <summary>
         /// Display alternative chains seen by the node.
         /// </summary>

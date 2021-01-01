@@ -13,5 +13,9 @@ namespace Monero.Client.Wallet.POD.Responses
     {
         [JsonPropertyName("tx_key")]
         public string TransactionKey { get; set; }
+        public override string ToString()
+        {
+            return TransactionKey;
+        }
     }
 }

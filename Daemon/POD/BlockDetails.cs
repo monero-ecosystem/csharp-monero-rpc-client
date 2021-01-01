@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Monero.Client.Utilities;
+using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Monero.Client.Daemon.POD
@@ -19,6 +22,20 @@ namespace Monero.Client.Daemon.POD
         public MinerTransaction MinerTx { get; set; }
         [JsonPropertyName("tx_hashes")]
         public List<string> TxHashes { get; set; } = new List<string>();
+        [JsonIgnore()]
+        public DateTime DateTime
+        {
+            get
+            {
+                return new DateTime(1970, 1, 1).AddSeconds(Timestamp);
+            }
+        }
+        public override string ToString()
+        {
+            var sb = new StringBuilder($"({DateTime.ToString(DateFormat.DateTimeFormat)}) {MajorVersion} / {MinorVersion} {PrevID}");
+            sb.AppendLine($"{MinerTx}");
+            return sb.ToString();
+        }
     }
 
 }

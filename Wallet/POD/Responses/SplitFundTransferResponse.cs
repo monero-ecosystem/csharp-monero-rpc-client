@@ -1,6 +1,9 @@
 ﻿using Monero.Client.Network;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using System.Text;
+using Monero.Client.Utilities;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
@@ -28,5 +31,16 @@ namespace Monero.Client.Wallet.POD.Responses
         public string UnsignedTransactionSet { get; set; }
         [JsonPropertyName("weight_list")]
         public List<ulong> Weights { get; set; } = new List<ulong>();
+        public override string ToString()
+        {
+            bool equalAmounts = TransactionHashes.Count == Amounts.Count && Amounts.Count == Fees.Count;
+            var sb = new StringBuilder();
+            if (equalAmounts)
+            {
+                for (int transferNumber = 0; transferNumber < TransactionHashes.Count; ++transferNumber)
+                    sb.AppendLine($"Sent {PriceUtilities.PiconeroToMonero(Amounts[transferNumber]).ToString(PriceFormat.MoneroPrecision)} with a fee of {PriceUtilities.PiconeroToMonero(Fees[transferNumber]).ToString(PriceFormat.MoneroPrecision)} [{TransactionHashes[transferNumber]}]");
+            }
+            return sb.ToString();
+        }
     }
 }

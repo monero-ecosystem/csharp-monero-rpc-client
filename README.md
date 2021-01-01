@@ -10,12 +10,11 @@ Both a daemon client and wallet client are available. The daemon client interact
 **Initialize Client**
 ```csharp
 using Monero.Client.Daemon;
-var daemonClient = new MoneroDaemonClient(new Uri("http://127.0.0.1:18082/json_rpc"));
+var daemonClient = await MoneroDaemonClient.CreateAsync(new Uri("http://127.0.0.1:18082/json_rpc")).ConfigureAwait(false);
 ```
 **Get Connections**
 ```csharp
-var token = new CancellationToken();
-List<Connection> connections = await daemonClient.GetConnectionsAsync(token).ConfigureAwait(false);
+List<Connection> connections = await daemonClient.GetConnectionsAsync().ConfigureAwait(false);
 ```
 ![](gif/connectionsdemo.gif)
 For the entire MoneroDaemonClient interface, please click [here](https://github.com/Agorist-Action/csharp-monero-rpc-client/blob/master/Daemon/IMoneroDaemonClient.cs).

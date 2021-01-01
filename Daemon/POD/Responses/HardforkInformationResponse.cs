@@ -1,4 +1,6 @@
 ﻿using Monero.Client.Network;
+using System;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Monero.Client.Daemon.POD.Responses
@@ -33,5 +35,13 @@ namespace Monero.Client.Daemon.POD.Responses
         public byte Voting { get; set; }
         [JsonPropertyName("window")]
         public uint Window { get; set; }
+        public override string ToString()
+        {
+            var typeInfo = typeof(HardforkInformation);
+            var nonNullPropertyList = typeInfo.GetProperties()
+                                              .Where(p => p.GetValue(this) != default)
+                                              .Select(p => $"{p.Name}: {p.GetValue(this)} ");
+            return string.Join(Environment.NewLine, nonNullPropertyList);
+        }
     }
 }

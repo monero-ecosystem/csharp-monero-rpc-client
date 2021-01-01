@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Monero.Client.Utilities;
+using System;
 using System.Text.Json.Serialization;
 
 namespace Monero.Client.Daemon.POD
@@ -56,6 +57,10 @@ namespace Monero.Client.Daemon.POD
             {
                 return new DateTime(1970, 1, 1).AddSeconds(this.Timestamp);
             }
+        }
+        public override string ToString()
+        {
+            return $"[{Height}] ({DateTime.ToString(DateFormat.DateTimeFormat)}) {Hash} - Size: {BlockSize}, Weight: {BlockWeight}, TxCount: {NumTxes}, Reward: {PriceUtilities.PiconeroToMonero(Reward).ToString(PriceFormat.MoneroPrecision)}";
         }
     }
 }
