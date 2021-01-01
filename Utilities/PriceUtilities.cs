@@ -35,7 +35,8 @@ namespace Monero.Client.Utilities
                 throw new InvalidOperationException("Cannot have a negative amount of Monero");
             int decimalPlaces = GetDecimalPlaces(amount);
             if (decimalPlaces > LowestBase)
-                throw new InvalidOperationException($"Amount has more than {LowestBase} decimal places.");
+                throw new InvalidOperationException($"{amount} has more than {LowestBase} decimal places. " +
+                    $"{amount} can only have 12 decimal places at most.");
             amount = amount * (decimal)Math.Pow(10, LowestBase);
             return checked((ulong)amount);
         }
