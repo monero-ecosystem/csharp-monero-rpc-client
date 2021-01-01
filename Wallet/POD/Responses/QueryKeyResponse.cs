@@ -6,10 +6,10 @@ namespace Monero.Client.Wallet.POD.Responses
     internal class QueryKeyResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public QueryKey Result { get; set; }
+        public QueryKeyResult Result { get; set; }
     }
 
-    public class QueryKey
+    internal class QueryKeyResult
     {
         [JsonPropertyName("key")]
         public string Key { get; set; }

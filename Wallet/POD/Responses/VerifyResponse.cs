@@ -9,7 +9,7 @@ namespace Monero.Client.Wallet.POD.Responses
         public VerifyResult Result { get; set; }
     }
 
-    public class VerifyResult
+    internal class VerifyResult
     {
         [JsonPropertyName("good")]
         public bool IsGood { get; set; }

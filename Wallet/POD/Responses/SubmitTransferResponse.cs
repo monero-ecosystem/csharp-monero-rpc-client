@@ -8,10 +8,10 @@ namespace Monero.Client.Wallet.POD.Responses
     internal class SubmitTransferResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public SubmitTransfer Result { get; set; }
+        public SubmitTransferResult Result { get; set; }
     }
 
-    public class SubmitTransfer
+    internal class SubmitTransferResult
     {
         [JsonPropertyName("tx_hash_list")]
         public List<string> TransactionHashes { get; set; } = new List<string>();

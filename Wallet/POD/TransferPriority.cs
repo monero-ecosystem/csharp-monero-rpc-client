@@ -3,9 +3,13 @@
     public enum TransferPriority : uint
     {
         /// <summary>
+        /// Really just Normal (4x)
+        /// </summary>
+        Default = 0,
+        /// <summary>
         /// Fee multiplier 1x
         /// </summary>
-        Unimportant = 0,
+        Unimportant,
         /// <summary>
         /// Fee multiplier 4x (default)
         /// </summary>

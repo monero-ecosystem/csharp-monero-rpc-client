@@ -8,10 +8,10 @@ namespace Monero.Client.Wallet.POD.Responses
     internal class GetAddressBookResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public GetAddressBook Result { get; set; }
+        public AddressBook Result { get; set; }
     }
 
-    public class GetAddressBook
+    public class AddressBook
     {
         [JsonPropertyName("entries")]
         public List<AddressBookEntry> Entries { get; set; } = new List<AddressBookEntry>();

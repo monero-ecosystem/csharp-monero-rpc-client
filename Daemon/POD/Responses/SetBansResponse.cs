@@ -9,7 +9,7 @@ namespace Monero.Client.Daemon.POD.Responses
         public SetBansResult Result { get; set; }
     }
 
-    public class SetBansResult
+    internal class SetBansResult
     {
         [JsonPropertyName("status")]
         public string Status { get; set; }

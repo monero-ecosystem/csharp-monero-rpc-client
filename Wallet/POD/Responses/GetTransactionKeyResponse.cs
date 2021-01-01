@@ -6,10 +6,10 @@ namespace Monero.Client.Wallet.POD.Responses
     internal class GetTransactionKeyResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public GetTransactionKey Result { get; set; }
+        public GetTransactionKeyResult Result { get; set; }
     }
 
-    public class GetTransactionKey
+    internal class GetTransactionKeyResult
     {
         [JsonPropertyName("tx_key")]
         public string TransactionKey { get; set; }

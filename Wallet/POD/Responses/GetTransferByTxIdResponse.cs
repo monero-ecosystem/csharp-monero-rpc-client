@@ -6,10 +6,10 @@ namespace Monero.Client.Wallet.POD.Responses
     internal class GetTransferByTxidResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public ShowTransferByTxid Result { get; set; }
+        public ShowTransferByTxidResult Result { get; set; }
     }
 
-    public class ShowTransferByTxid
+    internal class ShowTransferByTxidResult
     {
         [JsonPropertyName("transfer")]
         public Transfer Transfer { get; set; }

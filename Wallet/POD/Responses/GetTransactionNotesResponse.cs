@@ -8,10 +8,10 @@ namespace Monero.Client.Wallet.POD.Responses
     internal class GetTransactionNotesResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public GetTransactionNotes Result { get; set; }
+        public GetTransactionNotesResult Result { get; set; }
     }
 
-    public class GetTransactionNotes
+    internal class GetTransactionNotesResult
     {
         [JsonPropertyName("notes")]
         public List<string> Notes { get; set; } = new List<string>();

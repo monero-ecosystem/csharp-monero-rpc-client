@@ -9,20 +9,21 @@ namespace Monero.Client.Wallet.POD.Responses
     internal class AddressResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public AddressResult Result { get; set; }
+        public Addresses Result { get; set; }
     }
 
-    public class AddressResult
+    public class Addresses
     {
         [JsonPropertyName("address")]
-        public string Address { get; set; }
+        public string PrimaryAddress { get; set; }
         [JsonPropertyName("addresses")]
-        public List<AddressInformation> Addresses { get; set; } = new List<AddressInformation>();
+        public List<AddressInformation> AllAddresses { get; set; } = new List<AddressInformation>();
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendLine(Address);
-            sb.AppendLine(string.Join(Environment.NewLine, Addresses));
+            sb.AppendLine(PrimaryAddress);
+            sb.AppendLine("All Addresses:");
+            sb.AppendLine(string.Join(Environment.NewLine, AllAddresses));
             return sb.ToString();
         }
     }

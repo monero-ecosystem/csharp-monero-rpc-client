@@ -7,7 +7,7 @@ namespace Monero.Client.Network
 {
     internal class GenericRequestParameters
     {
-        public uint? height { get; set; } = null;
+        public ulong? height { get; set; } = null;
         public string hash { get; set; } = null;
         public uint? start_height { get; set; } = null;
         public uint? end_height { get; set; } = null;
@@ -20,8 +20,8 @@ namespace Monero.Client.Network
         public uint? count { get; set; } = null;
         public uint? grace_blocks { get; set; } = null;
         public bool? cumulative { get; set; } = null;
-        public uint? from_height { get; set; } = null;
-        public uint? to_height { get; set; } = null;
+        public ulong? from_height { get; set; } = null;
+        public ulong? to_height { get; set; } = null;
         public List<NodeBan> bans { get; set; } = null;
         public uint? account_index { get; set; } = null;
         public IEnumerable<uint> address_indices { get; set; } = null;
@@ -64,8 +64,8 @@ namespace Monero.Client.Network
         public bool? pending { get; set; } = null;
         public bool? failed { get; set; } = null;
         public bool? pool { get; set; } = null;
-        public uint? min_height { get; set; } = null;
-        public uint? max_height { get; set; } = null;
+        public ulong? min_height { get; set; } = null;
+        public ulong? max_height { get; set; } = null;
         public bool? filter_by_height { get; set; } = null;
         public string data { get; set; } = null;
         public string signature { get; set; } = null;
@@ -76,5 +76,16 @@ namespace Monero.Client.Network
         public string language { get; set; } = null;
         public string old_password { get; set; } = null;
         public string new_password { get; set; } = null;
+        public bool? all_accounts { get; set; } = null;
+        public bool? strict { get; set; } = null;
+        public string multisig_txset { get; set; } = null;
+        public string hex { get; set; } = null;
+        public ulong? reserve_size { get; set; } = null;
+        public string wallet_address { get; set; } = null;
+        public string prev_block { get; set; } = null;
+        public string extra_nonce { get; set; } = null;
+        public bool? binary { get; set; } = null;
+        public bool? compress { get; set; } = null;
+        public bool? check { get; set; } = null;
     }
 }
