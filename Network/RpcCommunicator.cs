@@ -880,7 +880,7 @@ namespace Monero.Client.Utilities
             return GetTransfersAsync(GenericRequestParameters, token);
         }
 
-        public Task<MoneroCommunicatorResponse> GetTransfersAsync(bool @in, bool @out, bool pending, bool failed, bool pool, uint min_height, uint max_height, CancellationToken token = default)
+        public Task<MoneroCommunicatorResponse> GetTransfersAsync(bool @in, bool @out, bool pending, bool failed, bool pool, ulong min_height, ulong max_height, CancellationToken token = default)
         {
             bool isValidRequest = false;
             isValidRequest = @in | @out | pending | failed | pool;

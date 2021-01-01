@@ -64,8 +64,8 @@ namespace Monero.Client.Network
         public bool? pending { get; set; } = null;
         public bool? failed { get; set; } = null;
         public bool? pool { get; set; } = null;
-        public uint? min_height { get; set; } = null;
-        public uint? max_height { get; set; } = null;
+        public ulong? min_height { get; set; } = null;
+        public ulong? max_height { get; set; } = null;
         public bool? filter_by_height { get; set; } = null;
         public string data { get; set; } = null;
         public string signature { get; set; } = null;

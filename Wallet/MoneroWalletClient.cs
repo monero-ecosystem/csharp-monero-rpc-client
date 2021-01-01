@@ -488,7 +488,7 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// <seealso cref="GetTransfersAsync(bool, bool, bool, bool, bool, CancellationToken)"/>
         /// </summary>
-        public async Task<ShowTransfers> GetTransfersAsync(bool @in, bool @out, bool pending, bool failed, bool pool, uint minHeight, uint maxHeight, CancellationToken token = default)
+        public async Task<ShowTransfers> GetTransfersAsync(bool @in, bool @out, bool pending, bool failed, bool pool, ulong minHeight, ulong maxHeight, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetTransfersAsync(@in, @out, pending, failed, pool, minHeight, maxHeight, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.ShowTransfersResponse, nameof(GetTransfersAsync));
