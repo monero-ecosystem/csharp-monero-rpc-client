@@ -6,10 +6,10 @@ namespace Monero.Client.Wallet.POD.Responses
     internal class FinalizeMultiSigResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public FinalizeMultiSig Result { get; set; }
+        public FinalizeMultiSigResult Result { get; set; }
     }
 
-    public class FinalizeMultiSig
+    internal class FinalizeMultiSigResult
     {
         [JsonPropertyName("address")]
         public string Address { get; set; }

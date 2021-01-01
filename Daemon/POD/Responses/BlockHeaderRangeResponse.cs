@@ -11,7 +11,7 @@ namespace Monero.Client.Daemon.POD.Responses
         public BlockHeaderRangeResult Result { get; set; }
     }
 
-    public class BlockHeaderRangeResult
+    internal class BlockHeaderRangeResult
     {
         [JsonPropertyName("credits")]
         public ulong Credits { get; set; }

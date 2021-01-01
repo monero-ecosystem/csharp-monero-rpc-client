@@ -6,10 +6,10 @@ namespace Monero.Client.Wallet.POD.Responses
     internal class MakeUriResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public MakeUri Result { get; set; }
+        public MakeUriResult Result { get; set; }
     }
 
-    public class MakeUri
+    internal class MakeUriResult
     {
         [JsonPropertyName("uri")]
         public string Uri { get; set; }

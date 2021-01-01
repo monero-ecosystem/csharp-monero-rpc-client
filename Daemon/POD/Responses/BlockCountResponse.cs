@@ -9,7 +9,7 @@ namespace Monero.Client.Daemon.POD.Responses
         public BlockCountResult Result { get; set; }
     }
 
-    public class BlockCountResult
+    internal class BlockCountResult
     {
         [JsonPropertyName("count")]
         public ulong Count { get; set; }

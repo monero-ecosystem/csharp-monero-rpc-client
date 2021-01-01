@@ -46,6 +46,11 @@ namespace Monero.Client.Network
                     method = "check_tx_key",
                     @params = requestParams,
                 },
+                MoneroResponseSubType.SubmitBlock => new AnonymousRequest
+                {
+                    method = "submit_block",
+                    @params = requestParams,
+                },
                 _ => throw new InvalidOperationException($"Unknown MoneroWalletResponseSubType ({subType})"),
             };
         }
@@ -211,8 +216,6 @@ namespace Monero.Client.Network
                 },
                 MoneroResponseSubType.Height => new GenericRequest
                 {
-                    jsonrpc = FieldAndHeaderDefaults.ApplicationJson,
-                    id = FieldAndHeaderDefaults.Id,
                     method = "get_height",
                     @params = requestParams,
                 },
@@ -421,6 +424,32 @@ namespace Monero.Client.Network
                     method = "submit_multisig",
                     @params = requestParams,
                 },
+                MoneroResponseSubType.DescribeTransfer => new GenericRequest
+                {
+                    method = "describe_transfer",
+                    @params = requestParams,
+                },
+                MoneroResponseSubType.SweepSingle => new GenericRequest
+                {
+                    method = "sweep_single",
+                    @params = requestParams,
+                },
+                MoneroResponseSubType.GetBlockTemplate => new GenericRequest
+                {
+                    method = "get_block_template",
+                    @params = requestParams,
+                },
+                MoneroResponseSubType.GetBanStatus => new GenericRequest
+                {
+                    method = "banned",
+                    @params = requestParams,
+                },
+                MoneroResponseSubType.PruneBlockchain => new GenericRequest
+                {
+                    method = "prune_blockchain",
+                    @params = requestParams,
+                },
+                MoneroResponseSubType.Verify => throw new NotImplementedException("The Verify RPC Command is not implemented"),
                 _ => throw new InvalidOperationException($"Unknown MoneroDaemonResponseSubType ({subType})"),
             };
         }

@@ -9,11 +9,9 @@ namespace Monero.Client.Daemon.POD.Responses
     {
         [JsonPropertyName("result")]
         public AlternateChainResult Result { get; set; }
-        [JsonPropertyName("status")]
-        public string Status { get; set; }
     }
 
-    public class AlternateChainResult
+    internal class AlternateChainResult
     {
         [JsonPropertyName("chains")]
         public List<Chain> Chains { get; set; } = new List<Chain>();

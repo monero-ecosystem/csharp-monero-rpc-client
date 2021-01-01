@@ -7,10 +7,10 @@ namespace Monero.Client.Wallet.POD.Responses
     internal class SignMultiSigTransactionResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public SignMultiSigTransactionResult Result { get; set; }
+        public SignMultiSigTransaction Result { get; set; }
     }
 
-    public class SignMultiSigTransactionResult
+    public class SignMultiSigTransaction
     {
         [JsonPropertyName("tx_data_hex")]
         public string TransactionDataHex { get; set; }

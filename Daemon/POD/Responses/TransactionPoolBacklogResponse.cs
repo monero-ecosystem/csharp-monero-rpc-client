@@ -6,10 +6,10 @@ namespace Monero.Client.Daemon.POD.Responses
     internal class TransactionPoolBacklogResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public TransactionPoolBacklogResult Result { get; set; }
+        public TransactionPoolBacklog Result { get; set; }
     }
 
-    public class TransactionPoolBacklogResult
+    public class TransactionPoolBacklog
     {
         [JsonPropertyName("backlog")]
         public string Backlog { get; set; }

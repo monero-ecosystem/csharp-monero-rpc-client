@@ -3,13 +3,13 @@ using System.Text.Json.Serialization;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-    internal class IsMultiSigInformationResponse : RpcResponse
+    internal class MultiSigInformationResponse : RpcResponse
     {
         [JsonPropertyName("result")]
-        public IsMultiSigInformation Result { get; set; }
+        public MultiSigInformation Result { get; set; }
     }
 
-    public class IsMultiSigInformation
+    public class MultiSigInformation
     {
         [JsonPropertyName("multisig")]
         public bool IsMultiSig { get; set; }

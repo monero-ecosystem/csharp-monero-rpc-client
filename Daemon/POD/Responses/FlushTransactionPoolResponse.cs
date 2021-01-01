@@ -9,7 +9,7 @@ namespace Monero.Client.Daemon.POD.Responses
         public FlushTransactionPoolResult Result { get; set; }
     }
 
-    public class FlushTransactionPoolResult
+    internal class FlushTransactionPoolResult
     {
         [JsonPropertyName("status")]
         public string Status { get; set; }

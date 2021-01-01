@@ -46,6 +46,11 @@ namespace Monero.Client.Network
         RelayTransaction,
         SyncInformation,
         SetBans,
+        SubmitBlock,
+        GetBlockTemplate,
+        GetBanStatus, // Status on the ban of an address.
+        PruneBlockchain,
+        TransactionPoolBacklog,
 
         // Wallet
         Balance,
@@ -104,15 +109,18 @@ namespace Monero.Client.Network
         FinalizeMultiSig,
         SignMultiSigTransaction,
         SubmitMultiSigTransaction,
+        DescribeTransfer,
+        SweepSingle,
+        GetPaymentDetail,
     }
 
     internal class MoneroCommunicatorResponse
     {
         internal MoneroResponseType MoneroResponseType { get; set; } = MoneroResponseType.None;
         internal MoneroResponseSubType MoneroResponseSubType { get; set; }
-        /*
-         * Daemon-related responses.
-         */
+        ///
+        /// Daemon-related responses.
+        ///
         internal BlockCountResponse BlockCountResponse { get; set; }
         internal BlockHeaderResponse BlockHeaderResponse { get; set; }
         internal BlockHeaderRangeResponse BlockHeaderRangeResponse { get; set; }
@@ -131,9 +139,13 @@ namespace Monero.Client.Network
         internal TransactionPoolBacklogResponse TransactionPoolBacklogResponse { get; set; }
         internal BlockResponse BlockResponse { get; set; }
         internal SetBansResponse SetBansResponse { get; set; }
-        /*
-         * Wallet-related responses.
-         */
+        internal SubmitBlockResponse SubmitBlockResponse { get; set; }
+        internal GetBlockTemplateResponse GetBlockTemplateResponse { get; set; }
+        internal GetBanStatusResponse GetBanStatusResponse { get; set; }
+        internal PruneBlockchainResponse PruneBlockchainResponse { get; set; }
+        ///
+        /// Wallet-related responses.
+        ///
         internal BalanceResponse BalanceResponse { get; set; }
         internal AddressResponse AddressResponse { get; set; }
         internal AddressIndexResponse AddressIndexResponse { get; set; }
@@ -182,7 +194,7 @@ namespace Monero.Client.Network
         internal CloseWalletResponse CloseWalletResponse { get; set; }
         internal ChangeWalletPasswordResponse ChangeWalletPasswordResponse { get; set; }
         internal GetRpcVersionResponse GetRpcVersionResponse { get; set; }
-        internal IsMultiSigInformationResponse IsMultiSigInformationResponse { get; set; }
+        internal MultiSigInformationResponse MultiSigInformationResponse { get; set; }
         internal PrepareMultiSigResponse PrepareMultiSigResponse { get; set; }
         internal MakeMultiSigResponse MakeMultiSigResponse { get; set; }
         internal ExportMultiSigInfoResponse ExportMultiSigInfoResponse { get; set; }
@@ -190,5 +202,8 @@ namespace Monero.Client.Network
         internal FinalizeMultiSigResponse FinalizeMultiSigResponse { get; set; }
         internal SignMultiSigTransactionResponse SignMultiSigTransactionResponse { get; set; }
         internal SubmitMultiSigTransactionResponse SubmitMultiSigTransactionResponse { get; set; }
+        internal DescribeTransferResponse DescribeTransferResponse { get; set; }
+        internal SweepSingleResponse SweepSingleResponse { get; set; }
+        internal PaymentDetailResponse PaymentDetailResponse { get; set; }
     }
 }
