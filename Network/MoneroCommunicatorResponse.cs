@@ -194,7 +194,7 @@ namespace Monero.Client.Network
         internal CloseWalletResponse CloseWalletResponse { get; set; }
         internal ChangeWalletPasswordResponse ChangeWalletPasswordResponse { get; set; }
         internal GetRpcVersionResponse GetRpcVersionResponse { get; set; }
-        internal IsMultiSigInformationResponse IsMultiSigInformationResponse { get; set; }
+        internal MultiSigInformationResponse MultiSigInformationResponse { get; set; }
         internal PrepareMultiSigResponse PrepareMultiSigResponse { get; set; }
         internal MakeMultiSigResponse MakeMultiSigResponse { get; set; }
         internal ExportMultiSigInfoResponse ExportMultiSigInfoResponse { get; set; }

@@ -710,11 +710,11 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Check if a wallet is a multi-signature (multisig) one.
         /// </summary>
-        public async Task<IsMultiSigInformation> IsMultiSigAsync(CancellationToken token = default)
+        public async Task<MultiSigInformation> GetMultiSigInformationAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.IsMultiSigAsync(token).ConfigureAwait(false);
-            ErrorGuard.ThrowIfResultIsNull(result?.IsMultiSigInformationResponse, nameof(IsMultiSigAsync));
-            return result.IsMultiSigInformationResponse.Result;
+            ErrorGuard.ThrowIfResultIsNull(result?.MultiSigInformationResponse, nameof(GetMultiSigInformationAsync));
+            return result.MultiSigInformationResponse.Result;
         }
 
         /// <summary>

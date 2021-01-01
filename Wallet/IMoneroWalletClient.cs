@@ -74,7 +74,7 @@ namespace Monero.Client.Wallet
         Task<CloseWallet> CloseWalletAsync(CancellationToken token = default);
         Task<ChangeWalletPassword> ChangeWalletPasswordAsync(string oldPassword = null, string newPassword = null, CancellationToken token = default);
         Task<uint> GetVersionAsync(CancellationToken token = default);
-        Task<IsMultiSigInformation> IsMultiSigAsync(CancellationToken token = default);
+        Task<MultiSigInformation> GetMultiSigInformationAsync(CancellationToken token = default);
         Task<string> PrepareMultiSigAsync(CancellationToken token = default);
         Task<MakeMultiSig> MakeMultiSigAsync(IEnumerable<string> multiSigInfo, uint threshold, string password, CancellationToken token = default);
         Task<string> ExportMultiSigInfoAsync(CancellationToken token = default);

@@ -1302,12 +1302,12 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            IsMultiSigInformationResponse responseObject = await JsonSerializer.DeserializeAsync<IsMultiSigInformationResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
+            MultiSigInformationResponse responseObject = await JsonSerializer.DeserializeAsync<MultiSigInformationResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {
                 MoneroResponseType = MoneroResponseType.Wallet,
                 MoneroResponseSubType = MoneroResponseSubType.IsMultiSig,
-                IsMultiSigInformationResponse = responseObject,
+                MultiSigInformationResponse = responseObject,
             };
         }
 
