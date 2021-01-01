@@ -262,6 +262,7 @@ namespace Monero.Client.Wallet
         /// </summary>
         public async Task<FundTransfer> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, bool getTxKey, bool getTxHex, ulong unlockTime = 0, CancellationToken token = default)
         {
+            ErrorGuard.ThrowIfUnlockTimeIsToolarge(unlockTime, nameof(unlockTime));
             var result = await _moneroRpcCommunicator.TransferAsync(transactions, transferPriority, getTxKey, getTxHex, unlockTime, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.FundTransferResponse, nameof(TransferAsync));
             return result.FundTransferResponse.Result;
@@ -272,6 +273,7 @@ namespace Monero.Client.Wallet
         /// </summary>
         public async Task<FundTransfer> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, uint ringSize, ulong unlockTime = 0, bool getTxKey = true, bool getTxHex = true, CancellationToken token = default)
         {
+            ErrorGuard.ThrowIfUnlockTimeIsToolarge(unlockTime, nameof(unlockTime));
             var result = await _moneroRpcCommunicator.TransferAsync(transactions, transferPriority, ringSize, unlockTime, getTxKey, getTxHex, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.FundTransferResponse, nameof(TransferAsync));
             return result.FundTransferResponse.Result;
@@ -282,6 +284,7 @@ namespace Monero.Client.Wallet
         /// </summary>
         public async Task<FundTransfer> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, uint ringSize, uint accountIndex, ulong unlockTime = 0, bool getTxKey = true, bool getTxHex = true, CancellationToken token = default)
         {
+            ErrorGuard.ThrowIfUnlockTimeIsToolarge(unlockTime, nameof(unlockTime));
             var result = await _moneroRpcCommunicator.TransferAsync(transactions, transferPriority, ringSize, accountIndex, unlockTime, getTxKey, getTxHex, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.FundTransferResponse, nameof(TransferAsync));
             return result.FundTransferResponse.Result;
@@ -302,6 +305,7 @@ namespace Monero.Client.Wallet
         /// </summary>
         public async Task<SplitFundTransfer> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, bool getTxKey, bool getTxHex, bool newAlgorithm = true, ulong unlockTime = 0, CancellationToken token = default)
         {
+            ErrorGuard.ThrowIfUnlockTimeIsToolarge(unlockTime, nameof(unlockTime));
             var result = await _moneroRpcCommunicator.TransferSplitAsync(transactions, transferPriority, getTxKey, getTxHex, newAlgorithm, unlockTime, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.FundTransferSplitResponse, nameof(TransferSplitAsync));
             return result.FundTransferSplitResponse.Result;
@@ -312,6 +316,7 @@ namespace Monero.Client.Wallet
         /// </summary>
         public async Task<SplitFundTransfer> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, uint ringSize, bool newAlgorithm = true, ulong unlockTime = 0, bool getTxKey = true, bool getTxHex = true, CancellationToken token = default)
         {
+            ErrorGuard.ThrowIfUnlockTimeIsToolarge(unlockTime, nameof(unlockTime));
             var result = await _moneroRpcCommunicator.TransferSplitAsync(transactions, transferPriority, ringSize, newAlgorithm, unlockTime, getTxKey, getTxHex, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.FundTransferSplitResponse, nameof(TransferSplitAsync));
             return result.FundTransferSplitResponse.Result;
@@ -322,6 +327,7 @@ namespace Monero.Client.Wallet
         /// </summary>
         public async Task<SplitFundTransfer> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, uint ringSize, uint accountIndex, bool newAlgorithm = true, ulong unlockTime = 0, bool getTxKey = true, bool getTxHex = true, CancellationToken token = default)
         {
+            ErrorGuard.ThrowIfUnlockTimeIsToolarge(unlockTime, nameof(unlockTime));
             var result = await _moneroRpcCommunicator.TransferSplitAsync(transactions, transferPriority, ringSize, accountIndex, newAlgorithm, unlockTime, getTxKey, getTxHex, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.FundTransferSplitResponse, nameof(TransferSplitAsync));
             return result.FundTransferSplitResponse.Result;
@@ -363,6 +369,7 @@ namespace Monero.Client.Wallet
         /// </summary>
         public async Task<SplitFundTransfer> SweepAllAsync(string address, uint accountIndex, TransferPriority transactionPriority, uint ringSize, ulong unlockTime = 0, ulong belowAmount = ulong.MaxValue, bool getTxKeys = true, bool getTxHex = true, bool getTxMetadata = true, CancellationToken token = default)
         {
+            ErrorGuard.ThrowIfUnlockTimeIsToolarge(unlockTime, nameof(unlockTime));
             var result = await _moneroRpcCommunicator.SweepAllAsync(address, accountIndex, transactionPriority, ringSize, unlockTime, belowAmount, getTxKeys, getTxHex, getTxMetadata, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.SweepAllResponse, nameof(SweepAllAsync));
             return result.SweepAllResponse.Result;
