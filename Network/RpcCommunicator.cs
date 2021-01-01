@@ -1466,7 +1466,7 @@ namespace Monero.Client.Utilities
             };
         }
 
-        public async Task<MoneroCommunicatorResponse> GetBlockHeaderByHeightAsync(uint height, CancellationToken token)
+        public async Task<MoneroCommunicatorResponse> GetBlockHeaderByHeightAsync(ulong height, CancellationToken token)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.BlockHeaderByHeight, new GenericRequestParameters() { height = height, }, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -1615,7 +1615,7 @@ namespace Monero.Client.Utilities
             };
         }
 
-        public async Task<MoneroCommunicatorResponse> GetCoinbaseTransactionSumAsync(uint height, uint count, CancellationToken token)
+        public async Task<MoneroCommunicatorResponse> GetCoinbaseTransactionSumAsync(ulong height, uint count, CancellationToken token)
         {
             HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.CoinbaseTransactionSum, new GenericRequestParameters() { height = height, count = count, }, token).ConfigureAwait(false);
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);

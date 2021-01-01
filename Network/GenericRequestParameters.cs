@@ -7,7 +7,7 @@ namespace Monero.Client.Network
 {
     internal class GenericRequestParameters
     {
-        public uint? height { get; set; } = null;
+        public ulong? height { get; set; } = null;
         public string hash { get; set; } = null;
         public uint? start_height { get; set; } = null;
         public uint? end_height { get; set; } = null;

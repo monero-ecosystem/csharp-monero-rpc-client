@@ -60,6 +60,9 @@ namespace Monero.Client.Daemon
             _moneroRpcCommunicator.Dispose();
         }
 
+        /// <summary>
+        /// Look up how many blocks are in the longest chain known to the node.
+        /// </summary>
         public async Task<ulong> GetBlockCountAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetBlockCountAsync(token).ConfigureAwait(false);
@@ -67,6 +70,9 @@ namespace Monero.Client.Daemon
             return result.BlockCountResponse.Result.Count;
         }
 
+        /// <summary>
+        /// Block header information for the most recent block is easily retrieved with this method.
+        /// </summary>
         public async Task<BlockHeader> GetLastBlockHeaderAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetLastBlockHeaderAsync(token).ConfigureAwait(false);
@@ -74,6 +80,9 @@ namespace Monero.Client.Daemon
             return result.BlockHeaderResponse.Result.BlockHeader;
         }
 
+        /// <summary>
+        ///  Retrieve basic information about the block by hash.
+        /// </summary>
         public async Task<BlockHeader> GetBlockHeaderByHashAsync(string hash, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetBlockHeaderByHashAsync(hash, token).ConfigureAwait(false);
@@ -81,13 +90,22 @@ namespace Monero.Client.Daemon
             return result.BlockHeaderResponse.Result.BlockHeader;
         }
 
-        public async Task<BlockHeader> GetBlockHeaderByHeightAsync(uint height, CancellationToken token = default)
+        /// <summary>
+        ///  Retrieve basic information about the block by height.
+        /// </summary>
+        public async Task<BlockHeader> GetBlockHeaderByHeightAsync(ulong height, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetBlockHeaderByHeightAsync(height, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.BlockHeaderResponse, nameof(GetBlockHeaderByHeightAsync));
             return result.BlockHeaderResponse.Result.BlockHeader;
         }
 
+        /// <summary>
+        /// Similar to get_block_header_by_height above, but for a range of blocks.
+        /// This method includes a starting block height and an ending block height as parameters to retrieve basic information about the range of blocks.
+        /// </summary>
+        /// <param name="startHeight">The starting block's height.</param>
+        /// <param name="endHeight">The ending block's height.</param>
         public async Task<List<BlockHeader>> GetBlockHeaderRangeAsync(uint startHeight, uint endHeight, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetBlockHeaderRangeAsync(startHeight, endHeight, token).ConfigureAwait(false);
@@ -95,6 +113,9 @@ namespace Monero.Client.Daemon
             return result.BlockHeaderRangeResponse.Result.Headers;
         }
 
+        /// <summary>
+        /// Retrieve information about incoming and outgoing connections to your node.
+        /// </summary>
         public async Task<List<Connection>> GetConnectionsAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetConnectionsAsync(token).ConfigureAwait(false);
@@ -102,6 +123,9 @@ namespace Monero.Client.Daemon
             return result.ConnectionResponse.Result.Connections;
         }
 
+        /// <summary>
+        /// Retrieve general information about the state of your node and the network.
+        /// </summary>
         public async Task<DaemonInformation> GetDaemonInformationAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetDaemonInformationAsync(token).ConfigureAwait(false);
@@ -109,6 +133,9 @@ namespace Monero.Client.Daemon
             return result.DaemonInformationResponse.Result;
         }
 
+        /// <summary>
+        /// Look up information regarding hard fork voting and readiness.
+        /// </summary>
         public async Task<HardforkInformation> GetHardforkInformationAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetHardforkInformationAsync(token).ConfigureAwait(false);
@@ -116,6 +143,9 @@ namespace Monero.Client.Daemon
             return result.HardforkInformationResponse.Result;
         }
 
+        /// <summary>
+        /// Get list of banned IPs.
+        /// </summary>
         public async Task<List<Ban>> GetBanInformationAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetBansAsync(token).ConfigureAwait(false);
@@ -123,6 +153,10 @@ namespace Monero.Client.Daemon
             return result.GetBansResponse.Result.Bans;
         }
 
+        /// <summary>
+        /// Flush tx ids from transaction pool
+        /// </summary>
+        /// <param name="txids">List of transactions IDs to flush from pool (all tx ids flushed if empty).</param>
         public async Task<string> FlushTransactionPoolAsync(IEnumerable<string> txids, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.FlushTransactionPoolAsync(txids, token).ConfigureAwait(false);
@@ -130,6 +164,9 @@ namespace Monero.Client.Daemon
             return result.FlushTransactionPoolResponse.Result.Status;
         }
 
+        /// <summary>
+        /// Get a histogram of output amounts. For all amounts (possibly filtered by parameters), gives the number of outputs on the chain for that amount. RingCT outputs counts as 0 amount.
+        /// </summary>
         public async Task<List<Distribution>> GetOutputHistogramAsync(IEnumerable<ulong> amounts, ulong fromHeight, ulong toHeight, bool cumulative = false, bool binary = true, bool compress = false, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetOutputHistogramAsync(amounts, fromHeight, toHeight, cumulative, binary, compress, token).ConfigureAwait(false);
@@ -137,13 +174,19 @@ namespace Monero.Client.Daemon
             return result.OutputHistogramResponse.Result.Distributions;
         }
 
-        public async Task<CoinbaseTransactionSum> GetCoinbaseTransactionSumAsync(uint height, uint count, CancellationToken token = default)
+        /// <summary>
+        /// Get the coinbase amount and the fees amount for n last blocks starting at particular height.
+        /// </summary>
+        public async Task<CoinbaseTransactionSum> GetCoinbaseTransactionSumAsync(ulong height, uint count, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetCoinbaseTransactionSumAsync(height, count, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.CoinbaseTransactionSumReponse, nameof(GetCoinbaseTransactionSumAsync));
             return result.CoinbaseTransactionSumReponse.Result;
         }
 
+        /// <summary>
+        /// Give the node current version.
+        /// </summary>
         public async Task<uint> GetVersionAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetDaemonVersionAsync(token).ConfigureAwait(false);
@@ -151,6 +194,9 @@ namespace Monero.Client.Daemon
             return result.VersionResponse.Result.Version;
         }
 
+        /// <summary>
+        /// Gives an estimation on fees (piconero) per byte.
+        /// </summary>
         public async Task<ulong> GetFeeEstimateAsync(uint graceBlocks, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetFeeEstimateAsync(graceBlocks, token).ConfigureAwait(false);
@@ -158,6 +204,9 @@ namespace Monero.Client.Daemon
             return result.FeeEstimateResponse.Result.Fee;
         }
 
+        /// <summary>
+        /// Gets all fee estimate parameters, including fees (piconero) per byte.
+        /// </summary>
         public async Task<FeeEstimate> GetFeeEstimateParametersAsync(uint graceBlocks, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetFeeEstimateAsync(graceBlocks, token).ConfigureAwait(false);
@@ -165,6 +214,9 @@ namespace Monero.Client.Daemon
             return result.FeeEstimateResponse.Result;
         }
 
+        /// <summary>
+        /// Display alternative chains seen by the node.
+        /// </summary>
         public async Task<List<Chain>> GetAlternateChainsAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetAlternateChainsAsync(token).ConfigureAwait(false);
@@ -172,6 +224,9 @@ namespace Monero.Client.Daemon
             return result.AlternateChainResponse.Result.Chains;
         }
 
+        /// <summary>
+        /// Relay a transaction.
+        /// </summary>
         public async Task<string> RelayTransactionAsync(string hex, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.RelayTransactionAsync(hex, token).ConfigureAwait(false);
@@ -179,6 +234,9 @@ namespace Monero.Client.Daemon
             return result.RelayTransactionResponse.Result.TxHash;
         }
 
+        /// <summary>
+        /// Get synchronisation informations.
+        /// </summary>
         public async Task<SyncronizationInformation> SyncInformationAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.SyncInformationAsync(token).ConfigureAwait(false);
@@ -186,6 +244,10 @@ namespace Monero.Client.Daemon
             return result.SyncronizeInformationResponse.Result;
         }
 
+        /// <summary>
+        /// Block header information can be retrieved using either a block's hash or height.
+        /// This method includes a block's height as an input parameter to retrieve basic information about the block.
+        /// </summary>
         public async Task<Block> GetBlockAsync(uint height, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetBlockAsync(height, token).ConfigureAwait(false);
@@ -193,6 +255,10 @@ namespace Monero.Client.Daemon
             return result.BlockResponse.Result;
         }
 
+        /// <summary>
+        /// Block header information can be retrieved using either a block's hash or height.
+        /// This method includes a block's hash as an input parameter to retrieve basic information about the block.
+        /// </summary>
         public async Task<Block> GetBlockAsync(string hash, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetBlockAsync(hash, token).ConfigureAwait(false);
@@ -200,6 +266,9 @@ namespace Monero.Client.Daemon
             return result.BlockResponse.Result;
         }
 
+        /// <summary>
+        /// Ban a node by IP.
+        /// </summary>
         public async Task<string> SetBansAsync(IEnumerable<(string host, ulong ip, bool ban, uint seconds)> bans, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.SetBansAsync(bans, token).ConfigureAwait(false);
@@ -207,6 +276,10 @@ namespace Monero.Client.Daemon
             return result.SetBansResponse.Result.Status;
         }
 
+        /// <summary>
+        /// Submit a mined block to the network.
+        /// </summary>
+        /// <returns>Success of block submission.</returns>
         public async Task<bool> SubmitBlocksAsync(IEnumerable<string> blockBlobs, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.SubmitBlocksAsync(blockBlobs, token).ConfigureAwait(false);
@@ -214,6 +287,9 @@ namespace Monero.Client.Daemon
             return result.SubmitBlockResponse.Result != null;
         }
 
+        /// <summary>
+        /// Get a block template on which mining a new block.
+        /// </summary>
         public async Task<BlockTemplate> GetBlockTemplateAsync(ulong reserveSize, string walletAddress, string prevBlock = null, string extraNonce = null, CancellationToken token = default)
         {
             if (reserveSize > 255ul)
@@ -223,6 +299,10 @@ namespace Monero.Client.Daemon
             return result.GetBlockTemplateResponse.Result;
         }
 
+        /// <summary>
+        /// Get the status of an address that may or may not be banned.
+        /// </summary>
+        /// <param name="address">IP address of the node whose ban status is to be checked (e.g. 95.216.217.238)</param>
         public async Task<BanStatus> GetBanStatusAsync(string address, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetBanStatusAsync(address, token).ConfigureAwait(false);
@@ -230,6 +310,9 @@ namespace Monero.Client.Daemon
             return result.GetBanStatusResponse.Result;
         }
 
+        /// <summary>
+        /// Get the transaction pool's backlog.
+        /// </summary>
         public async Task<TransactionPoolBacklog> GetTransactionPoolBacklogAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetTransactionPoolBacklogAsync(token).ConfigureAwait(false);
@@ -237,8 +320,10 @@ namespace Monero.Client.Daemon
             return result.TransactionPoolBacklogResponse.Result;
         }
 
-        //// Not supporting this currently, because it doesn't sound useful.
-        //// Pruning a synced chain is a bad idea. Resyncing in pruned-mode would be faster.
+        ///// <summary>
+        ///// Commands the daemon to prune the blockchain. 
+        ///// Pruned nodes remove much of this less relevant information to have a lighter footprint.
+        ///// </summary>
         //public async Task<PruneBlockchain> PruneBlockchainAsync(bool check = false, CancellationToken token = default)
         //{
         //    var result = await _moneroRpcCommunicator.PruneBlockchainAsync(check, token).ConfigureAwait(false);
