@@ -471,7 +471,7 @@ namespace Monero.Client.Utilities
             return TransferFundsAsync(GenericRequestParameters, token);
         }
 
-        public Task<MoneroCommunicatorResponse> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, bool get_tx_key, bool get_tx_hex, uint unlock_time = 0, CancellationToken token = default)
+        public Task<MoneroCommunicatorResponse> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, bool get_tx_key, bool get_tx_hex, ulong unlock_time = 0, CancellationToken token = default)
         {
             var GenericRequestParameters = new GenericRequestParameters()
             {
@@ -484,7 +484,7 @@ namespace Monero.Client.Utilities
             return TransferFundsAsync(GenericRequestParameters, token);
         }
 
-        public Task<MoneroCommunicatorResponse> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, uint unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
+        public Task<MoneroCommunicatorResponse> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, ulong unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
         {
             if (ring_size <= 1)
                 throw new InvalidOperationException($"ring_size must be at least 2");
@@ -501,7 +501,7 @@ namespace Monero.Client.Utilities
             return TransferFundsAsync(GenericRequestParameters, token);
         }
 
-        public Task<MoneroCommunicatorResponse> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, uint account_index, uint unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
+        public Task<MoneroCommunicatorResponse> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, uint account_index, ulong unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
         {
             if (ring_size <= 1)
                 throw new InvalidOperationException($"ring_size must be at least 2");
@@ -529,7 +529,7 @@ namespace Monero.Client.Utilities
             return TransferSplitFundsAsync(GenericRequestParameters, token);
         }
 
-        public Task<MoneroCommunicatorResponse> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, bool get_tx_key, bool get_tx_hex, bool new_algorithm = true, uint unlock_time = 0, CancellationToken token = default)
+        public Task<MoneroCommunicatorResponse> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, bool get_tx_key, bool get_tx_hex, bool new_algorithm = true, ulong unlock_time = 0, CancellationToken token = default)
         {
             var GenericRequestParameters = new GenericRequestParameters()
             {
@@ -543,7 +543,7 @@ namespace Monero.Client.Utilities
             return TransferSplitFundsAsync(GenericRequestParameters, token);
         }
 
-        public Task<MoneroCommunicatorResponse> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, bool new_algorithm = true, uint unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
+        public Task<MoneroCommunicatorResponse> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, bool new_algorithm = true, ulong unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
         {
             var GenericRequestParameters = new GenericRequestParameters()
             {
@@ -558,7 +558,7 @@ namespace Monero.Client.Utilities
             return TransferSplitFundsAsync(GenericRequestParameters, token);
         }
 
-        public Task<MoneroCommunicatorResponse> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, uint account_index, bool new_algorithm = true, uint unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
+        public Task<MoneroCommunicatorResponse> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transfer_priority, uint ring_size, uint account_index, bool new_algorithm = true, ulong unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, CancellationToken token = default)
         {
             if (ring_size <= 1)
                 throw new InvalidOperationException($"ring_size must be at least 2");
