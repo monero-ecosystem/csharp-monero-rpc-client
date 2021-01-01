@@ -157,6 +157,7 @@ namespace Monero.Client.Daemon
         /// Flush tx ids from transaction pool
         /// </summary>
         /// <param name="txids">List of transactions IDs to flush from pool (all tx ids flushed if empty).</param>
+        /// <returns>A string representing transaction pool status.</returns>
         public async Task<string> FlushTransactionPoolAsync(IEnumerable<string> txids, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.FlushTransactionPoolAsync(txids, token).ConfigureAwait(false);
@@ -227,6 +228,7 @@ namespace Monero.Client.Daemon
         /// <summary>
         /// Relay a transaction.
         /// </summary>
+        /// <returns>The transaction hash of the relayed transaction.</returns>
         public async Task<string> RelayTransactionAsync(string hex, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.RelayTransactionAsync(hex, token).ConfigureAwait(false);
@@ -269,6 +271,7 @@ namespace Monero.Client.Daemon
         /// <summary>
         /// Ban a node by IP.
         /// </summary>
+        /// <returns>A string representing the banned node's status.</returns>
         public async Task<string> SetBansAsync(IEnumerable<(string host, ulong ip, bool ban, uint seconds)> bans, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.SetBansAsync(bans, token).ConfigureAwait(false);
