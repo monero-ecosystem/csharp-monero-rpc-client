@@ -64,7 +64,7 @@ namespace Monero.Client.Wallet
         Task<ImportKeyImages> ImportKeyImagesAsync(IEnumerable<(string keyImage, string signature)> signedKeyImages, CancellationToken token = default);
         Task<string> MakeUriAsync(string address, ulong amount, string recipientName, string txDescription = null, string paymentId = null, CancellationToken token = default);
         Task<MoneroUri> ParseUriAsync(string uri, CancellationToken token = default);
-        Task<List<AddressBookEntry>> GetAddressBookAsync(IEnumerable<uint> entires, CancellationToken token = default);
+        Task<AddressBook> GetAddressBookAsync(IEnumerable<uint> entires, CancellationToken token = default);
         Task<AddAddressBook> AddAddressBookAsync(string address, string description = null, string paymentId = null, CancellationToken token = default);
         Task<DeleteAddressBook> DeleteAddressBookAsync(uint index, CancellationToken token = default);
         Task<RefreshWallet> RefreshWalletAsync(uint startHeight, CancellationToken token = default);

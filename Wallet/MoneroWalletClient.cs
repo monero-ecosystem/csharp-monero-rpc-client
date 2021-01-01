@@ -606,11 +606,11 @@ namespace Monero.Client.Wallet
         /// Retrieves entries from the address book.
         /// </summary>
         /// <param name="entires">Indices of the requested address book entries.</param>
-        public async Task<List<AddressBookEntry>> GetAddressBookAsync(IEnumerable<uint> entries, CancellationToken token = default)
+        public async Task<AddressBook> GetAddressBookAsync(IEnumerable<uint> entries, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.GetAddressBookAsync(entries, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.GetAddressBookResponse, nameof(GetAddressBookAsync));
-            return result.GetAddressBookResponse.Result.Entries;
+            return result.GetAddressBookResponse.Result;
         }
 
         /// <summary>
