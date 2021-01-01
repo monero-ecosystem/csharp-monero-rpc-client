@@ -539,6 +539,7 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Export outputs in hex format.
         /// </summary>
+        /// <returns>Output data hex.</returns>
         public async Task<string> ExportOutputsAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.ExportOutputsAsync(token).ConfigureAwait(false);
@@ -585,6 +586,7 @@ namespace Monero.Client.Wallet
         /// <param name="recipientName">Name of the payment recipient.</param>
         /// <param name="txDescription">Description of the reason for the tx.</param>
         /// <param name="paymentId">16 or 64 character hexadecimal payment id.</param>
+        /// <returns>Payment URI.</returns>
         public async Task<string> MakeUriAsync(string address, ulong amount, string recipientName, string txDescription = null, string paymentId = null, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.MakeUriAsync(address, amount, recipientName, txDescription, paymentId, token).ConfigureAwait(false);
@@ -744,6 +746,7 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Export multisig info for other participants.
         /// </summary>
+        /// <returns>A string representing multisig information.</returns>
         public async Task<string> ExportMultiSigInfoAsync(CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.ExportMultiSigInfoAsync(token).ConfigureAwait(false);
@@ -767,6 +770,7 @@ namespace Monero.Client.Wallet
         /// </summary>
         /// <param name="multisigInfo">List of multisig string from peers.</param>
         /// <param name="password">Wallet password.</param>
+        /// <returns>The multisig wallet address.</returns>
         public async Task<string> FinalizeMultiSigAsync(IEnumerable<string> multiSigInfo, string password, CancellationToken token = default)
         {
             var result = await _moneroRpcCommunicator.FinalizeMultiSigAsync(multiSigInfo, password, token).ConfigureAwait(false);
