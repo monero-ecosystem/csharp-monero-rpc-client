@@ -241,7 +241,7 @@ namespace Monero.Client.Network
                 },
                 MoneroResponseSubType.SweepAll => new GenericRequest
                 {
-                    method = "sweep_dust",
+                    method = "sweep_all",
                     @params = requestParams,
                 },
                 MoneroResponseSubType.SaveWallet => new GenericRequest
