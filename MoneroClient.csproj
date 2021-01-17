@@ -6,6 +6,7 @@
     <Platforms>AnyCPU;x64;x84</Platforms>
     <RootNamespace>Monero.Client</RootNamespace>
     <AssemblyName>Monero.Client</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Version>1.0.1.4</Version>
     <RepositoryUrl>https://github.com/Agorist-Action/csharp-monero-rpc-client</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
