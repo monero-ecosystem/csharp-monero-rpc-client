@@ -13,6 +13,8 @@ namespace Monero.Client.Wallet
     public class MoneroWalletClient : IMoneroWalletClient
     {
         private readonly RpcCommunicator _moneroRpcCommunicator;
+        private readonly object _disposingLock = new object();
+        private bool _disposed = false;
 
         public MoneroWalletClient(Uri uri)
         {
@@ -63,8 +65,28 @@ namespace Monero.Client.Wallet
         /// </summary>
         public void Dispose()
         {
-            this.CloseWalletAsync().GetAwaiter().GetResult();
-            _moneroRpcCommunicator.Dispose();
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (_disposingLock)
+            {
+                if (_disposed)
+                    return;
+                else
+                    _disposed = true;
+            }
+
+            if (disposing)
+            {
+                // Free managed objects.
+                this.SaveWalletAsync().GetAwaiter().GetResult();
+                this.CloseWalletAsync().GetAwaiter().GetResult();
+                _moneroRpcCommunicator.Dispose();
+            }
+
+            // Free unmanaged objects.
         }
 
         /// <summary>

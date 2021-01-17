@@ -13,6 +13,8 @@ namespace Monero.Client.Daemon
     public class MoneroDaemonClient : IMoneroDaemonClient
     {
         private readonly RpcCommunicator _moneroRpcCommunicator;
+        private readonly object _disposalLock = new object();
+        private bool _disposed = false;
 
         public MoneroDaemonClient(Uri uri)
         {
@@ -57,7 +59,26 @@ namespace Monero.Client.Daemon
 
         public void Dispose()
         {
-            _moneroRpcCommunicator.Dispose();
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (_disposalLock)
+            {
+                if (_disposed)
+                    return;
+                else
+                    _disposed = true;
+            }
+
+            if (disposing)
+            {
+                // Free managed objects.
+                _moneroRpcCommunicator.Dispose();
+            }
+
+            // Free unmanaged objects.
         }
 
         /// <summary>
