@@ -1935,6 +1935,45 @@ namespace Monero.Client.Utilities
             };
         }
 
+        public async Task<MoneroCommunicatorResponse> SetAttributeAsync(string key, string value, CancellationToken token = default)
+        {
+            var daemonRequestParameters = new GenericRequestParameters()
+            {
+                key = key,
+                value = value,
+            };
+            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.SetAttribute, daemonRequestParameters, token).ConfigureAwait(false);
+            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
+            SetAttributeResponse responseObject = await JsonSerializer.DeserializeAsync<SetAttributeResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
+            return new MoneroCommunicatorResponse()
+            {
+                MoneroResponseType = MoneroResponseType.Wallet,
+                MoneroResponseSubType = MoneroResponseSubType.SetAttribute,
+                SetAttributeResponse = responseObject,
+            };
+        }
+
+        public async Task<MoneroCommunicatorResponse> GetAttributeAsync(string key, CancellationToken token = default)
+        {
+            var daemonRequestParameters = new GenericRequestParameters()
+            {
+                key = key,
+            };
+            HttpRequestMessage request = await _requestAdapter.GetRequestMessage(MoneroResponseSubType.GetAttribute, daemonRequestParameters, token).ConfigureAwait(false);
+            HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
+            GetAttributeResponse responseObject = await JsonSerializer.DeserializeAsync<GetAttributeResponse>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
+            return new MoneroCommunicatorResponse()
+            {
+                MoneroResponseType = MoneroResponseType.Wallet,
+                MoneroResponseSubType = MoneroResponseSubType.GetAttribute,
+                GetAttributeResponse = responseObject,
+            };
+        }
+
         public void Dispose()
         {
             _httpClient.Dispose();

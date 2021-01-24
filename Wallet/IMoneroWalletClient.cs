@@ -83,5 +83,7 @@ namespace Monero.Client.Wallet
         Task<SignMultiSigTransaction> SignMultiSigAsync(string txDataHex, CancellationToken token = default);
         Task<List<string>> SubmitMultiSigAsync(string txDataHex, CancellationToken token = default);
         Task<List<PaymentDetail>> GetPaymentDetailAsync(string paymentId, CancellationToken token = default);
+        Task SetAttributeAsync(string key, string value, CancellationToken token = default);
+        Task<string> GetAttributeAsync(string key, CancellationToken token = default);
     }
 }
