@@ -6,7 +6,7 @@ namespace Monero.Client.Wallet.POD.Responses
 {
     internal class FundTransferResponse : RpcResponse
     {
-        [JsonPropertyName("address")]
+        [JsonPropertyName("result")]
         public FundTransfer Result { get; set; }
     }
 
