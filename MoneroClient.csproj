@@ -7,12 +7,13 @@
     <RootNamespace>Monero.Client</RootNamespace>
     <AssemblyName>Monero.Client</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <Version>1.0.1.5</Version>
+    <Version>1.0.1.6</Version>
     <RepositoryUrl>https://github.com/Agorist-Action/csharp-monero-rpc-client</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes>
-        Release Notes v1.0.1.5
-        - The sweep-all command previously invoked sweep-dust. Now sweep-all command works as intended.
+        Release Notes v1.0.1.6
+        - Correct FundTransferResponse deserialization.
+        - Add GetAttributeAsync and SetAttributeAsync methods to Wallet Client.
     </PackageReleaseNotes>
     <NeutralLanguage>en-US</NeutralLanguage>
     <PackageIcon>monero-xmr-logo.png</PackageIcon>
