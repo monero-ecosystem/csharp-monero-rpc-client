@@ -38,20 +38,19 @@ await moneroWalletClient.OpenWalletAsync("new_wallet3", "banana").ConfigureAwait
 ```
 **Transfer Funds**
 ```csharp
-var cts = new CancellationTokenSource();
 var dA = new List<(string address, ulong amount)>() 
 { 
 	("BfukYd1Dv5YDgkZDhffjmHb1SfzT7Wr1HNTYkyxEmfnXiGepCHgPiaWicRCLHpM2moVNWAxNEVKogU2w58fT", 1000ul),
 	("SomeOtherMoneroAddress", 3233100ul),
 };
-var response = await moneroWalletClient.TransferAsync(dA, TransferPriority.Normal, cts.token).ConfigureAwait(false);
+var response = await moneroWalletClient.TransferAsync(dA, TransferPriority.Normal).ConfigureAwait(false);
 ```
 For the entire MoneroWalletClient interface, please click [here](https://github.com/monero-ecosystem/csharp-monero-rpc-client/blob/master/Wallet/IMoneroWalletClient.cs).
 **Note:** Unlike the Daemon Client, to perform any action with the Wallet Client, one must first either create a new wallet, or open an existing one (as shown above).
 # Latest Stable Release
 Available on Nuget [here](https://www.nuget.org/packages/Monero.Client/).
 ```
-Install-Package Monero.Client -Version 1.0.1.4
+Install-Package Monero.Client -Version 1.0.1.5
 ```
 # Latest Development Changes
 ```

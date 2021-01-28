@@ -87,5 +87,7 @@ namespace Monero.Client.Network
         public bool? binary { get; set; } = null;
         public bool? compress { get; set; } = null;
         public bool? check { get; set; } = null;
+        public string key { get; set; } = null;
+        public string value { get; set; } = null;
     }
 }

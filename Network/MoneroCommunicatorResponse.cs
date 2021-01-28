@@ -112,6 +112,8 @@ namespace Monero.Client.Network
         DescribeTransfer,
         SweepSingle,
         GetPaymentDetail,
+        GetAttribute,
+        SetAttribute
     }
 
     internal class MoneroCommunicatorResponse
@@ -205,5 +207,7 @@ namespace Monero.Client.Network
         internal DescribeTransferResponse DescribeTransferResponse { get; set; }
         internal SweepSingleResponse SweepSingleResponse { get; set; }
         internal PaymentDetailResponse PaymentDetailResponse { get; set; }
+        internal SetAttributeResponse SetAttributeResponse { get; set; }
+        internal GetAttributeResponse GetAttributeResponse { get; set; }
     }
 }

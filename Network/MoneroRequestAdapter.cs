@@ -241,7 +241,7 @@ namespace Monero.Client.Network
                 },
                 MoneroResponseSubType.SweepAll => new GenericRequest
                 {
-                    method = "sweep_dust",
+                    method = "sweep_all",
                     @params = requestParams,
                 },
                 MoneroResponseSubType.SaveWallet => new GenericRequest
@@ -447,6 +447,16 @@ namespace Monero.Client.Network
                 MoneroResponseSubType.PruneBlockchain => new GenericRequest
                 {
                     method = "prune_blockchain",
+                    @params = requestParams,
+                },
+                MoneroResponseSubType.GetAttribute => new GenericRequest
+                {
+                    method = "get_attribute",
+                    @params = requestParams,
+                },
+                MoneroResponseSubType.SetAttribute => new GenericRequest
+                {
+                    method = "set_attribute",
                     @params = requestParams,
                 },
                 MoneroResponseSubType.Verify => throw new NotImplementedException("The Verify RPC Command is not implemented"),

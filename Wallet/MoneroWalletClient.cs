@@ -13,6 +13,8 @@ namespace Monero.Client.Wallet
     public class MoneroWalletClient : IMoneroWalletClient
     {
         private readonly RpcCommunicator _moneroRpcCommunicator;
+        private readonly object _disposingLock = new object();
+        private bool _disposed = false;
 
         public MoneroWalletClient(Uri uri)
         {
@@ -63,8 +65,28 @@ namespace Monero.Client.Wallet
         /// </summary>
         public void Dispose()
         {
-            this.CloseWalletAsync().GetAwaiter().GetResult();
-            _moneroRpcCommunicator.Dispose();
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (_disposingLock)
+            {
+                if (_disposed)
+                    return;
+                else
+                    _disposed = true;
+            }
+
+            if (disposing)
+            {
+                // Free managed objects.
+                this.SaveWalletAsync().GetAwaiter().GetResult();
+                this.CloseWalletAsync().GetAwaiter().GetResult();
+                _moneroRpcCommunicator.Dispose();
+            }
+
+            // Free unmanaged objects.
         }
 
         /// <summary>
@@ -839,6 +861,25 @@ namespace Monero.Client.Wallet
             var result = await _moneroRpcCommunicator.GetPaymentDetailAsync(payment_id, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.PaymentDetailResponse, nameof(GetPaymentDetailAsync));
             return result.PaymentDetailResponse.Result.Payments;
+        }
+
+        /// <summary>
+        /// Set an attribute (key/value pair) to store any additional info in the wallet
+        /// </summary>
+        public async Task SetAttributeAsync(string key, string value, CancellationToken token = default)
+        {
+            var result = await _moneroRpcCommunicator.SetAttributeAsync(key, value, token).ConfigureAwait(false);
+            ErrorGuard.ThrowIfResultIsNull(result?.SetAttributeResponse, nameof(SetAttributeAsync));
+        }
+
+        /// <summary>
+        /// Get an attribute value from the wallet, given its key; throws an error if not present
+        /// </summary>
+        public async Task<string> GetAttributeAsync(string key, CancellationToken token = default)
+        {
+            var result = await _moneroRpcCommunicator.GetAttributeAsync(key, token).ConfigureAwait(false);
+            ErrorGuard.ThrowIfResultIsNull(result?.GetAttributeResponse, nameof(GetAttributeAsync));
+            return result.GetAttributeResponse.Result.Value;
         }
     }
 }
