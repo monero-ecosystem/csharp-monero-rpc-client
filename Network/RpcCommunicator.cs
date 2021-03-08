@@ -738,6 +738,7 @@ namespace Monero.Client.Utilities
                 {
                     KeyType.Mnemonic => "mnemonic",
                     KeyType.ViewKey => "view_key",
+                    KeyType.SpendKey => "spend_key",
                     _ => throw new InvalidOperationException($"Unknown KeyType ({keyType})"),
                 };
             }
