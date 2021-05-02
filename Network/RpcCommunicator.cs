@@ -1968,7 +1968,6 @@ namespace Monero.Client.Utilities
             HttpResponseMessage response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
-            var asString = await ByteArrayToString(response).ConfigureAwait(false);
             TransactionPool responseObject = await JsonSerializer.DeserializeAsync<TransactionPool>(ms, _defaultSerializationOptions, token).ConfigureAwait(false);
             return new MoneroCommunicatorResponse()
             {

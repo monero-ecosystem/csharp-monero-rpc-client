@@ -22,6 +22,8 @@ namespace Monero.Client.Network
 
         public Task<HttpRequestMessage> GetRequestMessage(MoneroResponseSubType subType, CustomRequestParameters requestParams, CancellationToken token)
         {
+            if (requestParams == null)
+                return GetRequestMessage(subType, new GenericRequestParameters(), token);
             var request = GetRequest(subType, requestParams);
             IUriBuilder uriBuilder = new UriBuilderDirector(new UriBuilder(_url, _port, RequestEndpointExtensionRetriever.FetchEndpoint(request)));
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, uriBuilder.Build());
@@ -80,14 +82,6 @@ namespace Monero.Client.Network
                     method = null,
                     @params = null,
                     txs_hashes = customRequest.txs_hashes,
-                    id = null,
-                    jsonrpc = null,
-                },
-                MoneroResponseSubType.TransactionPoolTransactions => new CustomRequest
-                {
-                    endpoint = RequestEndpoint.TransactionPool,
-                    method = null,
-                    @params = null,
                     id = null,
                     jsonrpc = null,
                 },
@@ -578,6 +572,14 @@ namespace Monero.Client.Network
                     endpoint = RequestEndpoint.JsonRpc,
                     method = "set_attribute",
                     @params = requestParams,
+                },
+                MoneroResponseSubType.TransactionPoolTransactions => new BaseRequest
+                {
+                    endpoint = RequestEndpoint.TransactionPool,
+                    method = null,
+                    @params = null,
+                    id = null,
+                    jsonrpc = null,
                 },
                 MoneroResponseSubType.Verify => throw new NotImplementedException("The Verify RPC Command is not implemented"),
                 _ => throw new InvalidOperationException($"Unknown MoneroDaemonResponseSubType ({subType})"),
