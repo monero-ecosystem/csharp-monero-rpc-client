@@ -27,7 +27,7 @@ namespace Monero.Client.Daemon.POD
         {
             get
             {
-                return new DateTime(1970, 1, 1).AddSeconds(Timestamp);
+                return DateTime.UnixEpoch.AddSeconds(this.Timestamp);
             }
         }
         public override string ToString()

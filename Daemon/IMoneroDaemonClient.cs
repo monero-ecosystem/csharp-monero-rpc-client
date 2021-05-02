@@ -33,7 +33,8 @@ namespace Monero.Client.Daemon
         Task<string> SetBansAsync(IEnumerable<(string host, ulong ip, bool ban, uint seconds)> bans, CancellationToken token = default);
         Task<bool> SubmitBlocksAsync(IEnumerable<string> blockBlob, CancellationToken token = default);
         Task<BlockTemplate> GetBlockTemplateAsync(ulong reserveSize, string walletAddress, string prevBlock = null, string extraNonce = null, CancellationToken token = default);
-        //Task<PruneBlockchain> PruneBlockchainAsync(bool check = false, CancellationToken token = default);
         Task<TransactionPoolBacklog> GetTransactionPoolBacklogAsync(CancellationToken token = default);
+        Task<TransactionPool> GetTransactionPoolAsync(CancellationToken token = default);
+        Task<List<Transaction>> GetTransactionsAsync(IEnumerable<string> txHashes, CancellationToken token = default);
     }
 }

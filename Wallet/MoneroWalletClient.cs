@@ -16,25 +16,15 @@ namespace Monero.Client.Wallet
         private readonly object _disposingLock = new object();
         private bool _disposed = false;
 
-        public MoneroWalletClient(Uri uri)
+        private MoneroWalletClient(string url, uint port)
         {
-            _moneroRpcCommunicator = new RpcCommunicator(uri);
-        }
-
-        public MoneroWalletClient(Uri uri, HttpMessageHandler httpMessageHandler)
-        {
-            _moneroRpcCommunicator = new RpcCommunicator(uri, httpMessageHandler);
-        }
-
-        public MoneroWalletClient(Uri uri, HttpMessageHandler httpMessageHandler, bool disposeHandler)
-        {
-            _moneroRpcCommunicator = new RpcCommunicator(uri, httpMessageHandler, disposeHandler);
+            _moneroRpcCommunicator = new RpcCommunicator(url, port);
         }
 
         /// <summary>
         /// Initialize a Monero Wallet Client using default network settings (<localhost>:<defaultport>)
         /// </summary>
-        public MoneroWalletClient(MoneroNetwork networkType)
+        private MoneroWalletClient(MoneroNetwork networkType)
         {
             _moneroRpcCommunicator = new RpcCommunicator(networkType, ConnectionType.Wallet);
         }
@@ -42,9 +32,9 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Initialize a Monero Wallet Client using default network settings (<localhost>:<defaultport>), opening the wallet while doing so.
         /// </summary>
-        public static Task<MoneroWalletClient> CreateAsync(Uri uri, string filename, string password, CancellationToken cancellationToken = default)
+        public static Task<MoneroWalletClient> CreateAsync(string url, uint port, string filename, string password, CancellationToken cancellationToken = default)
         {
-            var moneroWalletClient = new MoneroWalletClient(uri);
+            var moneroWalletClient = new MoneroWalletClient(url, port);
             return moneroWalletClient.InitializeAsync(filename, password, cancellationToken);
         }
 

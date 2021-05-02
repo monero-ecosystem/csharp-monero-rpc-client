@@ -10,11 +10,11 @@ Both a daemon client and wallet client are available. The daemon client interact
 **Initialize Client**
 ```csharp
 using Monero.Client.Daemon;
-var daemonClient = await MoneroDaemonClient.CreateAsync(new Uri("http://127.0.0.1:18082/json_rpc")).ConfigureAwait(false);
+var daemonClient = await MoneroDaemonClient.CreateAsync("127.0.0.1",18081);
 ```
 **Get Connections**
 ```csharp
-List<Connection> connections = await daemonClient.GetConnectionsAsync().ConfigureAwait(false);
+List<Connection> connections = await daemonClient.GetConnectionsAsync();
 ```
 ![](gif/connectionsdemo.gif)
 For the entire MoneroDaemonClient interface, please click [here](https://github.com/Agorist-Action/csharp-monero-rpc-client/blob/master/Daemon/IMoneroDaemonClient.cs).
@@ -25,16 +25,8 @@ using Monero.Client.Network;
 using Monero.Client.Wallet;
 using Monero.Client.Wallet.POD;
 
-// Synchronously Initialize Client
-var moneroWalletClient = new MoneroWalletClient(new Uri("http://127.0.0.1:18082/json_rpc"));
-
-// Asynchronously Initialize Client (and Open Wallet) - This is the preferred method of initialization.
-var walletClient = await MoneroWalletClient.CreateAsync(MoneroNetwork.Mainnet, "TestMainnet", "123").ConfigureAwait(false);
-```
-**Open Wallet**
-```csharp
-// Will throw if wallet is already open.
-await moneroWalletClient.OpenWalletAsync("new_wallet3", "banana").ConfigureAwait(false);
+// Asynchronously Initialize Client (and Open Wallet)
+var walletClient = await MoneroWalletClient.CreateAsync(MoneroNetwork.Mainnet, "TestMainnet", "123");
 ```
 **Transfer Funds**
 ```csharp
@@ -43,7 +35,7 @@ var dA = new List<(string address, ulong amount)>()
 	("BfukYd1Dv5YDgkZDhffjmHb1SfzT7Wr1HNTYkyxEmfnXiGepCHgPiaWicRCLHpM2moVNWAxNEVKogU2w58fT", 1000ul),
 	("SomeOtherMoneroAddress", 3233100ul),
 };
-var response = await moneroWalletClient.TransferAsync(dA, TransferPriority.Normal).ConfigureAwait(false);
+var response = await moneroWalletClient.TransferAsync(dA, TransferPriority.Normal);
 ```
 For the entire MoneroWalletClient interface, please click [here](https://github.com/monero-ecosystem/csharp-monero-rpc-client/blob/master/Wallet/IMoneroWalletClient.cs).
 **Note:** Unlike the Daemon Client, to perform any action with the Wallet Client, one must first either create a new wallet, or open an existing one (as shown above).

@@ -123,7 +123,7 @@ namespace Monero.Client.Wallet.POD.Responses
         {
             get
             {
-                return new DateTime(1970, 1, 1).AddSeconds(this.Timestamp);
+                return DateTime.UnixEpoch.AddSeconds(this.Timestamp);
             }
         }
 
