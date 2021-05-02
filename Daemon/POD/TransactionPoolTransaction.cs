@@ -26,10 +26,10 @@ namespace Monero.Client.Daemon.POD
         {
             get
             {
-                const string defaultIdHash = "0000000000000000000000000000000000000000000000000000000000000000";
-                const ulong defaultHeight = 0;
-                return LastFailedHeight != defaultHeight && 
-                    string.Compare(defaultIdHash, LastFailedTxHash) != 0;
+                const string DefaultIdHash = "0000000000000000000000000000000000000000000000000000000000000000";
+                const ulong DefaultHeight = 0;
+                return LastFailedHeight != DefaultHeight && 
+                    string.Compare(DefaultIdHash, LastFailedTxHash) != 0;
             }
         }
         [JsonPropertyName("last_failed_id_hash")]
