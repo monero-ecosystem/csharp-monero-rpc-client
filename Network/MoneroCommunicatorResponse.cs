@@ -1,4 +1,5 @@
 ﻿
+using Monero.Client.Daemon.POD;
 using Monero.Client.Daemon.POD.Responses;
 using Monero.Client.Wallet.POD.Responses;
 
@@ -51,6 +52,8 @@ namespace Monero.Client.Network
         GetBanStatus, // Status on the ban of an address.
         PruneBlockchain,
         TransactionPoolBacklog,
+        Transactions,
+        TransactionPoolTransactions,
 
         // Wallet
         Balance,
@@ -145,6 +148,8 @@ namespace Monero.Client.Network
         internal GetBlockTemplateResponse GetBlockTemplateResponse { get; set; }
         internal GetBanStatusResponse GetBanStatusResponse { get; set; }
         internal PruneBlockchainResponse PruneBlockchainResponse { get; set; }
+        internal TransactionSet TransactionsResponse { get; set; }
+        internal TransactionPool TransactionPoolResponse { get; set; }
         ///
         /// Wallet-related responses.
         ///

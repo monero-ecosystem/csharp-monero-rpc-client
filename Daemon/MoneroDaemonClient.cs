@@ -16,32 +16,22 @@ namespace Monero.Client.Daemon
         private readonly object _disposalLock = new object();
         private bool _disposed = false;
 
-        public MoneroDaemonClient(Uri uri)
+        private MoneroDaemonClient(string url, uint port)
         {
-            _moneroRpcCommunicator = new RpcCommunicator(uri);
-        }
-
-        public MoneroDaemonClient(Uri uri, HttpMessageHandler httpMessageHandler)
-        {
-            _moneroRpcCommunicator = new RpcCommunicator(uri, httpMessageHandler);
-        }
-
-        public MoneroDaemonClient(Uri uri, HttpMessageHandler httpMessageHandler, bool disposeHandler)
-        {
-            _moneroRpcCommunicator = new RpcCommunicator(uri, httpMessageHandler, disposeHandler);
+            _moneroRpcCommunicator = new RpcCommunicator(url, port);
         }
 
         /// <summary>
         /// Initialize a Monero Wallet Client using default network settings (<localhost>:<defaultport>)
         /// </summary>
-        public MoneroDaemonClient(MoneroNetwork networkType)
+        private MoneroDaemonClient(MoneroNetwork networkType)
         {
             _moneroRpcCommunicator = new RpcCommunicator(networkType, ConnectionType.Daemon);
         }
 
-        public static Task<MoneroDaemonClient> CreateAsync(Uri uri, CancellationToken cancellationToken = default)
+        public static Task<MoneroDaemonClient> CreateAsync(string url, uint port, CancellationToken cancellationToken = default)
         {
-            var moneroDaemonClient = new MoneroDaemonClient(uri);
+            var moneroDaemonClient = new MoneroDaemonClient(url, port);
             return moneroDaemonClient.InitializeAsync(cancellationToken);
         }
 
@@ -344,15 +334,18 @@ namespace Monero.Client.Daemon
             return result.TransactionPoolBacklogResponse.Result;
         }
 
-        ///// <summary>
-        ///// Commands the daemon to prune the blockchain. 
-        ///// Pruned nodes remove much of this less relevant information to have a lighter footprint.
-        ///// </summary>
-        //public async Task<PruneBlockchain> PruneBlockchainAsync(bool check = false, CancellationToken token = default)
-        //{
-        //    var result = await _moneroRpcCommunicator.PruneBlockchainAsync(check, token).ConfigureAwait(false);
-        //    ErrorGuard.ThrowIfResultIsNull(result?.PruneBlockchainResponse, nameof(PruneBlockchainAsync));
-        //    return result.PruneBlockchainResponse.Result;
-        //}
+        public async Task<TransactionPool> GetTransactionPoolAsync(CancellationToken token = default)
+        {
+            var result = await _moneroRpcCommunicator.GetTransactionPoolAsync(token).ConfigureAwait(false);
+            ErrorGuard.ThrowIfResultIsNull(result?.TransactionPoolResponse == null, nameof(GetTransactionPoolAsync));
+            return result.TransactionPoolResponse;
+        }
+
+        public async Task<List<Transaction>> GetTransactionsAsync(IEnumerable<string> txHashes, CancellationToken token = default)
+        {
+            var result = await _moneroRpcCommunicator.GetTransactionsAsync(txHashes, token).ConfigureAwait(false);
+            ErrorGuard.ThrowIfResultIsNull(result?.TransactionsResponse == null, nameof(GetTransactionsAsync));
+            return result.TransactionsResponse?.Transactions;
+        }
     }
 }

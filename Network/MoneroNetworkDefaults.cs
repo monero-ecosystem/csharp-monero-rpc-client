@@ -4,12 +4,18 @@ namespace Monero.Client.Network
 {
     internal static class MoneroNetworkDefaults
     {
-        public const string DaemonMainnetUri = @"http://127.0.0.1:18081/json_rpc";
-        public const string DaemonStagenetUri = @"http://127.0.0.1:38081/json_rpc";
-        public const string DaemonTestnetUri = @"http://127.0.0.1:28081/json_rpc";
-        public const string WalletMainnetUri = @"http://127.0.0.1:18082/json_rpc";
-        public const string WalletStagenetUri = @"http://127.0.0.1:38082/json_rpc";
-        public const string WalletTestnetUri = @"http://127.0.0.1:28082/json_rpc";
+        public const string DaemonMainnetUrl = @"127.0.0.1";
+        public const uint DaemonMainnetPort = 18081;
+        public const string DaemonStagenetUrl = @"127.0.0.1";
+        public const uint DaemonStagenetPort = 38081;
+        public const string DaemonTestnetUrl = @"127.0.0.1";
+        public const uint DaemonTestnetPort = 28081;
+        public const string WalletMainnetUrl = @"127.0.0.1";
+        public const uint WalletMainnetPort = 18082;
+        public const string WalletStagenetUrl = @"127.0.0.1";
+        public const uint WalletStagenetPort = 38082;
+        public const string WalletTestnetUrl = @"127.0.0.1";
+        public const uint WalletTestnetPort = 28082;
     }
 
     internal static class FieldAndHeaderDefaults

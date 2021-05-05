@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace Monero.Client.Network
 {
+    /// <summary>
+    /// Used for json_rpc interface commands.
+    /// </summary>
     internal class GenericRequestParameters
     {
         public ulong? height { get; set; } = null;
@@ -89,5 +92,13 @@ namespace Monero.Client.Network
         public bool? check { get; set; } = null;
         public string key { get; set; } = null;
         public string value { get; set; } = null;
+    }
+
+    /// <summary>
+    /// Used for non json_rpc interface commands.
+    /// </summary>
+    internal class CustomRequestParameters : GenericRequestParameters
+    {
+        public IEnumerable<string> txs_hashes { get; set; } = null;
     }
 }
