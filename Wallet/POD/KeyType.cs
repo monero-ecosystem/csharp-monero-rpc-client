@@ -2,6 +2,7 @@
 {
     public enum KeyType
     {
+        SpendKey,
         ViewKey,
         Mnemonic,
     }
