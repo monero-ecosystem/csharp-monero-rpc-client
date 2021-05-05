@@ -42,7 +42,7 @@ For the entire MoneroWalletClient interface, please click [here](https://github.
 # Latest Stable Release
 Available on Nuget [here](https://www.nuget.org/packages/Monero.Client/).
 ```
-Install-Package Monero.Client -Version 1.0.1.5
+Install-Package Monero.Client -Version 1.0.1.7
 ```
 # Latest Development Changes
 ```
