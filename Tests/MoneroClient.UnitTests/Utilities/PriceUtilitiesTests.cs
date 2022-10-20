@@ -12,7 +12,7 @@ namespace MoneroClient.UnitTests.Utilities
         [InlineData(1, 1000000000000)]
         [InlineData(0.5, 500000000000)]
         [InlineData(1.5, 1500000000000)]
-        public void MoneroToPiconero_ValidMoneroAmounts_ReturnCorrectPiconero(decimal monero, ulong expectedPiconero)
+        public void MoneroToPiconero_ValidMoneroAmounts_ReturnsCorrectPiconero(decimal monero, ulong expectedPiconero)
         {
             var piconero = PriceUtilities.MoneroToPiconero(monero);
             Assert.Equal(expectedPiconero, piconero);
