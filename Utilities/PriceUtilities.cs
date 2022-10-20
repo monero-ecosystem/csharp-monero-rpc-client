@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Text;
 
-[assembly: InternalsVisibleTo("Monero.Client.Tests")]
+[assembly: InternalsVisibleTo("MoneroClient.UnitTests")]
 namespace Monero.Client.Utilities
 {
 
