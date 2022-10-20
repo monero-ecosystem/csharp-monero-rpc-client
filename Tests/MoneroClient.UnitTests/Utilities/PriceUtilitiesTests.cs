@@ -7,7 +7,7 @@ namespace MoneroClient.UnitTests.Utilities
     public class PriceUtilitiesTests
     {
         [Theory]
-        [InlineData(0, 0ul)]
+        [InlineData(0, 0)]
         [InlineData(0.000000000001, 1)]
         [InlineData(1, 1000000000000)]
         [InlineData(0.5, 500000000000)]
@@ -53,7 +53,8 @@ namespace MoneroClient.UnitTests.Utilities
         [Theory]
         [InlineData(10, 0.000000000010)]
         [InlineData(1, 0.000000000001)]
-        public void PiconeroToMonero_ValidPiconeroAmounts_ReturnCorrectMonero(ulong piconero, decimal expectedMonero)
+        [InlineData(0, 0)]
+        public void PiconeroToMonero_ValidPiconeroAmounts_ReturnsCorrectMonero(ulong piconero, decimal expectedMonero)
         {
             var monero = PriceUtilities.PiconeroToMonero(piconero);
             Assert.Equal(expectedMonero, monero);
@@ -65,14 +66,6 @@ namespace MoneroClient.UnitTests.Utilities
             ulong piconero = ulong.MaxValue;
             _ = PriceUtilities.PiconeroToMonero(piconero);
             // Does not throw.
-        }
-
-        [Fact]
-        public void PiconeroToMonero_ZeroPiconero()
-        {
-            ulong piconero = 0;
-            decimal monero = PriceUtilities.PiconeroToMonero(piconero);
-            Assert.Equal(0M, monero);
         }
     }
 }
