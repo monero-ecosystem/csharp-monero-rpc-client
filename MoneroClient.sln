@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29613.14
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneroClient", "MoneroClient.csproj", "{5B3EAD04-7CB8-4A2B-91BA-9F0EEC39EC4F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{752CD2CE-2A17-41AC-8931-F3F7B347013C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneroClientTests", "Tests\MoneroClientTests\MoneroClientTests.csproj", "{D1332264-3814-4FAB-91B2-0F0399FB1EC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneroClient.UnitTests", "Tests\MoneroClient.UnitTests\MoneroClient.UnitTests.csproj", "{DB7ECA37-87DA-4000-97E8-71FCDA6C7456}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,24 +31,24 @@ Global
 		{5B3EAD04-7CB8-4A2B-91BA-9F0EEC39EC4F}.Release|x64.Build.0 = Release|x64
 		{5B3EAD04-7CB8-4A2B-91BA-9F0EEC39EC4F}.Release|x86.ActiveCfg = Release|x86
 		{5B3EAD04-7CB8-4A2B-91BA-9F0EEC39EC4F}.Release|x86.Build.0 = Release|x86
-		{D1332264-3814-4FAB-91B2-0F0399FB1EC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D1332264-3814-4FAB-91B2-0F0399FB1EC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D1332264-3814-4FAB-91B2-0F0399FB1EC3}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{D1332264-3814-4FAB-91B2-0F0399FB1EC3}.Debug|x64.Build.0 = Debug|Any CPU
-		{D1332264-3814-4FAB-91B2-0F0399FB1EC3}.Debug|x86.ActiveCfg = Debug|x84
-		{D1332264-3814-4FAB-91B2-0F0399FB1EC3}.Debug|x86.Build.0 = Debug|x84
-		{D1332264-3814-4FAB-91B2-0F0399FB1EC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D1332264-3814-4FAB-91B2-0F0399FB1EC3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D1332264-3814-4FAB-91B2-0F0399FB1EC3}.Release|x64.ActiveCfg = Release|x64
-		{D1332264-3814-4FAB-91B2-0F0399FB1EC3}.Release|x64.Build.0 = Release|x64
-		{D1332264-3814-4FAB-91B2-0F0399FB1EC3}.Release|x86.ActiveCfg = Release|Any CPU
-		{D1332264-3814-4FAB-91B2-0F0399FB1EC3}.Release|x86.Build.0 = Release|Any CPU
+		{DB7ECA37-87DA-4000-97E8-71FCDA6C7456}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB7ECA37-87DA-4000-97E8-71FCDA6C7456}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB7ECA37-87DA-4000-97E8-71FCDA6C7456}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DB7ECA37-87DA-4000-97E8-71FCDA6C7456}.Debug|x64.Build.0 = Debug|Any CPU
+		{DB7ECA37-87DA-4000-97E8-71FCDA6C7456}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DB7ECA37-87DA-4000-97E8-71FCDA6C7456}.Debug|x86.Build.0 = Debug|Any CPU
+		{DB7ECA37-87DA-4000-97E8-71FCDA6C7456}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB7ECA37-87DA-4000-97E8-71FCDA6C7456}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB7ECA37-87DA-4000-97E8-71FCDA6C7456}.Release|x64.ActiveCfg = Release|Any CPU
+		{DB7ECA37-87DA-4000-97E8-71FCDA6C7456}.Release|x64.Build.0 = Release|Any CPU
+		{DB7ECA37-87DA-4000-97E8-71FCDA6C7456}.Release|x86.ActiveCfg = Release|Any CPU
+		{DB7ECA37-87DA-4000-97E8-71FCDA6C7456}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{D1332264-3814-4FAB-91B2-0F0399FB1EC3} = {752CD2CE-2A17-41AC-8931-F3F7B347013C}
+		{DB7ECA37-87DA-4000-97E8-71FCDA6C7456} = {752CD2CE-2A17-41AC-8931-F3F7B347013C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {88A52E0B-BDE4-4CB3-96A0-3D38793952CA}
