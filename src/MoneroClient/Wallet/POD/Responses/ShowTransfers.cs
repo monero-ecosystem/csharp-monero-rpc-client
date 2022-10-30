@@ -5,7 +5,6 @@ using System.Text.Json.Serialization;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-
     public class ShowTransfers
     {
         [JsonPropertyName("in")]

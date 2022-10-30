@@ -65,6 +65,8 @@
 		<Rule Id="CA1018" Action="None" />
 		<Rule Id="CA1710" Action="None" />
 		<Rule Id="SA0001" Action="None" />
+		<Rule Id="SA1615" Action="None" />
+		<Rule Id="CA1016" Action="None" />
 	</Rules>
 	<Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp.Features" RuleNamespace="Microsoft.CodeAnalysis.CSharp.Features">
 		<Rule Id="IDE0003" Action="None" />
@@ -131,5 +133,7 @@
 		<Rule Id="CA1018" Action="None" />
 		<Rule Id="CA1710" Action="None" />
 		<Rule Id="SA0001" Action="None" />
+		<Rule Id="SA1615" Action="None" />
+		<Rule Id="CA1016" Action="None" />
 	</Rules>
 </RuleSet>

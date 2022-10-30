@@ -55,7 +55,7 @@
 	<PropertyGroup>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-		<CodeAnalysisRuleSet>../StyleCop.Analyzers.ruleset</CodeAnalysisRuleSet>
+		<CodeAnalysisRuleSet></CodeAnalysisRuleSet>
 	</PropertyGroup>
 
 </Project>

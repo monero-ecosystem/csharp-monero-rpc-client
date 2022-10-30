@@ -2,7 +2,6 @@
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-
     public class TransferDestination
     {
         [JsonPropertyName("address")]

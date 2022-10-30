@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 
 namespace Monero.Client.Network
 {
-
     internal class Error
     {
         [JsonPropertyName("code")]

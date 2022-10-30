@@ -48,6 +48,7 @@ namespace Monero.Client.Utilities
                 (_, _) => throw new InvalidOperationException($"Unknown MoneroNetwork ({networkType}) and ConnectionType ({connectionType}) combination"),
             };
         }
+
         private RpcCommunicator()
         {
             this.httpClient = new HttpClient();
@@ -74,7 +75,6 @@ namespace Monero.Client.Utilities
             };
             return this.GetBalanceAsync(genericRequestParameters, token);
         }
-
 
         public Task<MoneroCommunicatorResponse> GetBalanceAsync(uint account_index, CancellationToken token = default)
         {
@@ -199,11 +199,11 @@ namespace Monero.Client.Utilities
         public async Task<MoneroCommunicatorResponse> GetAccountsAsync(string tag, CancellationToken token = default)
         {
             ErrorGuard.ThrowIfNullOrWhiteSpace(tag, nameof(tag));
-            var GenericRequestParameters = new GenericRequestParameters()
+            var genericRequestParameters = new GenericRequestParameters()
             {
                 Label = tag,
             };
-            HttpRequestMessage request = await this.requestAdapter.GetRequestMessage(MoneroResponseSubType.Account, GenericRequestParameters, token).ConfigureAwait(false);
+            HttpRequestMessage request = await this.requestAdapter.GetRequestMessage(MoneroResponseSubType.Account, genericRequestParameters, token).ConfigureAwait(false);
             HttpResponseMessage response = await this.httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
@@ -265,12 +265,12 @@ namespace Monero.Client.Utilities
         public async Task<MoneroCommunicatorResponse> LabelAccountAsync(uint account_index, string label, CancellationToken token = default)
         {
             ErrorGuard.ThrowIfNullOrWhiteSpace(label, nameof(label));
-            var GenericRequestParameters = new GenericRequestParameters()
+            var genericRequestParameters = new GenericRequestParameters()
             {
                 Label = label,
                 Account_index = account_index,
             };
-            HttpRequestMessage request = await this.requestAdapter.GetRequestMessage(MoneroResponseSubType.AccountLabeling, GenericRequestParameters, token).ConfigureAwait(false);
+            HttpRequestMessage request = await this.requestAdapter.GetRequestMessage(MoneroResponseSubType.AccountLabeling, genericRequestParameters, token).ConfigureAwait(false);
             HttpResponseMessage response = await this.httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
             using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
@@ -648,7 +648,6 @@ namespace Monero.Client.Utilities
             return this.GetIncomingTransfersAsync(genericRequestParameters, token);
         }
 
-
         public async Task<MoneroCommunicatorResponse> GetPrivateKey(KeyType key_type, CancellationToken token = default)
         {
             static string KeyTypeToString(KeyType keyType)
@@ -839,7 +838,6 @@ namespace Monero.Client.Utilities
             };
             return this.GetTransfersAsync(genericRequestParameters, token);
         }
-
 
         public Task<MoneroCommunicatorResponse> GetTransferByTxidAsync(string txid, CancellationToken token = default)
         {
@@ -1913,6 +1911,36 @@ namespace Monero.Client.Utilities
             return responseBody;
         }
 
+        private static List<FundTransferParameter> TransactionToFundTransferParameter(IEnumerable<(string address, ulong amount)> transactions)
+        {
+            List<FundTransferParameter> fundTransferParameters = new List<FundTransferParameter>();
+            foreach (var da in transactions)
+            {
+                fundTransferParameters.Add(new FundTransferParameter()
+                {
+                    Address = da.address,
+                    Amount = da.amount,
+                });
+            }
+
+            return fundTransferParameters;
+        }
+
+        private static List<SignedKeyImage> KeyImageAndSignatureToSignedKeyImages(IEnumerable<(string key_image, string signature)> signed_key_images)
+        {
+            var signedKeyImages = new List<SignedKeyImage>();
+            foreach (var keyImagePair in signed_key_images)
+            {
+                signedKeyImages.Add(new SignedKeyImage()
+                {
+                    Image = keyImagePair.key_image,
+                    Signature = keyImagePair.signature,
+                });
+            }
+
+            return signedKeyImages;
+        }
+
         private async Task<MoneroCommunicatorResponse> GetBalanceAsync(GenericRequestParameters genericRequestParameters, CancellationToken token)
         {
             HttpRequestMessage request = await this.requestAdapter.GetRequestMessage(MoneroResponseSubType.Balance, genericRequestParameters, token).ConfigureAwait(false);
@@ -1943,21 +1971,6 @@ namespace Monero.Client.Utilities
             };
         }
 
-        private static List<SignedKeyImage> KeyImageAndSignatureToSignedKeyImages(IEnumerable<(string key_image, string signature)> signed_key_images)
-        {
-            var signedKeyImages = new List<SignedKeyImage>();
-            foreach (var keyImagePair in signed_key_images)
-            {
-                signedKeyImages.Add(new SignedKeyImage()
-                {
-                    Image = keyImagePair.key_image,
-                    Signature = keyImagePair.signature,
-                });
-            }
-
-            return signedKeyImages;
-        }
-
         private async Task<MoneroCommunicatorResponse> GetTransferByTxidAsync(GenericRequestParameters genericRequestParameters, CancellationToken token)
         {
             HttpRequestMessage request = await this.requestAdapter.GetRequestMessage(MoneroResponseSubType.TransferByTxid, genericRequestParameters, token).ConfigureAwait(false);
@@ -1971,22 +1984,6 @@ namespace Monero.Client.Utilities
                 MoneroResponseSubType = MoneroResponseSubType.TransferByTxid,
                 TransferByTxidResponse = responseObject,
             };
-        }
-
-
-        private static List<FundTransferParameter> TransactionToFundTransferParameter(IEnumerable<(string address, ulong amount)> transactions)
-        {
-            List<FundTransferParameter> fundTransferParameters = new List<FundTransferParameter>();
-            foreach (var da in transactions)
-            {
-                fundTransferParameters.Add(new FundTransferParameter()
-                {
-                    Address = da.address,
-                    Amount = da.amount,
-                });
-            }
-
-            return fundTransferParameters;
         }
 
         private async Task<MoneroCommunicatorResponse> TransferFundsAsync(GenericRequestParameters genericRequestParameters, CancellationToken token)

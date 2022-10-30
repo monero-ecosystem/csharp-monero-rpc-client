@@ -1,11 +1,11 @@
-﻿using Monero.Client.Daemon.POD;
-using Monero.Client.Daemon.POD.Responses;
-using Monero.Client.Network;
-using Monero.Client.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Monero.Client.Daemon.POD;
+using Monero.Client.Daemon.POD.Responses;
+using Monero.Client.Network;
+using Monero.Client.Utilities;
 
 namespace Monero.Client.Daemon
 {
@@ -15,10 +15,6 @@ namespace Monero.Client.Daemon
         private readonly object disposalLock = new object();
         private bool disposed = false;
 
-        public void Dispose()
-        {
-            this.Dispose(true);
-        }
         private MoneroDaemonClient(string url, uint port)
         {
             this.moneroRpcCommunicator = new RpcCommunicator(url, port);
@@ -45,33 +41,9 @@ namespace Monero.Client.Daemon
             return moneroDaemonClient.InitializeAsync(cancellationToken);
         }
 
-        private Task<MoneroDaemonClient> InitializeAsync(CancellationToken cancellationToken)
+        public void Dispose()
         {
-            // Nothing to do yet.
-            return Task.FromResult(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            lock (this.disposalLock)
-            {
-                if (this.disposed)
-                {
-                    return;
-                }
-                else
-                {
-                    this.disposed = true;
-                }
-            }
-
-            if (disposing)
-            {
-                // Free managed objects.
-                this.moneroRpcCommunicator.Dispose();
-            }
-
-            // Free unmanaged objects.
+            this.Dispose(true);
         }
 
         /// <summary>
@@ -354,6 +326,35 @@ namespace Monero.Client.Daemon
             var result = await this.moneroRpcCommunicator.GetTransactionsAsync(txHashes, token).ConfigureAwait(false);
             ErrorGuard.ThrowIfResultIsNull(result?.TransactionsResponse == null, nameof(this.GetTransactionsAsync));
             return result.TransactionsResponse?.Transactions;
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            lock (this.disposalLock)
+            {
+                if (this.disposed)
+                {
+                    return;
+                }
+                else
+                {
+                    this.disposed = true;
+                }
+            }
+
+            if (disposing)
+            {
+                // Free managed objects.
+                this.moneroRpcCommunicator.Dispose();
+            }
+
+            // Free unmanaged objects.
+        }
+
+        private Task<MoneroDaemonClient> InitializeAsync(CancellationToken cancellationToken)
+        {
+            // Nothing to do yet.
+            return Task.FromResult(this);
         }
     }
 }

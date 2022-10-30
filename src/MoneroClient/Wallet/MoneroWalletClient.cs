@@ -20,7 +20,7 @@ namespace Monero.Client.Wallet
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MoneroWalletClient"/> class using default network settings (<localhost>:<defaultport>)
+        /// Initializes a new instance of the <see cref="MoneroWalletClient"/> class using default network settings (<localhost>:<defaultport>).
         /// </summary>
         private MoneroWalletClient(MoneroNetwork networkType)
         {
@@ -43,7 +43,7 @@ namespace Monero.Client.Wallet
         }
 
         /// <summary>
-        /// Disposes the object (also calls <see cref="CloseWalletAsync(CancellationToken)"/>)
+        /// Disposes the object (also calls <see cref="CloseWalletAsync(CancellationToken)"/>).
         /// </summary>
         public void Dispose()
         {
@@ -508,17 +508,6 @@ namespace Monero.Client.Wallet
             return result.SignResponse.Result.Sig;
         }
 
-        ///// <summary>
-        ///// Verify a signature on a string.
-        ///// </summary>
-        ///// <returns>Whether the signature is valid.</returns>
-        //public async Task<bool> VerifyAsync(string data, string address, string signature, CancellationToken token = default)
-        //{
-        //    var result = await _moneroRpcCommunicator.VerifyAsync(data, address, signature, token).ConfigureAwait(false);
-        //    ErrorGuard.ThrowIfResultIsNull(result?.VerifyResponse, nameof(VerifyAsync));
-        //    return result.VerifyResponse.Result.IsGood;
-        //}
-
         /// <summary>
         /// Export outputs in hex format.
         /// </summary>
@@ -590,7 +579,7 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Retrieves entries from the address book.
         /// </summary>
-        /// <param name="entires">Indices of the requested address book entries.</param>
+        /// <param name="entries">Indices of the requested address book entries.</param>
         public async Task<AddressBook> GetAddressBookAsync(IEnumerable<uint> entries, CancellationToken token = default)
         {
             var result = await this.moneroRpcCommunicator.GetAddressBookAsync(entries, token).ConfigureAwait(false);
@@ -873,6 +862,5 @@ namespace Monero.Client.Wallet
             await this.OpenWalletAsync(filename, password, cancellationToken).ConfigureAwait(false);
             return this;
         }
-
     }
 }

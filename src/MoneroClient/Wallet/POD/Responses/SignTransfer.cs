@@ -4,7 +4,6 @@ using System.Text.Json.Serialization;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-
     public class SignTransfer
     {
         [JsonPropertyName("signed_txset")]

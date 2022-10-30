@@ -1,12 +1,11 @@
-﻿using Monero.Client.Network;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
+using Monero.Client.Network;
 
 namespace Monero.Client.Daemon.POD.Responses
 {
-
     public class GeneralSyncronizationInformation
     {
         [JsonPropertyName("info")]

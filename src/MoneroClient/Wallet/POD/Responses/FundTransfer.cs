@@ -1,10 +1,9 @@
-﻿using Monero.Client.Network;
+﻿using System.Text.Json.Serialization;
+using Monero.Client.Network;
 using Monero.Client.Utilities;
-using System.Text.Json.Serialization;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-
     public class FundTransfer
     {
         [JsonPropertyName("amount")]

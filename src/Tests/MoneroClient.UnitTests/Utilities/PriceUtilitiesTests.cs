@@ -1,5 +1,5 @@
-using Monero.Client.Utilities;
 using System;
+using Monero.Client.Utilities;
 using Xunit;
 
 namespace MoneroClient.UnitTests.Utilities
@@ -65,6 +65,7 @@ namespace MoneroClient.UnitTests.Utilities
         {
             ulong piconero = ulong.MaxValue;
             _ = PriceUtilities.PiconeroToMonero(piconero);
+
             // Does not throw.
         }
     }

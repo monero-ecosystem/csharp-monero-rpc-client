@@ -3,7 +3,6 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-
     internal class ExportOutputsResult
     {
         [JsonPropertyName("outputs_data_hex")]
