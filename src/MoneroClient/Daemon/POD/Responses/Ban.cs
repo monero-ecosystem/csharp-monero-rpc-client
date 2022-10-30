@@ -1,6 +1,6 @@
-﻿using Monero.Client.Network;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using Monero.Client.Network;
 
 namespace Monero.Client.Daemon.POD.Responses
 {

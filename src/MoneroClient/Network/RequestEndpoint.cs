@@ -6,6 +6,7 @@ namespace Monero.Client.Network
     {
         // Generic endpoint
         JsonRpc,
+
         // Custom endpoints
         // https://www.getmonero.org/resources/developer-guides/daemon-rpc.html#get_transaction_pool
         TransactionPool,

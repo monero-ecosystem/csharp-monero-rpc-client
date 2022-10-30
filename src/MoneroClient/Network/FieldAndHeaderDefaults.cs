@@ -2,7 +2,6 @@
 
 namespace Monero.Client.Network
 {
-
     internal static class FieldAndHeaderDefaults
     {
         public const string ApplicationJson = "application/json";

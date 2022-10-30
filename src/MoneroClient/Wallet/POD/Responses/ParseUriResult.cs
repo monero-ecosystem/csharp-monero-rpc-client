@@ -4,7 +4,6 @@ using Monero.Client.Utilities;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-
     internal class ParseUriResult
     {
         [JsonPropertyName("uri")]

@@ -10,9 +10,9 @@ namespace Monero.Client.Network
 {
     internal class MoneroRequestAdapter
     {
+        private static readonly JsonSerializerOptions DefaultSerializationOptions = new JsonSerializerOptions() { IgnoreNullValues = true, };
         private readonly string url;
         private readonly uint port;
-        private static readonly JsonSerializerOptions DefaultSerializationOptions = new JsonSerializerOptions() { IgnoreNullValues = true, };
 
         public MoneroRequestAdapter(string url, uint port)
         {

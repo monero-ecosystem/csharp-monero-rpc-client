@@ -23,6 +23,7 @@ namespace Monero.Client.Wallet.POD
         public SubaddressIndex SubaddressIndex { get; set; }
         [JsonPropertyName("address")]
         public string Address { get; set; }
+
         /// <summary>
         /// The amount of time it would take, from the moment the payment was made, until the payment would be unlocked.
         /// </summary>

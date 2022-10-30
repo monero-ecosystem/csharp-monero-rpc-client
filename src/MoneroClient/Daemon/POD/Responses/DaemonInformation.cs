@@ -5,7 +5,6 @@ using Monero.Client.Network;
 
 namespace Monero.Client.Daemon.POD.Responses
 {
-
     public class DaemonInformation
     {
         [JsonPropertyName("adjusted_time")]
@@ -94,13 +93,21 @@ namespace Monero.Client.Daemon.POD.Responses
             get
             {
                 if (this.IsMainnet)
+                {
                     return MoneroNetwork.Mainnet;
+                }
                 else if (this.IsStagenet)
+                {
                     return MoneroNetwork.Stagenet;
+                }
                 else if (this.IsTestnet)
+                {
                     return MoneroNetwork.Testnet;
+                }
                 else
+                {
                     throw new InvalidOperationException("Unknown network type");
+                }
             }
         }
 

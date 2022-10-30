@@ -1,9 +1,8 @@
-﻿using Monero.Client.Network;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using Monero.Client.Network;
 
 namespace Monero.Client.Daemon.POD.Responses
 {
-
     public class PruneBlockchain
     {
         [JsonPropertyName("pruned")]

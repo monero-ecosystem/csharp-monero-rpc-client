@@ -4,8 +4,6 @@ namespace Monero.Client.Network
 {
     public class JsonRpcException : Exception
     {
-        public JsonRpcErrorCode JsonRpcErrorCode { get; private set; } = JsonRpcErrorCode.UnknownError;
-
         public JsonRpcException() : base()
         {
         }
@@ -22,6 +20,8 @@ namespace Monero.Client.Network
         {
             this.JsonRpcErrorCode = jsonRpcErrorCode;
         }
+
+        public JsonRpcErrorCode JsonRpcErrorCode { get; private set; } = JsonRpcErrorCode.UnknownError;
 
         public override string ToString()
         {

@@ -1,11 +1,10 @@
-﻿using Monero.Client.Utilities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
+using Monero.Client.Utilities;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-
     public class SplitFundTransfer
     {
         [JsonPropertyName("tx_hash_list")]

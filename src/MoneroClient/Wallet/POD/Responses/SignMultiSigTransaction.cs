@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-
     public class SignMultiSigTransaction
     {
         [JsonPropertyName("tx_data_hex")]

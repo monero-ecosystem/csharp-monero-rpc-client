@@ -30,6 +30,7 @@ namespace Monero.Client.Daemon.POD
                     string.Compare(DefaultIdHash, this.LastFailedTxHash) != 0;
             }
         }
+
         [JsonPropertyName("last_failed_id_hash")]
         public string LastFailedTxHash { get; set; }
         [JsonPropertyName("last_relayed_time")]
@@ -42,6 +43,7 @@ namespace Monero.Client.Daemon.POD
                 return DateTime.UnixEpoch.AddSeconds(this.LastRelayedTime);
             }
         }
+
         [JsonPropertyName("max_used_block_height")]
         public ulong MaxUsedBlockHeight { get; set; }
         [JsonPropertyName("max_used_block_id_hash")]

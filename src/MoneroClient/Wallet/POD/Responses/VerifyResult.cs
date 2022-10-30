@@ -2,7 +2,6 @@
 
 namespace Monero.Client.Wallet.POD.Responses
 {
-
     internal class VerifyResult
     {
         [JsonPropertyName("good")]

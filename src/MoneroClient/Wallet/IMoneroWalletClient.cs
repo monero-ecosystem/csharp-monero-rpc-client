@@ -1,9 +1,9 @@
-﻿using Monero.Client.Wallet.POD;
-using Monero.Client.Wallet.POD.Responses;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Monero.Client.Wallet.POD;
+using Monero.Client.Wallet.POD.Responses;
 
 namespace Monero.Client.Wallet
 {
@@ -57,7 +57,7 @@ namespace Monero.Client.Wallet
         Task<Transfer> GetTransferByTxidAsync(string txid, CancellationToken token = default);
         Task<Transfer> GetTransferByTxidAsync(string txid, uint accountIndex, CancellationToken token = default);
         Task<string> SignAsync(string data, CancellationToken token = default);
-        
+
         // Task<bool> VerifyAsync(string data, string address, string signature, CancellationToken token = default);
         Task<string> ExportOutputsAsync(CancellationToken token = default);
         Task<ulong> ImportOutputsAsync(CancellationToken token = default);
