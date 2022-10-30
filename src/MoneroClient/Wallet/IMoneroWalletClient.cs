@@ -1,0 +1,90 @@
+﻿using Monero.Client.Wallet.POD;
+using Monero.Client.Wallet.POD.Responses;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Monero.Client.Wallet
+{
+    public interface IMoneroWalletClient : IDisposable
+    {
+        Task<Balance> GetBalanceAsync(uint accountIndex, IEnumerable<uint> addressIndices, bool allAccounts = false, bool strict = false, CancellationToken token = default);
+        Task<Balance> GetBalanceAsync(uint accountIndex, CancellationToken token = default);
+        Task<Addresses> GetAddressAsync(uint accountIndex, CancellationToken token = default);
+        Task<Addresses> GetAddressAsync(uint accountIndex, IEnumerable<uint> addressIndices, CancellationToken token = default);
+        Task<AddressIndex> GetAddressIndexAsync(string address, CancellationToken token = default);
+        Task<AddressCreation> CreateAddressAsync(uint accountIndex, CancellationToken token = default);
+        Task<AddressCreation> CreateAddressAsync(uint accountIndex, string label, CancellationToken token = default);
+        Task<AddressLabel> LabelAddressAsync(uint majorIndex, uint minorIndex, string label, CancellationToken token = default);
+        Task<Account> GetAccountsAsync(CancellationToken token = default);
+        Task<Account> GetAccountsAsync(string tag, CancellationToken token = default);
+        Task<CreateAccount> CreateAccountAsync(CancellationToken token = default);
+        Task<CreateAccount> CreateAccountAsync(string label, CancellationToken token = default);
+        Task<AccountLabel> LabelAccountAsync(uint account_index, string label, CancellationToken token = default);
+        Task<AccountTags> GetAccountTagsAsync(CancellationToken token = default);
+        Task<TagAccounts> TagAccountsAsync(string tag, IEnumerable<uint> accounts, CancellationToken token = default);
+        Task<UntagAccounts> UntagAccountsAsync(IEnumerable<uint> accounts, CancellationToken token = default);
+        Task<AccountTagAndDescription> SetAccountTagDescriptionAsync(string tag, string description, CancellationToken token = default);
+        Task<ulong> GetHeightAsync(CancellationToken token = default);
+        Task<FundTransfer> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, CancellationToken token = default);
+        Task<FundTransfer> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, bool getTxKey, bool getTxHex, ulong unlockTime = 0, CancellationToken token = default);
+        Task<FundTransfer> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, uint ringSize, ulong unlockTime = 0, bool getTxKey = true, bool getTxHex = true, CancellationToken token = default);
+        Task<FundTransfer> TransferAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, uint ringSize, uint accountIndex, ulong unlockTime = 0, bool getTxKey = true, bool getTxHex = true, CancellationToken token = default);
+        Task<SplitFundTransfer> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, bool newAlgorithm = true, CancellationToken token = default);
+        Task<SplitFundTransfer> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, bool getTxKey, bool getTxHex, bool newAlgorithm = true, ulong unlockTime = 0, CancellationToken token = default);
+        Task<SplitFundTransfer> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, uint ringSize, bool newAlgorithm = true, ulong unlockTime = 0, bool get_tx_key = true, bool getTxHex = true, CancellationToken token = default);
+        Task<SplitFundTransfer> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, uint ringSize, uint accountIndex, bool newAlgorithm = true, ulong unlockTime = 0, bool getTxKey = true, bool getTxHex = true, CancellationToken token = default);
+        Task<SignTransfer> SignTransferAsync(string unsignedTxSet, bool exportRaw = false, CancellationToken token = default);
+        Task<List<string>> SubmitTransferAsync(string txDataHex, CancellationToken token = default);
+        Task<List<TransferDescription>> DescribeUnsignedTransferAsync(string unsignedTxSet, CancellationToken token = default);
+        Task<List<TransferDescription>> DescribeMultiSigTransferAsync(string multiSigTxSet, CancellationToken token = default);
+        Task<SweepDust> SweepDustAsync(bool getTxKey, bool getTxHex, bool getTxMetadata, bool doNotRelay = false, CancellationToken token = default);
+        Task<SplitFundTransfer> SweepAllAsync(string address, uint accountIndex, TransferPriority transactionPriority, uint ringSize, ulong unlockTime = 0, ulong belowAmount = ulong.MaxValue, bool getTxKeys = true, bool getTxHex = true, bool getTxMetadata = true, CancellationToken token = default);
+        Task<SweepSingle> SweepSingleAsync(string address, uint account_index, TransferPriority transaction_priority, uint ring_size, ulong unlock_time = 0, bool get_tx_key = true, bool get_tx_hex = true, bool get_tx_metadata = true, CancellationToken cancellationToken = default);
+        Task<SaveWallet> SaveWalletAsync(CancellationToken token = default);
+        Task<List<IncomingTransfer>> GetIncomingTransfersAsync(TransferType transferType, bool returnKeyImage = false, CancellationToken token = default);
+        Task<List<IncomingTransfer>> GetIncomingTransfersAsync(TransferType transferType, uint accountIndex, bool returnKeyImage = false, CancellationToken token = default);
+        Task<List<IncomingTransfer>> GetIncomingTransfersAsync(TransferType transferType, uint accountIndex, IEnumerable<uint> subaddrIndices, bool returnKeyImage = false, CancellationToken token = default);
+        Task<string> GetPrivateKey(KeyType keyType, CancellationToken token = default);
+        Task<StopWalletResult> StopWalletAsync(CancellationToken token = default);
+        Task<SetTransactionNotes> SetTransactionNotesAsync(IEnumerable<string> txids, IEnumerable<string> notes, CancellationToken token = default);
+        Task<List<string>> GetTransactionNotesAsync(IEnumerable<string> txids, CancellationToken token = default);
+        Task<string> GetTransactionKeyAsync(string txid, CancellationToken token = default);
+        Task<CheckTransactionKey> CheckTransactionKeyAsync(string txid, string txKey, string address, CancellationToken token = default);
+        Task<ShowTransfers> GetTransfersAsync(bool @in, bool @out, bool pending, bool failed, bool pool, CancellationToken token = default);
+        Task<ShowTransfers> GetTransfersAsync(bool @in, bool @out, bool pending, bool failed, bool pool, ulong min_height, ulong max_height, CancellationToken token = default);
+        Task<Transfer> GetTransferByTxidAsync(string txid, CancellationToken token = default);
+        Task<Transfer> GetTransferByTxidAsync(string txid, uint accountIndex, CancellationToken token = default);
+        Task<string> SignAsync(string data, CancellationToken token = default);
+        
+        // Task<bool> VerifyAsync(string data, string address, string signature, CancellationToken token = default);
+        Task<string> ExportOutputsAsync(CancellationToken token = default);
+        Task<ulong> ImportOutputsAsync(CancellationToken token = default);
+        Task<List<SignedKeyImage>> ExportKeyImagesAsync(CancellationToken token = default);
+        Task<ImportKeyImages> ImportKeyImagesAsync(IEnumerable<(string keyImage, string signature)> signedKeyImages, CancellationToken token = default);
+        Task<string> MakeUriAsync(string address, ulong amount, string recipientName, string txDescription = null, string paymentId = null, CancellationToken token = default);
+        Task<MoneroUri> ParseUriAsync(string uri, CancellationToken token = default);
+        Task<AddressBook> GetAddressBookAsync(IEnumerable<uint> entires, CancellationToken token = default);
+        Task<AddAddressBook> AddAddressBookAsync(string address, string description = null, string paymentId = null, CancellationToken token = default);
+        Task<DeleteAddressBook> DeleteAddressBookAsync(uint index, CancellationToken token = default);
+        Task<RefreshWallet> RefreshWalletAsync(uint startHeight, CancellationToken token = default);
+        Task<RescanSpent> RescanSpentAsync(CancellationToken token = default);
+        Task<CreateWallet> CreateWalletAsync(string filename, string language, string password = null, CancellationToken token = default);
+        Task<OpenWallet> OpenWalletAsync(string filename, string password = null, CancellationToken token = default);
+        Task<CloseWallet> CloseWalletAsync(CancellationToken token = default);
+        Task<ChangeWalletPassword> ChangeWalletPasswordAsync(string oldPassword = null, string newPassword = null, CancellationToken token = default);
+        Task<uint> GetVersionAsync(CancellationToken token = default);
+        Task<MultiSigInformation> GetMultiSigInformationAsync(CancellationToken token = default);
+        Task<string> PrepareMultiSigAsync(CancellationToken token = default);
+        Task<MakeMultiSig> MakeMultiSigAsync(IEnumerable<string> multiSigInfo, uint threshold, string password, CancellationToken token = default);
+        Task<string> ExportMultiSigInfoAsync(CancellationToken token = default);
+        Task<ImportMultiSigInformation> ImportMultiSigInfoAsync(IEnumerable<string> info, CancellationToken token = default);
+        Task<string> FinalizeMultiSigAsync(IEnumerable<string> multisigInfo, string password, CancellationToken token = default);
+        Task<SignMultiSigTransaction> SignMultiSigAsync(string txDataHex, CancellationToken token = default);
+        Task<List<string>> SubmitMultiSigAsync(string txDataHex, CancellationToken token = default);
+        Task<List<PaymentDetail>> GetPaymentDetailAsync(string paymentId, CancellationToken token = default);
+        Task SetAttributeAsync(string key, string value, CancellationToken token = default);
+        Task<string> GetAttributeAsync(string key, CancellationToken token = default);
+    }
+}
