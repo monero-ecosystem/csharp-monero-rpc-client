@@ -123,9 +123,7 @@ namespace Monero.Client.Network
         internal MoneroResponseType MoneroResponseType { get; set; } = MoneroResponseType.None;
         internal MoneroResponseSubType MoneroResponseSubType { get; set; }
 
-        ///
-        /// Daemon-related responses.
-        ///
+        // Daemon-related responses.
         internal BlockCountResponse BlockCountResponse { get; set; }
         internal BlockHeaderResponse BlockHeaderResponse { get; set; }
         internal BlockHeaderRangeResponse BlockHeaderRangeResponse { get; set; }
@@ -151,9 +149,7 @@ namespace Monero.Client.Network
         internal TransactionSet TransactionsResponse { get; set; }
         internal TransactionPool TransactionPoolResponse { get; set; }
 
-        ///
-        /// Wallet-related responses.
-        ///
+        // Wallet-related responses.
         internal BalanceResponse BalanceResponse { get; set; }
         internal AddressResponse AddressResponse { get; set; }
         internal AddressIndexResponse AddressIndexResponse { get; set; }

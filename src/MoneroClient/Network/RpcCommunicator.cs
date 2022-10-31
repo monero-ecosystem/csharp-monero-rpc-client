@@ -28,8 +28,8 @@ namespace Monero.Client.Utilities
         private readonly MoneroRequestAdapter requestAdapter;
         private readonly JsonSerializerOptions defaultSerializationOptions = new JsonSerializerOptions() { IgnoreNullValues = true, };
 
-        /// <param name="url">A string representation of the host you'd like to connect to (e.g. "127.0.0.1")</param>
-        /// <param name="port">An integer representation of the host's port you'd like to communicate on (e.g. 18081)</param>
+        /// <param name="url">A string representation of the host you'd like to connect to (e.g. "127.0.0.1").</param>
+        /// <param name="port">An integer representation of the host's port you'd like to communicate on (e.g. 18081).</param>
         public RpcCommunicator(string url, uint port) : this()
         {
             this.requestAdapter = new MoneroRequestAdapter(url, port);
@@ -1641,7 +1641,7 @@ namespace Monero.Client.Utilities
         {
             var daemonRequestParameters = new GenericRequestParameters()
             {
-                Bans = this.BanInformationToBans(bans)
+                Bans = BanInformationToBans(bans)
             };
             HttpRequestMessage request = await this.requestAdapter.GetRequestMessage(MoneroResponseSubType.SetBans, daemonRequestParameters, token).ConfigureAwait(false);
             HttpResponseMessage response = await this.httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
@@ -1941,6 +1941,23 @@ namespace Monero.Client.Utilities
             return signedKeyImages;
         }
 
+        private static List<NodeBan> BanInformationToBans(IEnumerable<(string host, ulong ip, bool ban, uint seconds)> bans)
+        {
+            var requestBans = new List<NodeBan>();
+            foreach (var ban in bans)
+            {
+                requestBans.Add(new NodeBan()
+                {
+                    Host = ban.host,
+                    IP = ban.ip,
+                    IsBanned = ban.ban,
+                    Seconds = ban.seconds,
+                });
+            }
+
+            return requestBans;
+        }
+
         private async Task<MoneroCommunicatorResponse> GetBalanceAsync(GenericRequestParameters genericRequestParameters, CancellationToken token)
         {
             HttpRequestMessage request = await this.requestAdapter.GetRequestMessage(MoneroResponseSubType.Balance, genericRequestParameters, token).ConfigureAwait(false);
@@ -2014,23 +2031,6 @@ namespace Monero.Client.Utilities
                 MoneroResponseSubType = MoneroResponseSubType.FundTransferSplit,
                 FundTransferSplitResponse = responseObject,
             };
-        }
-
-        private List<NodeBan> BanInformationToBans(IEnumerable<(string host, ulong ip, bool ban, uint seconds)> bans)
-        {
-            var requestBans = new List<NodeBan>();
-            foreach (var ban in bans)
-            {
-                requestBans.Add(new NodeBan()
-                {
-                    Host = ban.host,
-                    IP = ban.ip,
-                    IsBanned = ban.ban,
-                    Seconds = ban.seconds,
-                });
-            }
-
-            return requestBans;
         }
 
         private async Task<MoneroCommunicatorResponse> GetTransfersAsync(GenericRequestParameters genericRequestParameters, CancellationToken token)

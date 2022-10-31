@@ -284,7 +284,7 @@ namespace Monero.Client.Wallet
         }
 
         /// <summary>
-        /// <see cref="TransferSplitAsync(IEnumerable{(string address, ulong amount)}, TransferPriority, bool, CancellationToken)"/>
+        /// <see cref="TransferSplitAsync(IEnumerable{(string address, ulong amount)}, TransferPriority, bool, CancellationToken)"/>.
         /// </summary>
         public async Task<SplitFundTransfer> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, bool getTxKey, bool getTxHex, bool newAlgorithm = true, ulong unlockTime = 0, CancellationToken token = default)
         {
@@ -295,7 +295,7 @@ namespace Monero.Client.Wallet
         }
 
         /// <summary>
-        /// <see cref="TransferSplitAsync(IEnumerable{(string address, ulong amount)}, TransferPriority, bool, CancellationToken)"/>
+        /// <see cref="TransferSplitAsync(IEnumerable{(string address, ulong amount)}, TransferPriority, bool, CancellationToken)"/>.
         /// </summary>
         public async Task<SplitFundTransfer> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, uint ringSize, bool newAlgorithm = true, ulong unlockTime = 0, bool getTxKey = true, bool getTxHex = true, CancellationToken token = default)
         {
@@ -306,7 +306,7 @@ namespace Monero.Client.Wallet
         }
 
         /// <summary>
-        /// <see cref="TransferSplitAsync(IEnumerable{(string address, ulong amount)}, TransferPriority, bool, CancellationToken)"/>
+        /// <see cref="TransferSplitAsync(IEnumerable{(string address, ulong amount)}, TransferPriority, bool, CancellationToken)"/>.
         /// </summary>
         public async Task<SplitFundTransfer> TransferSplitAsync(IEnumerable<(string address, ulong amount)> transactions, TransferPriority transferPriority, uint ringSize, uint accountIndex, bool newAlgorithm = true, ulong unlockTime = 0, bool getTxKey = true, bool getTxHex = true, CancellationToken token = default)
         {
@@ -740,7 +740,7 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Turn this wallet into a multisig wallet, extra step for N-1/N wallets.
         /// </summary>
-        /// <param name="multisigInfo">List of multisig string from peers.</param>
+        /// <param name="multiSigInfo">List of multisig string from peers.</param>
         /// <param name="password">Wallet password.</param>
         /// <returns>The multisig wallet address.</returns>
         public async Task<string> FinalizeMultiSigAsync(IEnumerable<string> multiSigInfo, string password, CancellationToken token = default)
@@ -814,7 +814,7 @@ namespace Monero.Client.Wallet
         }
 
         /// <summary>
-        /// Set an attribute (key/value pair) to store any additional info in the wallet
+        /// Set an attribute (key/value pair) to store any additional info in the wallet.
         /// </summary>
         public async Task SetAttributeAsync(string key, string value, CancellationToken token = default)
         {
@@ -823,7 +823,7 @@ namespace Monero.Client.Wallet
         }
 
         /// <summary>
-        /// Get an attribute value from the wallet, given its key; throws an error if not present
+        /// Get an attribute value from the wallet, given its key; throws an error if not present.
         /// </summary>
         public async Task<string> GetAttributeAsync(string key, CancellationToken token = default)
         {
