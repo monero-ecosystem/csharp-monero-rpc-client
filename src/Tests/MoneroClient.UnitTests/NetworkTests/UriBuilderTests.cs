@@ -5,7 +5,7 @@ using System.Text;
 using Monero.Client.Utilities;
 using Xunit;
 
-namespace MoneroClient.UnitTests.Network
+namespace MoneroClient.UnitTests.NetworkTests
 {
     public class UriBuilderTests
     {

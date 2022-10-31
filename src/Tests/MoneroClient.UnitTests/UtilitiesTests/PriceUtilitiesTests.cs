@@ -2,7 +2,7 @@ using System;
 using Monero.Client.Utilities;
 using Xunit;
 
-namespace MoneroClient.UnitTests.Utilities
+namespace MoneroClient.UnitTests.UtilitiesTests
 {
     public class PriceUtilitiesTests
     {
