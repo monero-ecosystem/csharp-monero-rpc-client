@@ -9,7 +9,7 @@ namespace Monero.Client.Network
 
     internal class UriBuilder : IUriBuilder
     {
-        private readonly string url;
+        private readonly string host;
         private readonly string endpoint;
         private readonly uint port;
 
@@ -18,16 +18,16 @@ namespace Monero.Client.Network
             this.endpoint = endpoint;
         }
 
-        public UriBuilder(string url, uint port, string endpoint)
+        public UriBuilder(string host, uint port, string endpoint)
         {
-            this.url = url;
+            this.host = host;
             this.port = port;
             this.endpoint = endpoint;
         }
 
         public Uri Build()
         {
-            return new Uri($"http://{this.url}:{this.port}/{this.endpoint}");
+            return new Uri($"http://{this.host}:{this.port}/{this.endpoint}");
         }
     }
 }

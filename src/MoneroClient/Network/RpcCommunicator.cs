@@ -28,23 +28,23 @@ namespace Monero.Client.Utilities
         private readonly MoneroRequestAdapter requestAdapter;
         private readonly JsonSerializerOptions defaultSerializationOptions = new JsonSerializerOptions() { IgnoreNullValues = true, };
 
-        /// <param name="url">A string representation of the host you'd like to connect to (e.g. "127.0.0.1").</param>
+        /// <param name="host">A string representation of the host you'd like to connect to (e.g. "127.0.0.1").</param>
         /// <param name="port">An integer representation of the host's port you'd like to communicate on (e.g. 18081).</param>
-        public RpcCommunicator(string url, uint port) : this()
+        public RpcCommunicator(string host, uint port) : this()
         {
-            this.requestAdapter = new MoneroRequestAdapter(url, port);
+            this.requestAdapter = new MoneroRequestAdapter(host, port);
         }
 
         public RpcCommunicator(MoneroNetwork networkType, ConnectionType connectionType) : this()
         {
             this.requestAdapter = (connectionType, networkType) switch
             {
-                (ConnectionType.Daemon, MoneroNetwork.Mainnet) => new MoneroRequestAdapter(MoneroNetworkDefaults.DaemonMainnetUrl, MoneroNetworkDefaults.DaemonMainnetPort),
-                (ConnectionType.Daemon, MoneroNetwork.Stagenet) => new MoneroRequestAdapter(MoneroNetworkDefaults.DaemonStagenetUrl, MoneroNetworkDefaults.DaemonStagenetPort),
-                (ConnectionType.Daemon, MoneroNetwork.Testnet) => new MoneroRequestAdapter(MoneroNetworkDefaults.DaemonTestnetUrl, MoneroNetworkDefaults.DaemonTestnetPort),
-                (ConnectionType.Wallet, MoneroNetwork.Mainnet) => new MoneroRequestAdapter(MoneroNetworkDefaults.WalletMainnetUrl, MoneroNetworkDefaults.WalletMainnetPort),
-                (ConnectionType.Wallet, MoneroNetwork.Stagenet) => new MoneroRequestAdapter(MoneroNetworkDefaults.WalletStagenetUrl, MoneroNetworkDefaults.WalletStagenetPort),
-                (ConnectionType.Wallet, MoneroNetwork.Testnet) => new MoneroRequestAdapter(MoneroNetworkDefaults.WalletTestnetUrl, MoneroNetworkDefaults.WalletTestnetPort),
+                (ConnectionType.Daemon, MoneroNetwork.Mainnet) => new MoneroRequestAdapter(MoneroNetworkDefaults.DaemonMainnetHost, MoneroNetworkDefaults.DaemonMainnetPort),
+                (ConnectionType.Daemon, MoneroNetwork.Stagenet) => new MoneroRequestAdapter(MoneroNetworkDefaults.DaemonStagenetHost, MoneroNetworkDefaults.DaemonStagenetPort),
+                (ConnectionType.Daemon, MoneroNetwork.Testnet) => new MoneroRequestAdapter(MoneroNetworkDefaults.DaemonTestnetHost, MoneroNetworkDefaults.DaemonTestnetPort),
+                (ConnectionType.Wallet, MoneroNetwork.Mainnet) => new MoneroRequestAdapter(MoneroNetworkDefaults.WalletMainnetHost, MoneroNetworkDefaults.WalletMainnetPort),
+                (ConnectionType.Wallet, MoneroNetwork.Stagenet) => new MoneroRequestAdapter(MoneroNetworkDefaults.WalletStagenetHost, MoneroNetworkDefaults.WalletStagenetPort),
+                (ConnectionType.Wallet, MoneroNetwork.Testnet) => new MoneroRequestAdapter(MoneroNetworkDefaults.WalletTestnetHost, MoneroNetworkDefaults.WalletTestnetPort),
                 (_, _) => throw new InvalidOperationException($"Unknown MoneroNetwork ({networkType}) and ConnectionType ({connectionType}) combination"),
             };
         }

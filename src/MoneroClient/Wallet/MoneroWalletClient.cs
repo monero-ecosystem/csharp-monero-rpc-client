@@ -14,9 +14,9 @@ namespace Monero.Client.Wallet
         private readonly object disposingLock = new object();
         private bool disposed = false;
 
-        private MoneroWalletClient(string url, uint port)
+        private MoneroWalletClient(string host, uint port)
         {
-            this.moneroRpcCommunicator = new RpcCommunicator(url, port);
+            this.moneroRpcCommunicator = new RpcCommunicator(host, port);
         }
 
         /// <summary>
@@ -30,9 +30,9 @@ namespace Monero.Client.Wallet
         /// <summary>
         /// Initialize a Monero Wallet Client using default network settings (<localhost>:<defaultport>), opening the wallet while doing so.
         /// </summary>
-        public static Task<MoneroWalletClient> CreateAsync(string url, uint port, string filename, string password, CancellationToken cancellationToken = default)
+        public static Task<MoneroWalletClient> CreateAsync(string host, uint port, string filename, string password, CancellationToken cancellationToken = default)
         {
-            var moneroWalletClient = new MoneroWalletClient(url, port);
+            var moneroWalletClient = new MoneroWalletClient(host, port);
             return moneroWalletClient.InitializeAsync(filename, password, cancellationToken);
         }
 
