@@ -32,8 +32,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="gif\**" />
     <Compile Remove="Tests\**" />
+    <EmbeddedResource Remove="gif\**" />
     <EmbeddedResource Remove="Tests\**" />
+    <None Remove="gif\**" />
     <None Remove="Tests\**" />
   </ItemGroup>
 
@@ -44,13 +47,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="System.Text.Json" Version="6.0.6" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="gif\monero-xmr-logo.png">
-      <Pack>True</Pack>
-      <PackagePath></PackagePath>
-    </None>
   </ItemGroup>
 	<PropertyGroup>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
