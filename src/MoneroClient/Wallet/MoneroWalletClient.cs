@@ -42,6 +42,12 @@ namespace Monero.Client.Wallet
             return moneroWalletClient.InitializeAsync(filename, password, cancellationToken);
         }
 
+        public static Task<CreateWallet> CreateNewWalletAsync(string host, uint port, string filename, string password, string language, CancellationToken cancellationToken = default)
+        {
+            using var moneroWalletClient = new MoneroWalletClient(host, port);
+            return moneroWalletClient.CreateWalletAsync(filename, language, password, cancellationToken);
+        }
+
         /// <summary>
         /// Disposes the object (also calls <see cref="CloseWalletAsync(CancellationToken)"/>).
         /// </summary>
