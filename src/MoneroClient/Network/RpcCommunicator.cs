@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using Monero.Client.Daemon.POD;
@@ -26,7 +27,8 @@ namespace Monero.Client.Utilities
     {
         private readonly HttpClient httpClient;
         private readonly MoneroRequestAdapter requestAdapter;
-        private readonly JsonSerializerOptions defaultSerializationOptions = new JsonSerializerOptions() { IgnoreNullValues = true, };
+        private readonly JsonSerializerOptions defaultSerializationOptions = new JsonSerializerOptions()
+        { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
 
         /// <param name="host">A string representation of the host you'd like to connect to (e.g. "127.0.0.1").</param>
         /// <param name="port">An integer representation of the host's port you'd like to communicate on (e.g. 18081).</param>
