@@ -1,4 +1,5 @@
-﻿using MoneroClient.IntegrationTests.Constants;
+﻿using Monero.Client.Daemon;
+using MoneroClient.IntegrationTests.Constants;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,7 +17,7 @@ namespace MoneroClient.IntegrationTests.Utilities
         /// </summary>
         public static void Start()
         {
-           // StartDaemon();
+            //StartDaemon();
 
             StartWalletRpc();
         }
@@ -31,7 +32,8 @@ namespace MoneroClient.IntegrationTests.Utilities
                 var startInfo = new ProcessStartInfo
                 {
                     FileName = @"powershell.exe",
-                    Arguments = $"& '{fullPath}' --wallet-dir '{walletDirectory}' --rpc-bind-port {TestingConstants.DefaultPort} --disable-rpc-login --testnet",
+                    Arguments = $"& '{fullPath}' --wallet-dir '{walletDirectory}' --rpc-bind-port {TestingConstants.DefaultTestNetPort} --testnet --daemon-address http://testnet.community.rino.io:28081 --untrusted-daemon --disable-rpc-login --log-level 1",
+                    //Arguments = $"& '{fullPath}' --wallet-dir '{walletDirectory}' --rpc-bind-port 18082  --daemon-address http://node.community.rino.io:18081 --untrusted-daemon --disable-rpc-login",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
@@ -44,28 +46,45 @@ namespace MoneroClient.IntegrationTests.Utilities
                 };
                 process.Start();
 
+                // todo: don't sleep on a thread, check another way
+                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(5));
             }
         }
 
-            private static void StartDaemon()
+            public static async void StartDaemon()
         {
-            if (!IsProcessRunning(TestingConstants.DaemonProcessName))
-            {
-                ProcessStartInfo info = new ProcessStartInfo(Path.Combine(TestingConstants.GuiWalletDirectory, $"{TestingConstants.DaemonProcessName}.exe"))
-                {
-                    UseShellExecute = true,
-                    WorkingDirectory = TestingConstants.GuiWalletDirectory,
-                    Arguments = $"--testnet --rpc-bind-port {TestingConstants.DefaultPort}"
 
-                };
-                Process.Start(info);
-
-
-
-
+            
                
+            //using IMoneroDaemonClient nodeClient = await MoneroDaemonClient.CreateAsync(Monero.Client.Network.MoneroNetwork.Testnet);
+            using IMoneroDaemonClient nodeClient = await MoneroDaemonClient.CreateAsync("testnet.community.rino.io", 28081);
+             
+            try
+            {
+                //var connections = await nodeClient.GetConnectionsAsync();
+
+                //foreach (var con in connections)
+                //{
+                //    Debug.WriteLine(con);
+                //}
+
+
+
             }
-        }
+            catch { }
+
+                //if (!IsProcessRunning(TestingConstants.DaemonProcessName))
+                //{
+                //    ProcessStartInfo info = new ProcessStartInfo(Path.Combine(TestingConstants.GuiWalletDirectory, $"{TestingConstants.DaemonProcessName}.exe"))
+                //    {
+                //        UseShellExecute = true,
+                //        WorkingDirectory = TestingConstants.GuiWalletDirectory,
+                //        Arguments = $"--testnet --rpc-bind-port {TestingConstants.DefaultPort}"
+
+                //    };
+                //    Process.Start(info);
+                //}
+            }
 
         /// <summary>
         /// Kills the process of service host
