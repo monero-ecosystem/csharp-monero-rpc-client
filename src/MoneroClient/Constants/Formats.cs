@@ -5,6 +5,6 @@
         /// <summary>
         /// Twelve decimal places.
         /// </summary>
-        public static readonly string MoneroPrecision = "N12";
+        public const string MoneroPrecision = "N12";
     }
 }

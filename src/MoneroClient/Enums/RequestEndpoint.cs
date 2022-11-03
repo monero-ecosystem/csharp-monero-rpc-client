@@ -14,5 +14,4 @@ namespace Monero.Client.Enums
         TransactionPool,
         Transactions,
     }
-
 }

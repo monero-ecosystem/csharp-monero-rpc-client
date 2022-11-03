@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Monero.Client.Enums;
 
 namespace Monero.Client.Network
 {

@@ -2,6 +2,6 @@
 {
     internal class DateFormat
     {
-        public static readonly string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+        public const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
     }
 }

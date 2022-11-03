@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Monero.Client.Constants;
+using System;
 using System.Text.Json.Serialization;
 
 namespace Monero.Client.Daemon.POD
@@ -24,10 +25,8 @@ namespace Monero.Client.Daemon.POD
         {
             get
             {
-                const string DefaultIdHash = "0000000000000000000000000000000000000000000000000000000000000000";
-                const ulong DefaultHeight = 0;
-                return this.LastFailedHeight != DefaultHeight &&
-                    string.Compare(DefaultIdHash, this.LastFailedTxHash) != 0;
+                return this.LastFailedHeight != BlockchainDefaults.DefaultHeight &&
+                    string.Compare(BlockchainDefaults.DefaultIdHash, this.LastFailedTxHash) != 0;
             }
         }
 
