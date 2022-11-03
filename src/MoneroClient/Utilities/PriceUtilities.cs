@@ -7,17 +7,20 @@ namespace Monero.Client.Utilities
     internal class PriceUtilities
     {
         private const int LowestBase = 12;
-        private const decimal Piconero = 0.000000000001M;
-        private const decimal Nanonero = 0.000000001M;
-        private const decimal Micronero = 0.000001M;
-        private const decimal Millinero = 0.001M;
-        private const decimal Centinero = 0.01M;
-        private const decimal Decinero = 0.1M;
-        private const decimal Monero = 1M;
-        private const decimal Decanero = 10M;
-        private const decimal Hectonero = 100M;
-        private const decimal Kilonero = 1000M;
-        private const decimal Meganero = 1000000M;
+
+        /*
+            Piconero = 0.000000000001M;
+            Nanonero = 0.000000001M;
+            Micronero = 0.000001M;
+            Millinero = 0.001M;
+            Centinero = 0.01M;
+            Decinero = 0.1M;
+            Monero = 1M;
+            Decanero = 10M;
+            Hectonero = 100M;
+            Kilonero = 1000M;
+            Meganero = 1000000M;
+        */
 
         public static decimal PiconeroToMonero(ulong amount)
         {
