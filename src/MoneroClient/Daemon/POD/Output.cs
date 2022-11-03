@@ -1,4 +1,5 @@
 ﻿using System.Text.Json.Serialization;
+using Monero.Client.Constants;
 using Monero.Client.Utilities;
 
 namespace Monero.Client.Daemon.POD

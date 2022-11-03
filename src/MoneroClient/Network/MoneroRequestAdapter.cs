@@ -6,6 +6,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using Monero.Client.Constants;
+using Monero.Client.Enums;
 
 namespace Monero.Client.Network
 {

@@ -1,4 +1,4 @@
-﻿namespace Monero.Client.Utilities
+﻿namespace Monero.Client.Constants
 {
     internal class PriceFormat
     {

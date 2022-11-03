@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
-using Monero.Client.Utilities;
+using Monero.Client.Constants;
 
 namespace Monero.Client.Daemon.POD
 {

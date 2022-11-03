@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using Monero.Client.Constants;
 using Monero.Client.Network;
 using Monero.Client.Utilities;
 

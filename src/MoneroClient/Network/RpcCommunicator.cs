@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Monero.Client.Daemon.POD;
 using Monero.Client.Daemon.POD.Requests;
 using Monero.Client.Daemon.POD.Responses;
+using Monero.Client.Enums;
 using Monero.Client.Network;
 using Monero.Client.Wallet.POD;
 using Monero.Client.Wallet.POD.Requests;
@@ -330,7 +331,7 @@ namespace Monero.Client.Utilities
         {
             if (accounts == null || !accounts.Any())
             {
-                throw new InvalidOperationException("Accounts is either null or empty");
+                throw new InvalidOperationException($"{nameof(accounts)} is either null or empty");
             }
 
             var genericRequestParameters = new GenericRequestParameters()

@@ -1,4 +1,4 @@
-﻿namespace Monero.Client.Wallet.POD
+﻿namespace Monero.Client.Enums
 {
     public enum TransferPriority : uint
     {

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Monero.Client.Enums;
 using Monero.Client.Network;
 using Monero.Client.Utilities;
 using Monero.Client.Wallet.POD;
