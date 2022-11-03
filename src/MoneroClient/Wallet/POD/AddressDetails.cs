@@ -20,6 +20,10 @@ namespace Monero.Client.Wallet.POD
         public string Label { get; set; }
         [JsonPropertyName("num_unspent_outputs")]
         public ulong NumUnspentOutputs { get; set; }
+
+        /// <summary>
+        /// Time (in seconds) before balance is safe to spend.
+        /// </summary>
         [JsonPropertyName("time_to_unlock")]
         public ulong TimeToUnlock { get; set; }
         [JsonPropertyName("unlocked_balance")]
