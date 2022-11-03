@@ -4,6 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Monero.Client.Daemon.POD;
 using Monero.Client.Daemon.POD.Responses;
+using Monero.Client.Network;
+using Monero.Client.Wallet.POD.Responses;
 
 namespace Monero.Client.Daemon
 {

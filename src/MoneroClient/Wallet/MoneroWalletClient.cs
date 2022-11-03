@@ -839,6 +839,20 @@ namespace Monero.Client.Wallet
             return result.GetAttributeResponse.Result.Value;
         }
 
+        /// <summary>
+        /// Analyzes a string to determine whether it is a valid monero wallet address and returns the result and the address specifications.
+        /// </summary>
+        /// <param name="address">The address to validate.</param>
+        /// <param name="any_net_type">If true, consider addresses belonging to any of the three Monero networks (mainnet, stagenet, and testnet) valid. Otherwise, only consider an address valid if it belongs to the network on which the rpc-wallet's current daemon is running (Defaults to false).</param>
+        /// <param name="allow_openalias">If true, consider OpenAlias-formatted addresses valid (Defaults to false).</param>
+        /// <param name="token">A CancellationToken.</param>
+        public async Task<ValidateAddress> ValidateAddressAsync(string address, bool any_net_type = false, bool allow_openalias = false, CancellationToken token = default)
+        {
+            var result = await this.moneroRpcCommunicator.ValidateAddressAsync(address, any_net_type, allow_openalias, token).ConfigureAwait(false);
+            ErrorGuard.ThrowIfResultIsNull(result?.ValidateAddressResponse, nameof(this.ValidateAddressAsync));
+            return result.ValidateAddressResponse.Result;
+        }
+
         protected virtual void Dispose(bool disposing)
         {
             lock (this.disposingLock)

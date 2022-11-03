@@ -18,12 +18,6 @@ using Monero.Client.Wallet.POD.Responses;
 
 namespace Monero.Client.Utilities
 {
-    internal enum ConnectionType
-    {
-        Wallet,
-        Daemon,
-    }
-
     internal class RpcCommunicator
     {
         private readonly HttpClient httpClient;
@@ -1860,6 +1854,29 @@ namespace Monero.Client.Utilities
                 MoneroResponseType = MoneroResponseType.Wallet,
                 MoneroResponseSubType = MoneroResponseSubType.GetAttribute,
                 GetAttributeResponse = responseObject,
+            };
+        }
+
+        public async Task<MoneroCommunicatorResponse> ValidateAddressAsync(string address, bool any_net_type = false, bool allow_openalias = false, CancellationToken token = default)
+        {
+            var daemonRequestParameters = new GenericRequestParameters()
+            {
+                Address = address,
+                AnyNetType = any_net_type,
+                AllowOpenAlias = allow_openalias
+            };
+            HttpRequestMessage request = await this.requestAdapter.GetRequestMessage(MoneroResponseSubType.ValidateAddress, daemonRequestParameters, token).ConfigureAwait(false);
+            HttpResponseMessage response = await this.httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, token).ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+
+            using Stream ms = await ByteArrayToMemoryStream(response).ConfigureAwait(false);
+            ValidateAddressResponse responseObject = await JsonSerializer.DeserializeAsync<ValidateAddressResponse>(ms, this.defaultSerializationOptions, token).ConfigureAwait(false);
+            return new MoneroCommunicatorResponse()
+            {
+                MoneroResponseType = MoneroResponseType.Wallet,
+                MoneroResponseSubType = MoneroResponseSubType.ValidateAddress,
+                ValidateAddressResponse = responseObject,
             };
         }
 

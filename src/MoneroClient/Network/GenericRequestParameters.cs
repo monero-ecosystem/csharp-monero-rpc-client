@@ -175,5 +175,9 @@ namespace Monero.Client.Network
         public string Key { get; set; } = null;
         [JsonPropertyName("value")]
         public string Value { get; set; } = null;
+        [JsonPropertyName("any_net_type")]
+        public bool? AnyNetType { get; set; } = null;
+        [JsonPropertyName("allow_openalias")]
+        public bool? AllowOpenAlias { get; set; } = null;
     }
 }

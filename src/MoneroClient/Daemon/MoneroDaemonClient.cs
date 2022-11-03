@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Monero.Client.Daemon.POD;
 using Monero.Client.Daemon.POD.Responses;
+using Monero.Client.Enums;
 using Monero.Client.Network;
 using Monero.Client.Utilities;
 

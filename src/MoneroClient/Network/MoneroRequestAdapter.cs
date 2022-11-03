@@ -574,6 +574,12 @@ namespace Monero.Client.Network
                     Method = "get_attribute",
                     Params = requestParams,
                 },
+                MoneroResponseSubType.ValidateAddress => new BaseRequest
+                {
+                    Endpoint = RequestEndpoint.JsonRpc,
+                    Method = "validate_address",
+                    Params = requestParams,
+                },
                 MoneroResponseSubType.SetAttribute => new BaseRequest
                 {
                     Endpoint = RequestEndpoint.JsonRpc,

@@ -91,6 +91,7 @@
         SweepSingle,
         GetPaymentDetail,
         GetAttribute,
-        SetAttribute
+        SetAttribute,
+        ValidateAddress,
     }
 }

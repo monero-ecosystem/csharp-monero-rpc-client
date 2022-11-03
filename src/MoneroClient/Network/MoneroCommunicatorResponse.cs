@@ -98,5 +98,6 @@ namespace Monero.Client.Network
         internal PaymentDetailResponse PaymentDetailResponse { get; set; }
         internal SetAttributeResponse SetAttributeResponse { get; set; }
         internal GetAttributeResponse GetAttributeResponse { get; set; }
+        internal ValidateAddressResponse ValidateAddressResponse { get; set; }
     }
 }
