@@ -7,6 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
@@ -21,6 +24,25 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\MoneroClient\MoneroClient.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="TestData\MoneroWallets\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\MoneroWallets\test_0b395a87-583b-41bb-a7dc-1eed1ba47ef3">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\MoneroWallets\test_0b395a87-583b-41bb-a7dc-1eed1ba47ef3.address.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\MoneroWallets\test_0b395a87-583b-41bb-a7dc-1eed1ba47ef3.keys">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
  
 	<PropertyGroup>

@@ -1,4 +1,5 @@
-﻿using Monero.Client.Daemon;
+﻿using Microsoft.Extensions.Configuration;
+using Monero.Client.Daemon;
 using MoneroClient.IntegrationTests.Constants;
 using System;
 using System.Collections.Generic;
@@ -15,24 +16,24 @@ namespace MoneroClient.IntegrationTests.Utilities
         /// <summary>
         /// Invokes the host process for test service
         /// </summary>
-        public static void Start()
-        {
+        public static void Start(IConfiguration configuration)
+        {            
             //StartDaemon();
-
-            StartWalletRpc();
+            StartWalletRpc(configuration);
         }
 
-        private static void StartWalletRpc()
+        private static void StartWalletRpc(IConfiguration configuration)
         {
-            var walletDirectory = Directory.CreateDirectory("monero-wallets").FullName;
+            var walletTestDataDirectory =  Path.GetDirectoryName(AppDomain.CurrentDomain.BaseDirectory) + configuration["WalletDataDirectory"];
             var fullPath = Path.Combine(TestingConstants.GuiWalletDirectory, $"{TestingConstants.WalletRpcProcessName}.exe");
+            var daemonAddress = configuration["WalletRpc:DaemonAddressUrl"];
 
             if (!IsProcessRunning(TestingConstants.WalletRpcProcessName))
             {
                 var startInfo = new ProcessStartInfo
                 {
                     FileName = @"powershell.exe",
-                    Arguments = $"& '{fullPath}' --wallet-dir '{walletDirectory}' --rpc-bind-port {TestingConstants.DefaultTestNetPort} --testnet --daemon-address http://testnet.community.rino.io:28081 --untrusted-daemon --disable-rpc-login --log-level 1",
+                    Arguments = $"& '{fullPath}' --wallet-dir '{walletTestDataDirectory}' --rpc-bind-port {TestingConstants.DefaultTestNetPort} --testnet --daemon-address {daemonAddress} --untrusted-daemon --disable-rpc-login --log-level 1",
                     //Arguments = $"& '{fullPath}' --wallet-dir '{walletDirectory}' --rpc-bind-port 18082  --daemon-address http://node.community.rino.io:18081 --untrusted-daemon --disable-rpc-login",
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
