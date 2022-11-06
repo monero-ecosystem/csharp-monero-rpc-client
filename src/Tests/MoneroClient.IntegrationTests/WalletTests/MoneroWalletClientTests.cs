@@ -1,11 +1,13 @@
 using Monero.Client.Enums;
 using Monero.Client.Network;
 using Monero.Client.Wallet;
+using Monero.Client.Wallet.POD.Responses;
 using MoneroClient.IntegrationTests.BaseClasses;
 using MoneroClient.IntegrationTests.Constants;
 using MoneroClient.IntegrationTests.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -19,24 +21,21 @@ namespace MoneroClient.IntegrationTests.WalletTests
             // Arrange
             var fileName = "test_" + Guid.NewGuid().ToString();
             var walletPassword = "password123";
-            
+
             // Act
-            await MoneroWalletClient.CreateNewWalletAsync(
-                    TestingConstants.DefaultHost,
-                    TestingConstants.DefaultTestNetPort,
+            var walletClient = new MoneroWalletClient(
+                TestingConstants.DefaultHost,
+                TestingConstants.DefaultTestNetPort);
+            await walletClient.CreateWalletAsync(
                     fileName,
-                    walletPassword,
-                    TestingConstants.DefaultLanguage);
-            var walletClient = await MoneroWalletClient.CreateAsync(
-                    TestingConstants.DefaultHost,
-                    TestingConstants.DefaultTestNetPort,
-                    fileName,
+                    TestingConstants.DefaultLanguage,
                     walletPassword);
             var mnemonicPhrase = await walletClient.GetPrivateKey(KeyType.Mnemonic);
             var words = mnemonicPhrase.Split(' ');
 
             // Assert
             Assert.Equal(25, words.Length);
+            Assert.True(true);
         }
 
         [Fact]
@@ -100,32 +99,8 @@ namespace MoneroClient.IntegrationTests.WalletTests
                 fileName,
                 walletPassword);
             var validationResult = await walletClient.ValidateAddressAsync("9vTA787Xnw8Uxa4LoNwAR4MZmhtDymQCU6EZ3q1g6yCRBv62UKuN9PG2CX4sotUehjBfAY487fL2eJQoaPzStnF5SxEzcYi");
-            await walletClient.StopWalletAsync();
 
             // Assert
-            Assert.True(validationResult.Valid);
-        }
-
-        
-        [Fact(Skip = "not done")]
-        public async Task ValidateAddressAsync_ValidTestNetAddres_ReturnsValid_skip()
-        {
-    
-            var fileName = "test_e05d308b-cf8f-4570-a6ed-c48e3b036b02";// "test_" + Guid.NewGuid().ToString();
-            var walletPassword = "password123";
-            //await MoneroWalletClient.CreateNewWalletAsync(
-            //        TestingConstants.DefaultHost,
-            //        18082,
-            //        fileName,
-            //        walletPassword,
-            //        TestingConstants.DefaultLanguage);
-
-            var walletClient = await MoneroWalletClient.CreateAsync(MoneroNetwork.Mainnet, fileName, walletPassword);
-            var validationResult = await walletClient.ValidateAddressAsync("42go2d3XqA9Mx4HjZoqr93BHspcMxwAUBivs3yJKV1FyTycEcbgjNyEaGNEcgnUE9DDDAXNanzB16YgMt88Sa8cFSm2QcHK");
-
-
-            BackgroundProcessUtility.Stop();
-
             Assert.True(validationResult.Valid);
         }
     }

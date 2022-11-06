@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Monero.Client.Enums;
@@ -15,7 +16,7 @@ namespace Monero.Client.Wallet
         private readonly object disposingLock = new object();
         private bool disposed = false;
 
-        private MoneroWalletClient(string host, uint port)
+        public MoneroWalletClient(string host, uint port)
         {
             this.moneroRpcCommunicator = new RpcCommunicator(host, port);
         }
@@ -41,12 +42,6 @@ namespace Monero.Client.Wallet
         {
             var moneroWalletClient = new MoneroWalletClient(networkType);
             return moneroWalletClient.InitializeAsync(filename, password, cancellationToken);
-        }
-
-        public static Task<CreateWallet> CreateNewWalletAsync(string host, uint port, string filename, string password, string language, CancellationToken cancellationToken = default)
-        {
-            using var moneroWalletClient = new MoneroWalletClient(host, port);
-            return moneroWalletClient.CreateWalletAsync(filename, language, password, cancellationToken);
         }
 
         /// <summary>
